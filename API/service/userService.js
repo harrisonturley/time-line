@@ -1,29 +1,19 @@
-const User = require('../models/user');
+const User = require('../repository/user');
 
-function getUserByEmail(req, res) {
-    return User.findOne({email: req.params.email}).then(function (user) {
-        res.send(user);
-    });
+function getUserByEmail(email) {
+    return User.findOne({email: email});
 }
 
-function addUser(req, res) {
-    return User.create(req.body).then(function (user) {
-        res.send(user);
-    });
+function addUser(body) {
+    return User.create(body);
 }
 
-function updateUser(req, res) {
-    return User.findOneAndUpdate({email: req.params.email}, req.body).then(function () {
-        User.findOne({email: req.params.email}).then(function (user) {
-            res.send(user);
-        });
-    });
+function updateUser(email, body) {
+    return User.findOneAndUpdate({email: email}, body);
 }
 
-function deleteUser(req, res) {
-    return User.findOneAndRemove({email: req.params.email}).then(function (user) {
-        res.send(user);
-    });
+function deleteUser(email) {
+    return User.findOneAndRemove({email: email});
 }
 
 module.exports = {getUserByEmail, addUser, updateUser, deleteUser};
