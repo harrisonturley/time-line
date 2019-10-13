@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const docs = require("express-mongoose-docs");
 
 // mongoose Promise is deprecated; cast it to global.Promise
 mongoose.Promise = global.Promise;
@@ -22,6 +23,9 @@ server.use(function (err, req, res, _) {
     res.status(422).send({error: err.message});
 });
 
-server.listen(process.env.port || 4000, function () {
+// API docs
+docs(server, mongoose);
+
+server.listen(4000, function () {
     console.log('API is up');
 });
