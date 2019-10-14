@@ -72,3 +72,6 @@ API/.idea/
 
 # NodeJS modules
 API/node_modules/
+
+# External API keys
+API/api_keys/
