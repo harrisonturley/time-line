@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const LineupSchema = new Schema({
     // id must be the Yelp API's restaurant id
     id: {
-        type: Number,
+        type: String,
         unique: true,
         required: true
     },

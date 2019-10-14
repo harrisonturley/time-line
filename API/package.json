@@ -23,6 +23,8 @@
     "express-mongoose-docs": "^0.3.2",
     "mocha": "^6.2.1",
     "mongoose": "^5.7.4",
-    "nodemon": "^1.19.3"
+    "nodemon": "^1.19.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   }
 }
