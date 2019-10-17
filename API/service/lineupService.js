@@ -15,7 +15,10 @@ function addLineup(body) {
 
 function updateLineup(id, body) {
     pushNotification.checkToSendPushNotification(body, id);
-    return Lineup.findOneAndUpdate({id: id}, body);
+    //return Lineup.findOneAndUpdate({id: id}, body);
+    //pushNotification.checkToSendPushNotification(body, id, function(){
+        return Lineup.findOneAndUpdate({id: id}, body);
+    //});
 }
 
 function deleteLineup(id) {
