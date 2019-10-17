@@ -1,4 +1,4 @@
-var firebaseAdmin = require('../server.js');
+var firebaseAdmin = require('./notificationController');
 var admin = firebaseAdmin.admin;
 const searchService = require('../service/searchService');
 
@@ -16,7 +16,7 @@ var message = {
 function checkToSendPushNotification(body, id) {
   //need to get restaurant name from id
   //un hardcode this
-  //var name = searchService.getRestaurantsById(id);
+  console.log(admin);
   
   searchService.getRestaurantsById(id).then(function (name) {
     if(body.lineupTime<=5){
@@ -25,27 +25,14 @@ function checkToSendPushNotification(body, id) {
       .then((response) => {
         // Response is a message ID string.
         console.log('Successfully sent message:', response);
+        res.status(200).send();
       })
       .catch((error) => {
         console.log('Error sending message:', error);
+        res.status(422).send({error: err.message});
       });
     }
-    else console.log("not sending req for restaurant:" + name);
   });
-
-  /*
-  if(body.lineupTime<=5){
-    console.log("would send a message");
-    admin.messaging().send(message)
-    .then((response) => {
-      // Response is a message ID string.
-      console.log('Successfully sent message:', response);
-    })
-    .catch((error) => {
-      console.log('Error sending message:', error);
-    });
-  }
-  else console.log("not updating body.");*/
 }
 
 module.exports = {checkToSendPushNotification};
