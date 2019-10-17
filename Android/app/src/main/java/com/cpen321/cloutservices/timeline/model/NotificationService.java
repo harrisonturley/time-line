@@ -6,6 +6,6 @@ import retrofit2.http.POST;
 
 public interface NotificationService {
 
-    @POST("/notification/subscribe")
+    @POST("notification/subscribe")
     Call<Notification> sendNotificationToken(@Body Notification notification);
 }

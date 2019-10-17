@@ -61,7 +61,6 @@ public class SearchActivity extends AppCompatActivity {
 
                     // Log and toast
                     Log.d("GET_INSTANCE_ID", token);
-                    Toast.makeText(SearchActivity.this, token, Toast.LENGTH_SHORT).show();
 
                     Notification notification = new Notification(token);
                     NotificationService notificationSub = RetrofitClientInstance.getRetrofitInstance().create(NotificationService.class);
@@ -74,7 +73,8 @@ public class SearchActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<Notification> call, Throwable t) {
-                            Toast.makeText(SearchActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SearchActivity.this, "Something went wrong...Please try later! " + t.getCause(), Toast.LENGTH_SHORT).show();
+
                         }
                     });
                 }
