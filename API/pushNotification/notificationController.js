@@ -15,13 +15,13 @@ var message = {
 
 //how to handle req res next?
 //can only test this once i have a registration token
-router.get('/notification/subscribe/:registrationToken', function (req, res, next) {
-    console.log("user token is:"+ req.params.registrationToken);
+router.post('/notification/subscribe', function (req, res, next) {
+    console.log("user token is:"+ req.body.registrationToken);
 
   // Subscribe the devices corresponding to the registration tokens to the
   // topic.
   
-  admin.messaging().subscribeToTopic(req.params.registrationToken, topic)
+  admin.messaging().subscribeToTopic(req.body.registrationToken, topic)
   .then(function(response) {
   // See the MessagingTopicManagementResponse reference documentation
   // for the contents of response.
