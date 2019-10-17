@@ -5,9 +5,9 @@ var admin = require('firebase-admin');
 var topic = 'globalTopic';
 
 var message = {
-  data: {
-    score: '850',
-    time: '2:45'
+  notification: {
+    body: 'test',
+    title: 'hello hello'
   },
   topic: topic
 };
