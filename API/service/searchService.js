@@ -1,6 +1,7 @@
 const request = require('request-promise');
-const keyModule = require('../api_keys/yelpApiKey');
-const API_KEY = keyModule.API_KEY;
+//const keyModule = require('../api_keys/yelpApiKey');
+//const API_KEY = keyModule.API_KEY;
+const API_KEY = '';
 const lineupService = require('../service/lineupService');
 
 function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
@@ -19,6 +20,22 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
     };
 
     return request(options).then(addLineupTimes);
+}
+
+function getRestaurantsById(id) {
+    console.log("in here hello");
+    const options = {
+        uri: 'https://api.yelp.com/v3/businesses/' + id,
+        headers: {
+            'Authorization': 'Bearer ' + API_KEY
+        },
+        json: true
+    };
+    // find out how to extract name from here
+    return request(options).then(function (searchResults) {
+        console.log(searchResults.name);
+        return searchResults.name;
+    });
 }
 
 /**
@@ -58,4 +75,4 @@ function addLineupTimes(searchResults) {
     });
 }
 
-module.exports = {getRestaurantsByKeywordAndCoordinates};
+module.exports = {getRestaurantsByKeywordAndCoordinates, getRestaurantsById};
