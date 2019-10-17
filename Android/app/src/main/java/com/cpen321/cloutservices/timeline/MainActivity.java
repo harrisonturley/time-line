@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tempOnClick(View v) {
+        //remove
         Intent i = new Intent(this, SearchActivity.class);
         startActivity(i);
     }
