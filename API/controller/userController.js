@@ -8,6 +8,15 @@ router.get('/users/:email', function (req, res, next) {
     }).catch(next);
 });
 
+// is this the object id?
+// do we need this if we have google auth?
+// i dont think this needs to be a post?
+router.get('/users/login/:_id', function (req, res, next) {
+    userService.verifyLoginUserExists(req.params._id).then(function (user) {
+        res.send(user);
+    }).catch(next);
+});
+
 router.post('/users', function (req, res, next) {
     userService.addUser(req.body).then(function (user) {
         res.send(user);
