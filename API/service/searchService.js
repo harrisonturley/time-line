@@ -30,7 +30,7 @@ function getRestaurantsById(id) {
         },
         json: true
     };
-    // find out how to extract name from here
+    
     return request(options).then(function (searchResults) {
         return searchResults.name;
     });
