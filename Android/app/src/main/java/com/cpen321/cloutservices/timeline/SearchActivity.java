@@ -10,18 +10,25 @@ import android.os.Bundle;
 
 public class SearchActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        Toolbar t = findViewById(R.id.toolbar_main);
-        setSupportActionBar(t);
+        toolbar = findViewById(R.id.toolbar_main);
+        drawer = findViewById(R.id.drawer_layout);
+        
+        configureToolbar();
+    }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, t, R.string.app_name, R.string.app_name);
+    private void configureToolbar() {
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.app_name, R.string.app_name);
         drawer.addDrawerListener(toggle);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_24px);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
     }
 }
