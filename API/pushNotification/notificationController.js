@@ -1,8 +1,9 @@
 
 const express = require('express');
 const router = express.Router();
-var firebaseAdmin = require('../server.js');
-var admin = firebaseAdmin.admin;
+//var firebaseAdmin = require('../server.js');
+//var admin = firebaseAdmin.admin;
+var admin = require('firebase-admin');
 var topic = 'globalTopic';
 
 var message = {
@@ -13,10 +14,17 @@ var message = {
   topic: topic
 };
 
+admin.initializeApp({
+  credential: admin.credential.applicationDefault()
+});
+
+module.admin = admin;
+
 //how to handle req res next?
 //can only test this once i have a registration token
 router.post('/notification/subscribe', function (req, res, next) {
     console.log("user token is:"+ req.body.registrationToken);
+    console.log(admin);
 
   // Subscribe the devices corresponding to the registration tokens to the
   // topic.

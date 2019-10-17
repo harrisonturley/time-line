@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const docs = require("express-mongoose-docs");
-var admin = require('firebase-admin');
+//var admin = require('firebase-admin');
 
 // mongoose Promise is deprecated; cast it to global.Promise
 mongoose.Promise = global.Promise;
@@ -17,11 +17,11 @@ const server = express();
 // FB as actual database?
 // https://firebase.google.com/docs/admin/setup#add_the_sdk
 // also is best place for all this code here or somewhere else?
-admin.initializeApp({
-    credential: admin.credential.applicationDefault()
-  });
+// admin.initializeApp({
+//     credential: admin.credential.applicationDefault()
+//   });
 
-module.admin = admin;
+//module.admin = admin;
 
 // parsing middleware
 const jsonParser = bodyParser.json();
@@ -46,3 +46,5 @@ docs(server, mongoose);
 server.listen(4000, function () {
     console.log('API is up');
 });
+
+//module.exports = admin;
