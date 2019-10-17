@@ -1,0 +1,31 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "api for time line",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harrisonturley/time-line.git"
+  },
+  "author": "Mark & Victoria",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harrisonturley/time-line/issues"
+  },
+  "homepage": "https://github.com/harrisonturley/time-line#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-mongoose-docs": "^0.3.2",
+    "firebase-admin": "^8.6.0",
+    "mocha": "^6.2.1",
+    "mongoose": "^5.7.5",
+    "nodemon": "^1.19.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  }
+}
