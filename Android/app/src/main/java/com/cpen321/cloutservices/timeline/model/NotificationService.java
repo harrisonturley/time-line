@@ -1,4 +1,11 @@
 package com.cpen321.cloutservices.timeline.model;
 
-public class NotificationService {
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
+
+public interface NotificationService {
+
+    @POST("/notification/subscribe")
+    Call<Notification> sendNotificationToken(@Body Notification notification);
 }
