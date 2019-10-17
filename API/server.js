@@ -32,7 +32,7 @@ server.use(jsonParser);
 server.use('/api', require('./controller/userController'));
 server.use('/api', require('./controller/lineupController'));
 // server.use('/api', require('./controller/searchController'));
-server.use('/api', require('./pushNotification/subscriptionController'));
+server.use('/api', require('./pushNotification/notificationController'));
 
 // error handling middleware
 server.use(function (err, req, res, _) {
@@ -44,5 +44,5 @@ server.use(function (err, req, res, _) {
 docs(server, mongoose);
 
 server.listen(4000, function () {
-    console.log('API is up!');
+    console.log('API is up');
 });
