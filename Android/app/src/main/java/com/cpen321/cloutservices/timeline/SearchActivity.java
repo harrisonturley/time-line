@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
+import android.view.View;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -20,7 +21,7 @@ public class SearchActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar_main);
         drawer = findViewById(R.id.drawer_layout);
-        
+
         configureToolbar();
     }
 
@@ -30,5 +31,9 @@ public class SearchActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_24px);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void onClickTestButton(View v) {
+
     }
 }
