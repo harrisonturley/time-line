@@ -24,7 +24,6 @@ module.admin = admin;
 //can only test this once i have a registration token
 router.post('/notification/subscribe', function (req, res, next) {
     console.log("user token is:"+ req.body.registrationToken);
-    console.log(admin);
 
   // Subscribe the devices corresponding to the registration tokens to the
   // topic.
@@ -34,10 +33,11 @@ router.post('/notification/subscribe', function (req, res, next) {
   // See the MessagingTopicManagementResponse reference documentation
   // for the contents of response.
     console.log('Successfully subscribed to topic:', response);
-    // dont need any response?
+    res.status(200).send();
   })
   .catch(function(error) {
     console.log('Error subscribing to topic:', error);
+    res.status(422).send({error: err.message});
   });
 
     /*userService.getUserByEmail(req.params.email, res).then(function (user) {
