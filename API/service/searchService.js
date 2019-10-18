@@ -23,7 +23,6 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
 }
 
 function getRestaurantsById(id) {
-    console.log("in here hello");
     const options = {
         uri: 'https://api.yelp.com/v3/businesses/' + id,
         headers: {
@@ -31,9 +30,8 @@ function getRestaurantsById(id) {
         },
         json: true
     };
-    // find out how to extract name from here
+    
     return request(options).then(function (searchResults) {
-        console.log(searchResults.name);
         return searchResults.name;
     });
 }

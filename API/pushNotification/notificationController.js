@@ -1,15 +1,13 @@
 
 const express = require('express');
 const router = express.Router();
-//var firebaseAdmin = require('../server.js');
-//var admin = firebaseAdmin.admin;
 var admin = require('firebase-admin');
 var topic = 'globalTopic';
 
 var message = {
-  data: {
-    score: '850',
-    time: '2:45'
+  notification: {
+    body: 'test',
+    title: 'hello hello'
   },
   topic: topic
 };
@@ -39,16 +37,6 @@ router.post('/notification/subscribe', function (req, res, next) {
     console.log('Error subscribing to topic:', error);
     res.status(422).send({error: err.message});
   });
-
-    /*userService.getUserByEmail(req.params.email, res).then(function (user) {
-      res.send(user);
-    }).catch(next);
-
-    searchService.getRestaurantsByKeywordAndCoordinates(
-        req.query.keyword, {latitude: req.query.latitude, longitude: req.query.longitude}
-    ).then(function (searchResults) {
-        res.send(searchResults);
-    }).catch(next);*/
 });
 
 router.get('/notification/send', function (req, res, next) {
@@ -58,12 +46,15 @@ router.get('/notification/send', function (req, res, next) {
     .then((response) => {
       // Response is a message ID string.
       console.log('Successfully sent message:', response);
+      res.status(200).send();
     })
     .catch((error) => {
       console.log('Error sending message:', error);
+      res.status(422).send({error: err.message});
     });
 });
 
 module.exports = router;
+module.exports.admin = admin;
 
   
