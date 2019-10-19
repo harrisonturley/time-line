@@ -13,6 +13,7 @@ router.get('/users/:email', function (req, res, next) {
 // how do i get the token from the post request
 
 //right now all this does is return yes or no based if the user exists
+// so then front end can take that, and then call add new user if need be
 router.post('/users/tokensignin', function (req, res, next) {
     // check how to parse body
     //what do we want to return
