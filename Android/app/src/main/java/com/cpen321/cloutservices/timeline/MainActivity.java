@@ -68,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // end of create
-
-        Intent i = new Intent(this, SearchActivity.class);
-        startActivity(i);
     }
 
     private void createNotificationChannel() {
