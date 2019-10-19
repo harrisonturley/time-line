@@ -8,12 +8,18 @@ router.get('/users/:email', function (req, res, next) {
     }).catch(next);
 });
 
-// is this the object id?
-// do we need this if we have google auth?
-// i dont think this needs to be a post?
-router.get('/users/login/:_id', function (req, res, next) {
-    userService.verifyLoginUserExists(req.params._id).then(function (user) {
-        res.send(user);
+// still sketchy cuz not tested, need to test with front end
+// how tf is this supposed to work... google docs r weird
+// how do i get the token from the post request
+
+//right now all this does is return yes or no based if the user exists
+router.post('/users/tokensignin', function (req, res, next) {
+    // check how to parse body
+    //what do we want to return
+    authenticatorService.verifyId(req.body.idToken).then(function (userid) {
+        userService.verifyLoginUserExists(userid).then(function (user){
+            res.send(user);
+        });
     }).catch(next);
 });
 
