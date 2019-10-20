@@ -5,10 +5,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,10 +25,11 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener {
 
     private Toolbar toolbar;
     private DrawerLayout drawer;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,15 @@ public class SearchActivity extends AppCompatActivity {
         drawer = findViewById(R.id.drawer_layout);
 
         configureToolbar();
+        Class fragmentClass = SearchFragment.class;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 
     private void configureToolbar() {
@@ -44,6 +57,10 @@ public class SearchActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_24px);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     public void onClickTestButton(View v) {
