@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group>
-        <item android:id="@+id/nav_item_one"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Item 1" />
-        <item android:id="@+id/nav_item_two"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Item 2" />
-        <item android:id="@+id/nav_item_three"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Item 3" />
-    </group>
+    <group
+        android:id="@+id/menu_group"
+        android:checkableBehavior="single">
+        <item android:title="Navigation">
+            <menu>
+                <item android:id="@+id/nav_search"
+                    android:icon="@drawable/ic_search_24px"
+                    android:title="Search"
+                    android:checkable="true"/>
+                <item android:id="@+id/nav_awards"
+                    android:icon="@drawable/ic_attach_money_24px"
+                    android:title="Awards"
+                    android:checkable="true"/>
+                <item android:id="@+id/nav_settings"
+                    android:icon="@drawable/ic_settings_24px"
+                    android:title="Settings"
+                    android:checkable="true"/>
+            </menu>
+        </item>
 
-    <group android:id="@+id/group_menu">
-        <item android:id="@+id/nav_item_four"
-            android:title="Item 4" />
-        <item android:id="@+id/nav_item_five"
-            android:title="Item 5" />
+        <item android:title="Account">
+            <menu>
+                <item android:id="@+id/nav_sign_out"
+                    android:icon="@drawable/ic_clear_24px"
+                    android:title="Sign Out" />
+            </menu>
+        </item>
     </group>
-
-    <item android:title="Title 1">
-        <menu>
-            <item android:id="@+id/nav_item_six"
-                android:icon="@mipmap/ic_launcher"
-                android:title="Item 6" />
-            <item android:id="@+id/nav_item_seven"
-                android:icon="@mipmap/ic_launcher"
-                android:title="Item 7" />
-        </menu>
-    </item>
 </menu>
