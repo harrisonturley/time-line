@@ -22,20 +22,6 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
     return request(options).then(addLineupTimes);
 }
 
-function getRestaurantsById(id) {
-    const options = {
-        uri: 'https://api.yelp.com/v3/businesses/' + id,
-        headers: {
-            'Authorization': 'Bearer ' + API_KEY
-        },
-        json: true
-    };
-    
-    return request(options).then(function (searchResults) {
-        return searchResults.name;
-    });
-}
-
 /**
  * @param searchResults {{businesses:{lineupTime:Number}}}
  **/
@@ -73,4 +59,4 @@ function addLineupTimes(searchResults) {
     });
 }
 
-module.exports = {getRestaurantsByKeywordAndCoordinates, getRestaurantsById};
+module.exports = {getRestaurantsByKeywordAndCoordinates};
