@@ -8,21 +8,6 @@ router.get('/users/:email', function (req, res, next) {
     }).catch(next);
 });
 
-// still sketchy cuz not tested, need to test with front end
-// how tf is this supposed to work... google docs r weird
-// how do i get the token from the post request
-
-//right now all this does is return yes or no based if the user exists
-router.post('/users/tokensignin', function (req, res, next) {
-    // check how to parse body
-    //what do we want to return
-    authenticatorService.verifyId(req.body.idToken).then(function (userid) {
-        userService.verifyLoginUserExists(userid).then(function (user){
-            res.send(user);
-        });
-    }).catch(next);
-});
-
 router.post('/users', function (req, res, next) {
     userService.addUser(req.body).then(function (user) {
         res.send(user);
@@ -41,6 +26,20 @@ router.put('/users/:email', function (req, res, next) {
 router.delete('/users/:email', function (req, res, next) {
     userService.deleteUser(req.params.email).then(function (user) {
         res.send(user);
+    }).catch(next);
+});
+
+// still have to test this method in conjunction with the front end
+// currently just returns yes or no based if the user exists
+// more work/planning needs to be done on figuring out
+// implementation in conjunction with the front end.
+router.post('/users/tokensignin', function (req, res, next) {
+    // check how to parse body
+    //what do we want to return
+    authenticatorService.verifyId(req.body.idToken).then(function (userid) {
+        userService.verifyLoginUserExists(userid).then(function (user){
+            res.send(user);
+        });
     }).catch(next);
 });
 

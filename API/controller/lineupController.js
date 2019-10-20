@@ -17,7 +17,6 @@ router.post('/lineups', function (req, res, next) {
 router.put('/lineups/:id', function (req, res, next) {
     lineupService.updateLineup(req.params.id, req.body).then(function (lineup) {
         //  need to return the UPDATED lineup, not the found one
-        // is this the spot where we send a push notification?
         lineupService.getLineupById(req.params.id).then(function (updatedLineup) {
             res.send(updatedLineup);
         });

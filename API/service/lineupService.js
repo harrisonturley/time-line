@@ -1,5 +1,5 @@
 const Lineup = require('../repository/lineup');
-const pushNotification = require('../pushNotification/pushNotification');
+const pushNotification = require('./notificationService');
 
 function getLineupById(id) {
     return Lineup.findOne({id: id});
@@ -14,11 +14,9 @@ function addLineup(body) {
 }
 
 function updateLineup(id, body) {
-    pushNotification.checkToSendPushNotification(body, id);
-    //return Lineup.findOneAndUpdate({id: id}, body);
-    //pushNotification.checkToSendPushNotification(body, id, function(){
-        return Lineup.findOneAndUpdate({id: id}, body);
-    //});
+    return Lineup.findOneAndUpdate({id: id}, body).then(function (update) {
+        pushNotification.checkToSendPushNotification(body, id);
+    });
 }
 
 function deleteLineup(id) {

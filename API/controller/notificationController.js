@@ -18,14 +18,9 @@ admin.initializeApp({
 
 module.admin = admin;
 
-//how to handle req res next?
-//can only test this once i have a registration token
+// subscribes users to a general topic
 router.post('/notification/subscribe', function (req, res, next) {
-    console.log("user token is:"+ req.body.registrationToken);
-
-  // Subscribe the devices corresponding to the registration tokens to the
-  // topic.
-  
+    
   admin.messaging().subscribeToTopic(req.body.registrationToken, topic)
   .then(function(response) {
   // See the MessagingTopicManagementResponse reference documentation
@@ -39,9 +34,9 @@ router.post('/notification/subscribe', function (req, res, next) {
   });
 });
 
+// this endpoint is just to purely test sending a push notification without the sending logic
 router.get('/notification/send', function (req, res, next) {
-  console.log("in send message");
-    
+
     admin.messaging().send(message)
     .then((response) => {
       // Response is a message ID string.
