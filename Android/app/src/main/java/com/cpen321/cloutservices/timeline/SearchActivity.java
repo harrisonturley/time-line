@@ -101,7 +101,6 @@ public class SearchActivity extends AppCompatActivity {
             navigationHeaderEmail.setText(account.getEmail());
             navigationHeaderEmail.setPaintFlags(navigationHeaderEmail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-
             if (account.getPhotoUrl() != null) {
                 navigationHeaderImageView.setImageURI(account.getPhotoUrl());
                 Log.w("PHOTO", account.getPhotoUrl().toString());
