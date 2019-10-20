@@ -35,7 +35,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 
-public class SearchActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener {
+public class SearchActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -116,6 +116,9 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
                     case R.id.nav_search:
                         fragmentClass = SearchFragment.class;
                         break;
+                    case R.id.nav_settings:
+                        fragmentClass = SettingsFragment.class;
+                        break;
                 }
 
                 try {
@@ -138,7 +141,7 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
             @Override
             public void run() {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                //fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                 fragmentTransaction.replace(R.id.flContent, mainFragment);
                 fragmentTransaction.commitAllowingStateLoss();
             }
@@ -159,44 +162,5 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
         } else {
             super.onBackPressed();
         }
-    }
-
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    public void onClickTestButton(View v) {
-        FirebaseInstanceId.getInstance().getInstanceId()
-            .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                @Override
-                public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                    if (!task.isSuccessful()) {
-                        Log.w("GET_INSTANCE_ID", "getInstanceId failed", task.getException());
-                        return;
-                    }
-
-                    // Get new Instance ID token
-                    String token = task.getResult().getToken();
-
-                    // Log and toast
-                    Log.d("GET_INSTANCE_ID", token);
-
-                    Notification notification = new Notification(token);
-                    NotificationService notificationSub = RetrofitClientInstance.getRetrofitInstance().create(NotificationService.class);
-                    Call<Notification> call = notificationSub.sendNotificationToken(notification);
-                    call.enqueue(new Callback<Notification>() {
-                        @Override
-                        public void onResponse(Call<Notification> call, Response<Notification> response) {
-                            Toast.makeText(SearchActivity.this, "Call sent", Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void onFailure(Call<Notification> call, Throwable t) {
-                            Toast.makeText(SearchActivity.this, "Something went wrong...Please try later! " + t.getCause(), Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-                }
-            });
     }
 }
