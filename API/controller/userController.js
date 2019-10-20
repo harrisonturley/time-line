@@ -29,18 +29,4 @@ router.delete('/users/:email', function (req, res, next) {
     }).catch(next);
 });
 
-// still have to test this method in conjunction with the front end
-// currently just returns yes or no based if the user exists
-// more work/planning needs to be done on figuring out
-// implementation in conjunction with the front end.
-router.post('/users/tokensignin', function (req, res, next) {
-    // check how to parse body
-    //what do we want to return
-    authenticatorService.verifyId(req.body.idToken).then(function (userid) {
-        userService.verifyLoginUserExists(userid).then(function (user){
-            res.send(user);
-        });
-    }).catch(next);
-});
-
 module.exports = router;
