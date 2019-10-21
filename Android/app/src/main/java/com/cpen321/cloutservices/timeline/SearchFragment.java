@@ -113,7 +113,6 @@ public class SearchFragment extends Fragment {
         searchView = v.findViewById(R.id.search_view);
         recyclerView = v.findViewById(R.id.search_recycler_view);
 
-        recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
@@ -126,7 +125,6 @@ public class SearchFragment extends Fragment {
                 call.enqueue(new Callback<Businesses>() {
                     @Override
                     public void onResponse(Call<Businesses> call, Response<Businesses> response) {
-                        Toast.makeText(getActivity(), "Good", Toast.LENGTH_SHORT).show();
                         List<Restaurant> restaurants = response.body().getBusinesses();
                         Collections.sort(restaurants, new Comparator<Restaurant>() {
                             @Override
