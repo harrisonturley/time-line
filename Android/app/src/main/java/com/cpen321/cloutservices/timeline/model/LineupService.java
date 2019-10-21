@@ -16,14 +16,14 @@ import retrofit2.http.Query;
 public interface LineupService {
 
     @GET("lineups/{id}")
-    Call<Lineup> getLineup(@Path("id") String restaurantId, @Body Integer lineupTime);
+    Call<Lineup> getLineup(@Path("id") String restaurantId);
 
     //Post cart
     @POST("lineups")
     Call<Lineup> addLineup(@Body Lineup lineup);
 
     @PUT("lineups/{id}")
-    Call<Lineup>  updateLineup(@Path("id") String restaurantId, @Body Integer lineupTime);
+    Call<Lineup>  updateLineup(@Path("id") String restaurantId, @Body Lineup lineup);
 
 //    @PUT("/lineups")
 }
