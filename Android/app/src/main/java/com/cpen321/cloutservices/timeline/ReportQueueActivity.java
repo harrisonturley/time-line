@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ProgressBar;
 
-import com.cpen321.cloutservices.timeline.model.ApiService;
+import com.cpen321.cloutservices.timeline.model.LineupService;
 import com.cpen321.cloutservices.timeline.model.Lineup;
 
 import retrofit2.Call;
@@ -26,16 +27,12 @@ public class ReportQueueActivity extends AppCompatActivity {
     Button submitQueueBtn;
     Integer lineuptime;
     String restaurantId;
-    ApiService service;
     ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_queue);
-
-        /*Create handle for the RetrofitInstance interface*/
-        service = RetrofitClientInstance.getRetrofitInstance().create(ApiService.class);
 
         // findViews
         submitQueueBtn = findViewById(R.id.submit_btn);
@@ -65,11 +62,19 @@ public class ReportQueueActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         Lineup lineup = new Lineup(restaurantId, lineuptime);
-        Call<Lineup> call = service.sendLineupTime(lineup);
+        Log.wtf("Print restaurantId: ", restaurantId);
+        Log.wtf("Print lineuptime: ", lineuptime.toString());
+        LineupService service = RetrofitClientInstance.getRetrofitInstance().create(LineupService.class);
+        Call<Lineup> call = service.addLineup(lineup);
 
         call.enqueue(new Callback<Lineup>() {
             @Override
             public void onResponse(Call<Lineup> call, Response<Lineup> response) {
+                Log.wtf("Call request", call.request().toString());
+                Log.wtf("Call request header", call.request().headers().toString());
+                Log.wtf("Response raw header", response.headers().toString());
+                Log.wtf("Response raw", String.valueOf(response.raw().body()));
+                Log.wtf("Response code", String.valueOf(response.code()));
 
                 if (response.isSuccessful()) {
                     progressBar.setVisibility(View.INVISIBLE);
@@ -77,17 +82,18 @@ public class ReportQueueActivity extends AppCompatActivity {
 
 
                 } else {
-                    Toast.makeText(ReportQueueActivity.this, "Cannot submit new lineup time while your previous time is in progress.", Toast.LENGTH_LONG).show();
+                    System.out.println("ERROR "+response.raw().body());
+                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                    Toast.makeText(ReportQueueActivity.this,  "Cannot submit new lineup time while your previous time is in progress.", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }
 
             @Override
             public void onFailure(Call<Lineup> call, Throwable t) {
-
                 Toast.makeText(ReportQueueActivity.this, "Failed to submit. Check your Internet connection", Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
-
+                Log.wtf("Error", t.getMessage());
             }
         });
     }
