@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cpen321.cloutservices.timeline">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- To access Google+ APIs: -->
     <application
         android:allowBackup="true"
@@ -27,7 +31,5 @@
             </intent-filter>
         </service>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
