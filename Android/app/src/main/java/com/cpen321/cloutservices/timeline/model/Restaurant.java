@@ -19,6 +19,9 @@ public class Restaurant {
     @SerializedName("lineupTime")
     private int lineupTime;
 
+    @SerializedName("location")
+    private Location location;
+
     public String getId() {
         return id;
     }
@@ -37,5 +40,9 @@ public class Restaurant {
 
     public int getLineupTime() {
         return lineupTime;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }

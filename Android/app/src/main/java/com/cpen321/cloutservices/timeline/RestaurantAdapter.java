@@ -1,13 +1,14 @@
 package com.cpen321.cloutservices.timeline;
 
-import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cpen321.cloutservices.timeline.model.Restaurant;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -29,9 +30,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     @Override
     public void onBindViewHolder(RestaurantAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.tv_name.setText(restaurants.get(i).getName());
-        viewHolder.tv_version.setText(restaurants.get(i).getId());
-        viewHolder.tv_api.setText(restaurants.get(i).getImageUrl());
+        Picasso.get().load(Uri.parse(restaurants.get(i).getImageUrl())).error(R.drawable.ic_clear_24px).into(viewHolder.restaurantImage);
+        viewHolder.restaurantName.setText(restaurants.get(i).getName());
+        viewHolder.restaurantAddress.setText(restaurants.get(i).getLocation().getDisplayAddressFormatted());
+        viewHolder.restaurantLineup.setText("Lineup: " + restaurants.get(i).getLineupTime() + " minutes");
+        viewHolder.restaurantDistance.setText("Distance: " + (int)restaurants.get(i).getDistance() + " metres");
     }
 
     @Override
@@ -40,14 +43,20 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tv_name, tv_version, tv_api;
+        private ImageView restaurantImage;
+        private TextView restaurantName;
+        private TextView restaurantAddress;
+        private TextView restaurantLineup;
+        private TextView restaurantDistance;
 
         public ViewHolder(View v) {
             super(v);
 
-            tv_name = v.findViewById(R.id.tv_name);
-            tv_version = v.findViewById(R.id.tv_version);
-            tv_api = v.findViewById(R.id.tv_api_level);
+            restaurantImage = v.findViewById(R.id.restaurantImage);
+            restaurantName = v.findViewById(R.id.restaurantName);
+            restaurantAddress = v.findViewById(R.id.restaurantAddress);
+            restaurantLineup = v.findViewById(R.id.restaurantLineup);
+            restaurantDistance = v.findViewById(R.id.restaurantDistance);
         }
     }
 }
