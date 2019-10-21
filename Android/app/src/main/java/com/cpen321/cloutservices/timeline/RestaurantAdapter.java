@@ -1,5 +1,6 @@
 package com.cpen321.cloutservices.timeline;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     private ArrayList<Restaurant> restaurants;
 
+    private static final String ID_TAG = "id";
+
     public RestaurantAdapter(ArrayList<Restaurant> restaurants) {
         this.restaurants = restaurants;
     }
@@ -30,11 +33,22 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     @Override
     public void onBindViewHolder(RestaurantAdapter.ViewHolder viewHolder, int i) {
+        final int index = i;
+
         Picasso.get().load(Uri.parse(restaurants.get(i).getImageUrl())).error(R.drawable.ic_clear_24px).into(viewHolder.restaurantImage);
         viewHolder.restaurantName.setText(restaurants.get(i).getName());
         viewHolder.restaurantAddress.setText(restaurants.get(i).getLocation().getDisplayAddressFormatted());
         viewHolder.restaurantLineup.setText("Lineup: " + restaurants.get(i).getLineupTime() + " minutes");
         viewHolder.restaurantDistance.setText("Distance: " + (int)restaurants.get(i).getDistance() + " metres");
+
+        viewHolder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), TestActivity.class);
+                intent.putExtra(ID_TAG, restaurants.get(index).getId());
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -43,6 +57,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private View view;
         private ImageView restaurantImage;
         private TextView restaurantName;
         private TextView restaurantAddress;
@@ -52,6 +67,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         public ViewHolder(View v) {
             super(v);
 
+            view = v;
             restaurantImage = v.findViewById(R.id.restaurantImage);
             restaurantName = v.findViewById(R.id.restaurantName);
             restaurantAddress = v.findViewById(R.id.restaurantAddress);
