@@ -22,7 +22,7 @@ public class SearchActivity extends AppCompatActivity {
         reportqueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SearchActivity.this, SearchActivity.class));
+                startActivity(new Intent(SearchActivity.this, ReportQueueActivity.class));
             }
         });
     }

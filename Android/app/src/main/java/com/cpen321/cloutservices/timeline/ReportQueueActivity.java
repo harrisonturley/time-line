@@ -41,10 +41,12 @@ public class ReportQueueActivity extends AppCompatActivity {
         submitQueueBtn = findViewById(R.id.submit_btn);
         queueInput = findViewById(R.id.queue_input);
         progressBar = findViewById(R.id.progressBar);
+        restaurantname = findViewById(R.id.restaurant_name);
 
         /* retrieve restaurant from search activity */
-        bundle = getIntent().getExtras();
-        restaurantId = bundle.getString("restaurantId");
+//        bundle = getIntent().getExtras();
+//        restaurantId = bundle.getString("restaurantId");
+        restaurantId = "MCDONALDS";
         restaurantname.setText(restaurantId);
 
         submitQueueBtn.setOnClickListener(new View.OnClickListener() {
