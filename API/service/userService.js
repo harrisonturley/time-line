@@ -16,4 +16,8 @@ function deleteUser(email) {
     return User.findOneAndRemove({email: email});
 }
 
-module.exports = {getUserByEmail, addUser, updateUser, deleteUser};
+function verifyLoginUserExists(_id) {
+    return User.exists({_id: _id});
+}
+
+module.exports = {getUserByEmail, addUser, updateUser, deleteUser, verifyLoginUserExists};
