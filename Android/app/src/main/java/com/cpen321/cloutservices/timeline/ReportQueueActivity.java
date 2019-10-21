@@ -3,17 +3,21 @@ package com.cpen321.cloutservices.timeline;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ProgressBar;
 
+import com.bumptech.glide.Glide;
 import com.cpen321.cloutservices.timeline.model.LineupService;
 import com.cpen321.cloutservices.timeline.model.Lineup;
+import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,13 +25,22 @@ import retrofit2.Response;
 
 public class ReportQueueActivity extends AppCompatActivity {
 
-    Bundle bundle;
     TextView restaurantname;
+    TextView restaurantaddress;
+    ImageView restaurantimage;
     EditText queueInput;
     Button submitQueueBtn;
     Integer lineuptime;
-    String restaurantId;
     ProgressBar progressBar;
+
+    // Passed from RestaurantAdapter;
+    String restaurantId;
+    String imageURL;
+    String address;
+    String name;
+    private static final String IMG = "img";
+    private static final String ADDR = "addr";
+    private static final String NAME = "name";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +52,22 @@ public class ReportQueueActivity extends AppCompatActivity {
         queueInput = findViewById(R.id.queue_input);
         progressBar = findViewById(R.id.progressBar);
         restaurantname = findViewById(R.id.restaurant_name);
+        restaurantaddress = findViewById(R.id.restaurant_address);
+        restaurantimage = findViewById(R.id.restaurant_image);
 
-        /* retrieve restaurant from search activity */
-//        bundle = getIntent().getExtras();
-//        restaurantId = bundle.getString("restaurantId");
-        restaurantId = "MCDONALDS";
-        restaurantname.setText(restaurantId);
+
+        /* retrieve restaurant from RestaurantAdapter */
+        Intent intent = getIntent();
+        restaurantId = intent.getStringExtra("id");
+        imageURL = intent.getStringExtra("img");
+        address = intent.getStringExtra("addr");
+        name = intent.getStringExtra("name");
+
+
+        restaurantname.setText(name);
+        restaurantaddress.setText(address);
+//        Picasso.get().load(imageURL).into(restaurantimage);
+        Glide.with(ReportQueueActivity.this).load(imageURL).into(restaurantimage);
 
         submitQueueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +75,7 @@ public class ReportQueueActivity extends AppCompatActivity {
                 lineuptime = Integer.parseInt(queueInput.getText().toString());
                 // send info to backend api call lets go
                 putLineupTime(restaurantId, lineuptime);
+                startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
             }
         });
     }
