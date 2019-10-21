@@ -20,6 +20,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     private ArrayList<Restaurant> restaurants;
 
     private static final String ID_TAG = "id";
+    private static final String IMG = "img";
+    private static final String ADDR = "addr";
+    private static final String NAME = "name";
 
     public RestaurantAdapter(ArrayList<Restaurant> restaurants) {
         this.restaurants = restaurants;
@@ -44,8 +47,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), TestActivity.class);
+                Intent intent = new Intent(v.getContext(), ReportQueueActivity.class);
                 intent.putExtra(ID_TAG, restaurants.get(index).getId());
+                intent.putExtra(IMG, restaurants.get(index).getImageUrl());
+                intent.putExtra(ADDR, restaurants.get(index).getLocation().getDisplayAddressFormatted());
+                intent.putExtra(NAME, restaurants.get(index).getName());
                 v.getContext().startActivity(intent);
             }
         });
