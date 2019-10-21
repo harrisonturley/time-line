@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.squareup.picasso.Picasso;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -107,8 +108,9 @@ public class SearchActivity extends AppCompatActivity {
             navigationHeaderEmail.setPaintFlags(navigationHeaderEmail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
             if (account.getPhotoUrl() != null) {
-                navigationHeaderImageView.setImageURI(account.getPhotoUrl());
-                Log.w("PHOTO", account.getPhotoUrl().toString());
+                Picasso.get().load(account.getPhotoUrl()).error(R.mipmap.ic_launcher).into(navigationHeaderImageView);
+            } else {
+                navigationHeaderImageView.setImageResource(R.mipmap.ic_launcher);
             }
         }
 
