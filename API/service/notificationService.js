@@ -15,7 +15,7 @@ function getRestaurantsById(id) {
       },
       json: true
   };
-  
+
   return request(options).then(function (searchResults) {
       return searchResults.name;
   });
@@ -44,6 +44,9 @@ function checkToSendPushNotification(body, id) {
       .catch((error) => {
         console.log("Error sending message:", error);
       });
+    }
+    else{
+      console.log("No need for push notification.");
     }
   }).catch((error) => {
     console.log("Not a valid restaurant ID, no notification sent", error);
