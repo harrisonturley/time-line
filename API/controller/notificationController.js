@@ -1,15 +1,15 @@
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-var admin = require('firebase-admin');
-var topic = 'globalTopic';
+var admin = require("firebase-admin");
+var topic = "globalTopic";
 
 var message = {
   notification: {
     body: 'test',
     title: 'hello hello'
   },
-  topic: topic
+  topic
 };
 
 admin.initializeApp({
@@ -19,32 +19,32 @@ admin.initializeApp({
 module.admin = admin;
 
 // subscribes users to a general topic
-router.post('/notification/subscribe', function (req, res, next) {
+router.post("/notification/subscribe", function (req, res, next) {
     
   admin.messaging().subscribeToTopic(req.body.registrationToken, topic)
   .then(function(response) {
   // See the MessagingTopicManagementResponse reference documentation
   // for the contents of response.
-    console.log('Successfully subscribed to topic:', response);
+    console.log("Successfully subscribed to topic:", response);
     res.status(200).send();
   })
   .catch(function(error) {
-    console.log('Error subscribing to topic:', error);
+    console.log("Error subscribing to topic:", error);
     res.status(422).send({error: err.message});
   });
 });
 
 // this endpoint is just to purely test sending a push notification without the sending logic
-router.get('/notification/send', function (req, res, next) {
+router.get("/notification/send", function (req, res, next) {
 
     admin.messaging().send(message)
     .then((response) => {
       // Response is a message ID string.
-      console.log('Successfully sent message:', response);
+      console.log("Successfully sent message:", response);
       res.status(200).send();
     })
     .catch((error) => {
-      console.log('Error sending message:', error);
+      console.log("Error sending message:", error);
       res.status(422).send({error: err.message});
     });
 });
