@@ -38,9 +38,6 @@ public class ReportQueueActivity extends AppCompatActivity {
     String imageURL;
     String address;
     String name;
-    private static final String IMG = "img";
-    private static final String ADDR = "addr";
-    private static final String NAME = "name";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +63,6 @@ public class ReportQueueActivity extends AppCompatActivity {
 
         restaurantname.setText(name);
         restaurantaddress.setText(address);
-//        Picasso.get().load(imageURL).into(restaurantimage);
         Glide.with(ReportQueueActivity.this).load(imageURL).into(restaurantimage);
 
         submitQueueBtn.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +93,6 @@ public class ReportQueueActivity extends AppCompatActivity {
         call.enqueue(new Callback<Lineup>() {
             @Override
             public void onResponse(Call<Lineup> call, Response<Lineup> response) {
-                // wtf is going on
                 Log.wtf("Call request", call.request().toString());
                 Log.wtf("Call request header", call.request().headers().toString());
                 Log.wtf("Response raw header", response.headers().toString());
@@ -126,50 +121,6 @@ public class ReportQueueActivity extends AppCompatActivity {
             }
         });
     }
-/*
-    // method to post the line up time -- not used anymore... kept for nostalgia
-    public void postLineupTime(String restaurantId, Integer lineuptime) {
-        // setup progess bar
-        progressBar.setVisibility(View.VISIBLE);
 
-        Lineup lineup = new Lineup(restaurantId, lineuptime);
-        Log.wtf("Print restaurantId: ", restaurantId);
-        Log.wtf("Print lineuptime: ", lineuptime.toString());
-        LineupService service = RetrofitClientInstance.getRetrofitInstance().create(LineupService.class);
-        Call<Lineup> call = service.addLineup(lineup);
-
-        call.enqueue(new Callback<Lineup>() {
-            @Override
-            public void onResponse(Call<Lineup> call, Response<Lineup> response) {
-                // wtf is going on
-                Log.wtf("Call request", call.request().toString());
-                Log.wtf("Call request header", call.request().headers().toString());
-                Log.wtf("Response raw header", response.headers().toString());
-                Log.wtf("Response raw", String.valueOf(response.raw().body()));
-                Log.wtf("Response code", String.valueOf(response.code()));
-
-                //  object does not exist yet
-                if (response.isSuccessful()) {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(ReportQueueActivity.this, "You have submitted your lineup time", Toast.LENGTH_LONG).show();
-
-                // if not successful, object exists already. Update instead!
-                } else {
-                    System.out.println("ERROR "+response.raw().body());
-                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
-                    Toast.makeText(ReportQueueActivity.this,  "Cannot submit new lineup time while submission is in progress", Toast.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Lineup> call, Throwable t) {
-                Toast.makeText(ReportQueueActivity.this, "Failed to submit. Check your Internet connection", Toast.LENGTH_LONG).show();
-                progressBar.setVisibility(View.INVISIBLE);
-                Log.wtf("Error", t.getMessage());
-            }
-        });
-    }
-*/
     /* end of class */
 }
