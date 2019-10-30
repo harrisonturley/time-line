@@ -26,14 +26,10 @@ import retrofit2.Response;
 public class ReportQueueActivity extends AppCompatActivity {
 
     private EditText queueInput;
-    private Integer lineuptime;
     private ProgressBar progressBar;
 
     // Passed from RestaurantAdapter;
     private String restaurantId;
-    private String imageURL;
-    private String address;
-    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +48,9 @@ public class ReportQueueActivity extends AppCompatActivity {
         /* retrieve restaurant from RestaurantAdapter */
         Intent intent = getIntent();
         restaurantId = intent.getStringExtra("id");
-        imageURL = intent.getStringExtra("img");
-        address = intent.getStringExtra("addr");
-        name = intent.getStringExtra("name");
+        String imageURL = intent.getStringExtra("img");
+        String address = intent.getStringExtra("addr");
+        String name = intent.getStringExtra("name");
 
 
         restaurantname.setText(name);
@@ -64,9 +60,9 @@ public class ReportQueueActivity extends AppCompatActivity {
         submitQueueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lineuptime = Integer.parseInt(queueInput.getText().toString());
+                int lineupTime = Integer.parseInt(queueInput.getText().toString());
                 // send info to backend api call lets go
-                putLineupTime(restaurantId, lineuptime);
+                putLineupTime(restaurantId, lineupTime);
                 startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
             }
         });
