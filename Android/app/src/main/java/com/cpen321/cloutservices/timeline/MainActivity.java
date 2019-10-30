@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.sign_in_button:
                         signIn();
                         break;
+                    default: break;
                 }
             }
         });
