@@ -21,7 +21,7 @@ module.admin = admin;
 // subscribes users to a general topic
 router.post("/notification/subscribe", function (req, res, next) {
     
-  admin.messaging().subscribeToTopic(req.body.registrationToken, topic)
+  admin.messaging().subscribeToTopic(req.body.registrationToken, globalTopic)
   .then(function(response) {
   // See the MessagingTopicManagementResponse reference documentation
   // for the contents of response.
