@@ -25,19 +25,11 @@ import retrofit2.Response;
 
 public class ReportQueueActivity extends AppCompatActivity {
 
-    TextView restaurantname;
-    TextView restaurantaddress;
-    ImageView restaurantimage;
-    EditText queueInput;
-    Button submitQueueBtn;
-    Integer lineuptime;
-    ProgressBar progressBar;
+    private EditText queueInput;
+    private ProgressBar progressBar;
 
     // Passed from RestaurantAdapter;
-    String restaurantId;
-    String imageURL;
-    String address;
-    String name;
+    private String restaurantId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,20 +37,20 @@ public class ReportQueueActivity extends AppCompatActivity {
         setContentView(R.layout.activity_report_queue);
 
         // findViews
-        submitQueueBtn = findViewById(R.id.submit_btn);
         queueInput = findViewById(R.id.queue_input);
         progressBar = findViewById(R.id.progressBar);
-        restaurantname = findViewById(R.id.restaurant_name);
-        restaurantaddress = findViewById(R.id.restaurant_address);
-        restaurantimage = findViewById(R.id.restaurant_image);
+        Button submitQueueBtn = findViewById(R.id.submit_btn);
+        TextView restaurantname = findViewById(R.id.restaurant_name);
+        TextView restaurantaddress = findViewById(R.id.restaurant_address);
+        ImageView restaurantimage = findViewById(R.id.restaurant_image);
 
 
         /* retrieve restaurant from RestaurantAdapter */
         Intent intent = getIntent();
         restaurantId = intent.getStringExtra("id");
-        imageURL = intent.getStringExtra("img");
-        address = intent.getStringExtra("addr");
-        name = intent.getStringExtra("name");
+        String imageURL = intent.getStringExtra("img");
+        String address = intent.getStringExtra("addr");
+        String name = intent.getStringExtra("name");
 
 
         restaurantname.setText(name);
@@ -68,9 +60,9 @@ public class ReportQueueActivity extends AppCompatActivity {
         submitQueueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lineuptime = Integer.parseInt(queueInput.getText().toString());
+                int lineupTime = Integer.parseInt(queueInput.getText().toString());
                 // send info to backend api call lets go
-                putLineupTime(restaurantId, lineuptime);
+                putLineupTime(restaurantId, lineupTime);
                 startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
             }
         });
