@@ -25,19 +25,19 @@ import retrofit2.Response;
 
 public class ReportQueueActivity extends AppCompatActivity {
 
-    TextView restaurantname;
-    TextView restaurantaddress;
-    ImageView restaurantimage;
-    EditText queueInput;
-    Button submitQueueBtn;
-    Integer lineuptime;
-    ProgressBar progressBar;
+    private TextView restaurantname;
+    private TextView restaurantaddress;
+    private ImageView restaurantimage;
+    private EditText queueInput;
+    private Button submitQueueBtn;
+    private Integer lineuptime;
+    private ProgressBar progressBar;
 
     // Passed from RestaurantAdapter;
-    String restaurantId;
-    String imageURL;
-    String address;
-    String name;
+    private String restaurantId;
+    private String imageURL;
+    private String address;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
