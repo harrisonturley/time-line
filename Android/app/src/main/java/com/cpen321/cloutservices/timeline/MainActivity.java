@@ -22,7 +22,6 @@ import androidx.annotation.Nullable;
 public class MainActivity extends AppCompatActivity {
 
     private int RC_SIGN_IN = 0;
-    private SignInButton signin;
     private GoogleSignInClient mGoogleSignInClient;
 
     @Override
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         createNotificationChannel();
-        signin = findViewById(R.id.sign_in_button);
+        SignInButton signin = findViewById(R.id.sign_in_button);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.

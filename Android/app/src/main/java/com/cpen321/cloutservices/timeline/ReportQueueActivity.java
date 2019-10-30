@@ -25,11 +25,7 @@ import retrofit2.Response;
 
 public class ReportQueueActivity extends AppCompatActivity {
 
-    private TextView restaurantname;
-    private TextView restaurantaddress;
-    private ImageView restaurantimage;
     private EditText queueInput;
-    private Button submitQueueBtn;
     private Integer lineuptime;
     private ProgressBar progressBar;
 
@@ -45,12 +41,12 @@ public class ReportQueueActivity extends AppCompatActivity {
         setContentView(R.layout.activity_report_queue);
 
         // findViews
-        submitQueueBtn = findViewById(R.id.submit_btn);
         queueInput = findViewById(R.id.queue_input);
         progressBar = findViewById(R.id.progressBar);
-        restaurantname = findViewById(R.id.restaurant_name);
-        restaurantaddress = findViewById(R.id.restaurant_address);
-        restaurantimage = findViewById(R.id.restaurant_image);
+        Button submitQueueBtn = findViewById(R.id.submit_btn);
+        TextView restaurantname = findViewById(R.id.restaurant_name);
+        TextView restaurantaddress = findViewById(R.id.restaurant_address);
+        ImageView restaurantimage = findViewById(R.id.restaurant_image);
 
 
         /* retrieve restaurant from RestaurantAdapter */
