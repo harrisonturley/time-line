@@ -6,8 +6,8 @@ var globalTopic = "globalTopic";
 
 var message = {
   notification: {
-    body: 'test',
-    title: 'hello hello'
+    body: "test",
+    title: "hello hello"
   },
   topic: globalTopic
 };

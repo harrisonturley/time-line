@@ -44,7 +44,7 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
     const options = {
         uri: "https://api.yelp.com/v3/businesses/search",
         headers: {
-            'Authorization': 'Bearer ' + API_KEY
+            "Authorization": "Bearer " + API_KEY
         },
         qs: {
             term: keyword,
