@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const LineupSchema = new Schema({
@@ -14,6 +14,6 @@ const LineupSchema = new Schema({
     }
 });
 
-const Lineup = mongoose.model('lineup', LineupSchema);
+const Lineup = mongoose.model("lineup", LineupSchema);
 
 module.exports = Lineup;
