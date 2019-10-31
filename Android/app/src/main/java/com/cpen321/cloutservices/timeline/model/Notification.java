@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class Notification {
 
     @SerializedName("registrationToken")
-    String notificationToken;
+    private String notificationToken;
 
     public Notification(String token) {
         this.notificationToken = token;

@@ -42,10 +42,6 @@ public class SearchActivity extends AppCompatActivity {
     private GoogleSignInAccount account;
     private Handler handler;
 
-    private int navItemIndex;
-
-    private static final String TAG_SEARCH = "search";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +62,6 @@ public class SearchActivity extends AppCompatActivity {
         configureNavigationView();
 
         if (savedInstanceState == null) {
-            navItemIndex = 0;
             Class fragmentClass = SearchFragment.class;
 
             try {
