@@ -77,7 +77,7 @@ public class ReportQueueActivity extends AppCompatActivity {
         Lineup lineup = new Lineup();
         lineup.setLineupTime(lineuptime);
 
-        LineupService service = RetrofitClientInstance.getRetrofitInstance().create(LineupService.class);
+        LineupService service = RetrofitClient.getRetrofitInstance().create(LineupService.class);
         Call<Lineup> call = service.updateLineup(restaurantId, lineup);
 
         call.enqueue(new Callback<Lineup>() {

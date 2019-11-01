@@ -53,7 +53,7 @@ public class SettingsFragment extends Fragment {
                         Log.d("GET_INSTANCE_ID", token);
 
                         Notification notification = new Notification(token);
-                        NotificationService notificationSub = RetrofitClientInstance.getRetrofitInstance().create(NotificationService.class);
+                        NotificationService notificationSub = RetrofitClient.getRetrofitInstance().create(NotificationService.class);
                         Call<Notification> call = notificationSub.sendNotificationToken(notification);
                         call.enqueue(new Callback<Notification>() {
                             @Override

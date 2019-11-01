@@ -3,7 +3,7 @@ package com.cpen321.cloutservices.timeline;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClientInstance {
+public class RetrofitClient {
 
     private static Retrofit retrofit;
     private static final String BASE_URL = "http://192.168.0.108:4000/api/";

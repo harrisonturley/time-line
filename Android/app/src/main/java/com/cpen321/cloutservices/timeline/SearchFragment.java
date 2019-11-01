@@ -47,7 +47,6 @@ public class SearchFragment extends Fragment {
     private Location currentLocation;
     private SearchView searchView;
     private RecyclerView recyclerView;
-    private RestaurantAdapter restaurantAdapter;
 
     private final int PERMISSION_ID = 42;
 
@@ -111,7 +110,7 @@ public class SearchFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                RestaurantService restaurantService = RetrofitClientInstance.getRetrofitInstance().create(RestaurantService.class);
+                RestaurantService restaurantService = RetrofitClient.getRetrofitInstance().create(RestaurantService.class);
                 Call<Businesses> call = restaurantService.getJSON(query, currentLocation.getLatitude(), currentLocation.getLongitude());
 
                 call.enqueue(new Callback<Businesses>() {
@@ -129,7 +128,7 @@ public class SearchFragment extends Fragment {
                             }
                         });
 
-                        restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants);
+                        RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants);
                         recyclerView.setAdapter(restaurantAdapter);
                     }
 
