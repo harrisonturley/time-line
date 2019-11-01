@@ -9,4 +9,8 @@ public class Lineup {
 
     public void setLineupTime(Integer lineupTime) { this.lineupTime = lineupTime; }
 
+    public int getLineupTime() {
+        return lineupTime;
+    }
+
 }
