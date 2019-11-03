@@ -67,6 +67,7 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
+Android/app/src/main/res/values/secrets.xml
 
 ### API ###
 # IntelliJ
