@@ -110,7 +110,12 @@ public class SearchFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                RestaurantService restaurantService = RetrofitClientHelper.getRetrofitInstance().create(RestaurantService.class);
+                if (currentLocation == null) {
+                    Toast.makeText(getActivity(), "Please wait for location to acquire", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                RestaurantService restaurantService = RetrofitClientHelper.getRetrofitInstance(getContext()).create(RestaurantService.class);
                 Call<Businesses> call = restaurantService.getJSON(query, currentLocation.getLatitude(), currentLocation.getLongitude());
 
                 call.enqueue(new Callback<Businesses>() {

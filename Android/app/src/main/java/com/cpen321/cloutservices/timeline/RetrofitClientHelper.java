@@ -1,17 +1,20 @@
 package com.cpen321.cloutservices.timeline;
 
+import android.app.Application;
+import android.content.Context;
+import android.util.Log;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClientHelper {
+public class RetrofitClientHelper extends Application {
 
     private static Retrofit retrofit;
-    private static final String BASE_URL = "http://192.168.0.108:4000/api/";
 
-    public static Retrofit getRetrofitInstance() {
+    public static Retrofit getRetrofitInstance(Context context) {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(context.getResources().getString(R.string.backendEndpoint))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         }
