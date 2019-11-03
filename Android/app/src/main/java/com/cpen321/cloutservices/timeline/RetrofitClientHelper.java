@@ -2,7 +2,6 @@ package com.cpen321.cloutservices.timeline;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
