@@ -34,21 +34,6 @@ router.post("/notification/subscribe", function (req, res, next) {
   });
 });
 
-// this endpoint is just to purely test sending a push notification without the sending logic
-router.get("/notification/send", function (req, res, next) {
-
-    admin.messaging().send(message)
-    .then((response) => {
-      // Response is a message ID string.
-      console.log("Successfully sent message:", response);
-      res.status(200).send();
-    })
-    .catch((error) => {
-      console.log("Error sending message:", error);
-      res.status(422).send({error: error.message});
-    });
-});
-
 module.exports = router;
 module.exports.admin = admin;
 

@@ -24,33 +24,36 @@ function getRestaurantsById(id) {
 // requires a valid yelp restaurant id
 function checkToSendPushNotification(body, id) {
   
-  getRestaurantsById(id).then(function (name) {
+  return new Promise(function(success, nosuccess){
 
-    if(body.lineupTime <= 5){
+    getRestaurantsById(id).then(function (name) {
 
-      var message = {
-        notification: {
-          body: name + " has under a 5 minute wait time!",
-          title: "Notification from Time Line"
-        },
-        topic: globalTopic
-      };
-      
-      admin.messaging().send(message)
-      .then((response) => {
-        // Response is a message ID string.
-        console.log("Successfully sent message:", response);
-      })
-      .catch((error) => {
-        console.log("Error sending message:", error);
-      });
-    }
-    else{
-      console.log("No need for push notification.");
-    }
-  }).catch((error) => {
-    console.log("Not a valid restaurant ID, no notification sent", error);
-  });
+      if(body.lineupTime <= 5){
+
+        var message = {
+          notification: {
+            body: name + " has under a 5 minute wait time!",
+            title: "Notification from Time Line"
+          },
+          topic: globalTopic
+        };
+        
+        admin.messaging().send(message)
+        .then(() => {
+          // Response is a message ID string.
+          success("sent message");
+        })
+        .catch(() => {
+          nosuccess("error sending message");
+        });
+      }
+      else{
+        success("no need for notification");
+      }
+    }).catch(() => {
+        nosuccess("not a valid restaurant id");
+    });
+ });
 }
 
 module.exports = {checkToSendPushNotification, getRestaurantsById};
