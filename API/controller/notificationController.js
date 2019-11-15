@@ -4,14 +4,6 @@ const router = express.Router();
 var admin = require("firebase-admin");
 var globalTopic = "globalTopic";
 
-var message = {
-  notification: {
-    body: "test",
-    title: "hello hello"
-  },
-  topic: globalTopic
-};
-
 admin.initializeApp({
   credential: admin.credential.applicationDefault()
 });
@@ -25,11 +17,11 @@ router.post("/notification/subscribe", function (req, res, next) {
   .then(function(response) {
   // See the MessagingTopicManagementResponse reference documentation
   // for the contents of response.
-    console.log("Successfully subscribed to topic:", response);
+    console.log("Successfully subscribed to topic:");
     res.status(200).send();
   })
   .catch(function(error) {
-    console.log("Error subscribing to topic:", error);
+    console.log("Error subscribing to topic:");
     res.status(422).send({error: error.message});
   });
 });
