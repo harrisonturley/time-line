@@ -1,16 +1,18 @@
 //this is just for the beforeAll
-const User = require("../repository/user");
+const User = require("../../repository/user");
 //module we are testing
-const userService = require("../service/userService");
+const userService = require("../../service/userService");
 //this is just for the beforeAll
-const Lineup = require("../repository/lineup");
+const Lineup = require("../../repository/lineup");
 //module we are testing
-const lineupService = require("../service/lineupService");
+const lineupService = require("../../service/lineupService");
+//module we are testing
+const searchService = require("../../service/searchService");
 
 //const app = require("./controller.test.js");
 // const mongoose = app.mongoose;
 // const listener = app.listener;
-const app = require("../server.js");
+const app = require("../../server.js");
 const mongoose = app.mongoose;
 const listener = app.listener;
 var userId1 = uuidv4();
@@ -75,6 +77,11 @@ afterAll(done => {
     
     done();
 });
+
+// afterEach(done => {
+//     listener.close();
+//     done();
+// });
 
 
 describe("User Service", () => {
@@ -229,6 +236,41 @@ describe("Lineup Service", () => {
    
 });
 
+describe("Search Service", () => {
+    
+    test("getRestaurants OK", () => {
+    
+        jest.setTimeout(15000);
+    
+        return searchService.getRestaurantsByKeywordAndCoordinates(
+             "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"})
+             .then(data => expect(data).toBe("jenny"));
+    
+        // const data = searchService.getRestaurantsByKeywordAndCoordinates(
+        //     "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"});
+        // expect(data).toBe("jenny");
+    
+    
+        // expect(searchService.getRestaurantsByKeywordAndCoordinates(
+        //     "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"}))
+        //     .resolves.toBe("Gary Danko");
+      
+    
+        // return searchService.getRestaurantsByKeywordAndCoordinates(
+        //     "Tim%20Hortons", 
+        //     {latitude: "49.258335", longitude: "-123.249585"}).then(data => {
+        //     expect(data).toBe("jenny");
+        // });
+    
+        //if mess up input "lonitude" returns status code 400
+    });
+  
+    test("getRestaurants ERR", async () => {
+        expect(searchService.getRestaurantsByKeywordAndCoordinates(
+            "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"}))
+            .rejects.toContain("error");
+    });
+  })
 
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx'.replace(/[xy]/g, function(c) {

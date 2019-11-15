@@ -1,6 +1,6 @@
-const pushNotification = require("../service/notificationService");
+const pushNotification = require("../../service/notificationService");
 
-const mockNotificationController = jest.mock("../controller/notificationController");
+const mockNotificationController = jest.mock("../../controller/notificationController");
 
 
 //when have these together calls mock

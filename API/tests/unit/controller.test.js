@@ -8,12 +8,12 @@
 //if dont get that far though, then can add entries in beforeAll so they all pass
 
 const request = require("supertest");
-const app = require("../server.js");
+const app = require("../../server.js");
 const mongoose = app.mongoose;
 const listener = app.listener;
 const queryString = "/api/search/restaurants?keyword=Tim%20Hortons&latitude=49.258335&longitude=-123.249585";
-const User = require("../repository/user");
-const Lineup = require("../repository/lineup");
+const User = require("../../repository/user");
+const Lineup = require("../../repository/lineup");
 var lineupId1 = uuidv4();
 var lineupId2 = uuidv4();
 var userEmail1 = uuidv4() + "@gmail.com";
@@ -53,6 +53,10 @@ afterAll(done => {
     done();
 });
 
+// afterEach(done => {
+//   listener.close();
+//   done();
+// });
 
 describe("Lineup Controller", () => {
 
