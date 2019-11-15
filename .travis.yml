@@ -6,7 +6,7 @@ matrix:
       before_install: 
         - cd Android 
       script:
-        - ./gradlew androidTest
+        - ./gradlew androidTe
     - language: node_js
       node_js:
         - '11'
