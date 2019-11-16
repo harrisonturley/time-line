@@ -8,7 +8,6 @@ matrix:
             - npm install
           script:
             - yarn test
-            
         - language: android
           dist: trusty
           android:
