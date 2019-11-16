@@ -30,13 +30,9 @@ var query = {},
     },
     options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
-//TODO: make seperate testing database?
-
-//TODO add entries to data base for gets?
-
 //TODO handle eaddr error: seperate listener? or put all tests in one file
 
-//could have mock db but for now just adds and deletes items it adds
+//could have testing db but for now just adds and deletes items it adds
 beforeAll(done => {
     User.findOneAndUpdate(query, updateUser, options).then(() => {
         Lineup.findOneAndUpdate(query, updateLineup, options)
@@ -61,13 +57,10 @@ beforeAll(done => {
     done();
 });
 
-//remove all that we added to database?
-//RUN WITH THAT FLAG THING IF IT HANGS
+//remove all that we added to database
 afterAll(done => {
     // Allow Jest to exit successfully.
-    //mongoose.connection.close();
     
-    //is this causing a race condition?
     User.findOneAndRemove({email: "servicetest@gmail.com"});
     User.findOneAndRemove({email: userId1});
     Lineup.findOneAndDelete({id: "test id"});
@@ -77,12 +70,6 @@ afterAll(done => {
     
     done();
 });
-
-// afterEach(done => {
-//     listener.close();
-//     done();
-// });
-
 
 describe("User Service", () => {
 
