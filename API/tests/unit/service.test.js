@@ -244,7 +244,7 @@ describe("Search Service", () => {
     
         return searchService.getRestaurantsByKeywordAndCoordinates(
              "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"})
-             .then(data => expect(data).toBe("jenny"));
+             .then(data => expect(data.businesses.id).toBe("FX7Dw41atuJ4oeTK6WtDUQ"));
     
         // const data = searchService.getRestaurantsByKeywordAndCoordinates(
         //     "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"});

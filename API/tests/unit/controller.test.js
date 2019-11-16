@@ -11,9 +11,12 @@ const request = require("supertest");
 const app = require("../../server.js");
 const mongoose = app.mongoose;
 const listener = app.listener;
-const queryString = "/api/search/restaurants?keyword=Tim%20Hortons&latitude=49.258335&longitude=-123.249585";
+
 const User = require("../../repository/user");
 const Lineup = require("../../repository/lineup");
+
+const queryString = "/api/search/restaurants?keyword=Tim%20Hortons&latitude=49.258335&longitude=-123.249585";
+
 var lineupId1 = uuidv4();
 var lineupId2 = uuidv4();
 var userEmail1 = uuidv4() + "@gmail.com";
@@ -60,9 +63,6 @@ afterAll(done => {
 
 describe("Lineup Controller", () => {
 
-  //TODO mock db? so that FX7Dw41atuJ4oeTK6WtDUQ this will always pass
-  //pass in before hand so always in db?
-  //add in before all?
   it("Get OK", async () => {
     const res = await request(app)
       .get("/api/lineups/FX7Dw41atuJ4oeTK6WtDUQ");
