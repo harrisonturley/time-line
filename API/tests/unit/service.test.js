@@ -71,6 +71,7 @@ afterAll(done => {
     done();
 });
 
+
 describe("User Service", () => {
 
     //HMMM why does this fail sometimes when we include controller.test?
@@ -187,6 +188,7 @@ describe("Lineup Service", () => {
             data: "non existent"
         }).catch(e => expect(e.message).toContain("failed"));
     });
+    
     
     it("updateLineup OK", () => {
         setTimeout(function(){
