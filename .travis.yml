@@ -1,22 +1,19 @@
-dist: trusty
 matrix:
-  include:
-    - language: java
-      jdk: oraclejdk8
-      before_install: 
-        - cd Android 
-      script:
-        - ./gradlew androidTest
-    - language: node_js
-      node_js:
-        - '11'
-      cache: 
-        directories:
-          - node_modules
-      before_install:
-        - cd API
-        - npm update
-      install: 
-        - npm install
-      script:
-        - npm run test:unit 
+    include:
+        - language: node_js
+          before-install:
+            - cd API
+            - npm update
+          install: 
+            - npm install
+          script:
+            - yarn test
+            
+        - language: android
+          dist: trusty
+          android:
+                components:
+                    - build-tools-xx.x.x
+                    - android-xx
+          script:
+		# android build test command
