@@ -4,7 +4,7 @@ const request = supertest(app);
 const {setupDB} = require('./test-setup');
 const databaseName = 'lineupControllerITDB';
 const Lineup = require('../../repository/lineup');
-const lineupSeeds = require('../seeds/lineup.seed.js');
+const lineupSeeds = require('./seeds/lineup.seed.js');
 const uuid = require('uuid');
 
 // create a test database specific to this test file & seed it with data

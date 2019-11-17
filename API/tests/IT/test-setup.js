@@ -2,7 +2,7 @@
 //source: https://zellwk.com/blog/jest-and-mongoose/
 
 /* global beforeAll beforeEach afterEach afterAll */
-const {seedDatabase} = require('../seeds');
+const {seedDatabase} = require('./seeds');
 const mongoose = require('mongoose');
 mongoose.set('useCreateIndex', true);
 mongoose.promise = global.Promise;
