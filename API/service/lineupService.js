@@ -16,6 +16,7 @@ function addLineup(body) {
 function updateLineup(id, body) {
     return Lineup.findOneAndUpdate({id}, body, {upsert: true}).then(function (update) {
         pushNotification.checkToSendPushNotification(body, id);
+        return update;
     });
 }
 
