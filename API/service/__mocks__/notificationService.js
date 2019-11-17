@@ -4,7 +4,6 @@ const notificationServiceMock = jest.genMockFromModule(
   function getRestaurantsByKeywordAndCoordinates(key, coord) {
     return new Promise(function(success, nosuccess){
       if(key.includes("Tim")){
-          //return what test wants
           success({});
       }
       nosuccess({});

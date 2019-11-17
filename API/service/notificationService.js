@@ -45,14 +45,12 @@ function checkToSendPushNotification(body, id) {
           .catch(() => {
             nosuccess("error sending message");
           });
-          
+
       }).catch(() => {
-          console.log("not a valid rest id");
           nosuccess("not a valid restaurant id");
       });
     }
     else{
-      console.log("no need to send");
       success("no need for notification");
     }
  });
