@@ -4,7 +4,7 @@ const request = supertest(app);
 const {setupDB} = require('./test-setup');
 const databaseName = 'userControllerITDB';
 const User = require('../../repository/user');
-const userSeeds = require('../seeds/user.seed.js');
+const userSeeds = require('./seeds/user.seed.js');
 
 // create a test database specific to this test file & seed it with data
 setupDB(databaseName);
