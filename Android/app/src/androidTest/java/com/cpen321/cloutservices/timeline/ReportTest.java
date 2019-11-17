@@ -37,13 +37,93 @@ import static org.hamcrest.Matchers.is;
 public class ReportTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<SearchActivity> mActivityTestRule = new ActivityTestRule<>(SearchActivity.class);
 
     @Rule
     public GrantPermissionRule mGrantPermissionRule =
             GrantPermissionRule.grant(
                     "android.permission.ACCESS_FINE_LOCATION",
                     "android.permission.ACCESS_COARSE_LOCATION");
+
+    @Test
+    public void typeLineupTest() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction searchAutoComplete = onView(
+                allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")),
+                        childAtPosition(
+                                allOf(withClassName(is("android.widget.LinearLayout")),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.LinearLayout")),
+                                                1)),
+                                0),
+                        isDisplayed()));
+        searchAutoComplete.perform(replaceText("mcd"), closeSoftKeyboard());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction searchAutoComplete2 = onView(
+                allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")), withText("mcd"),
+                        childAtPosition(
+                                allOf(withClassName(is("android.widget.LinearLayout")),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.LinearLayout")),
+                                                1)),
+                                0),
+                        isDisplayed()));
+        searchAutoComplete2.perform(pressImeActionButton());
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction relativeLayout = onView(
+                allOf(childAtPosition(
+                        childAtPosition(
+                                withId(R.id.search_recycler_view),
+                                0),
+                        0),
+                        isDisplayed()));
+        relativeLayout.check(matches(isDisplayed()));
+
+        ViewInteraction cardView = onView(
+                allOf(childAtPosition(
+                        allOf(withId(R.id.search_recycler_view),
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        1)),
+                        0),
+                        isDisplayed()));
+        cardView.perform(click());
+
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.queue_input),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        appCompatEditText.perform(replaceText("7"), closeSoftKeyboard());
+
+        onView(withId(R.id.queue_input)).check(matches(withText("7")));
+    }
 
     @Test
     public void reportTest() {
@@ -114,16 +194,6 @@ public class ReportTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-//        ViewInteraction button = onView(
-//                allOf(withId(R.id.submit_btn),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        withId(android.R.id.content),
-//                                        0),
-//                                4),
-//                        isDisplayed()));
-//        button.check(matches(isDisplayed()));
 
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.queue_input),
