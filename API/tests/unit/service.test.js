@@ -66,7 +66,7 @@ afterAll(done => {
     Lineup.findOneAndDelete({id: "test id"});
     Lineup.findOneAndDelete({id: lineupId1});
     mongoose.connection.close();
-    listener.close();
+    //listener.close();
     
     done();
 });
@@ -189,7 +189,6 @@ describe("Lineup Service", () => {
         }).catch(e => expect(e.message).toContain("failed"));
     });
     
-    
     it("updateLineup OK", () => {
         setTimeout(function(){
         return lineupService.updateLineup(
@@ -197,7 +196,7 @@ describe("Lineup Service", () => {
                 id: lineupId1,
                 lineupTime: 4
             }).then(data => {
-            expect(data).toBe(4);
+            expect(data).toBe(6);
         });
         }, 500);
     });

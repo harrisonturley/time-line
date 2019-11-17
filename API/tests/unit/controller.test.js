@@ -62,7 +62,7 @@ afterAll(done => {
     // Lineup.findOneAndDelete({id: lineupId1});
 
     mongoose.connection.close();
-    listener.close();
+    //listener.close();
     done();
 });
 
