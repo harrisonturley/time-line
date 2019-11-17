@@ -8,33 +8,27 @@ const lineupService = require("../service/lineupService");
  * @param searchResults {{businesses:{lineupTime:Number}}}
  **/
 function addLineupTimes(searchResults) {
-    let businessIds = [];
-    let lineupTimes = [];
+    let businessIdToBusinessMap = new Map();
 
-    let i = 0;
     searchResults.businesses.forEach(function (business) {
-        businessIds.push(business.id);
-        lineupTimes[i] = null;
-        i++;
+        business.lineupTime = null;
+        businessIdToBusinessMap.set(business.id, business);
     });
 
+    let businessIds = Array.from(businessIdToBusinessMap.keys());
+
     return lineupService.getLineupsByIds(businessIds).then(function (lineups) {
-        i = 0;
-        if (lineups != null) {
-            lineups.forEach(function (lineup) {
-                // will be null if there is no lineup time yet for the business
-                if (lineup != null) {
-                    lineupTimes[i] = lineup.lineupTime;
-                }
-                i++;
-            });
+        if (lineups == null) {
+            return searchResults;
         }
 
-        i = 0;
-        searchResults.businesses.forEach(function (business) {
-            business.lineupTime = lineupTimes[i];
-            i++;
+        // works because lineup id = business id
+        lineups.forEach(function (lineup) {
+            businessIdToBusinessMap.get(lineup.id).lineupTime = lineup.lineupTime;
         });
+
+        searchResults.businesses = Array.from(businessIdToBusinessMap.values());
+        console.log(searchResults);
 
         return searchResults;
     });
