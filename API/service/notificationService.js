@@ -26,33 +26,33 @@ function checkToSendPushNotification(body, id) {
   
   return new Promise(function(success, nosuccess){
 
-    getRestaurantsById(id).then(function (name) {
+    if(body.lineupTime <= 5){
+      getRestaurantsById(id).then(function (name) {
 
-      if(body.lineupTime <= 5){
+          var message = {
+            notification: {
+              body: name + " has under a 5 minute wait time!",
+              title: "Notification from Time Line"
+            },
+            topic: globalTopic
+          };
+          
+          admin.messaging().send(message)
+          .then(() => {
+            // Response is a message ID string.
+            success("sent message");
+          })
+          .catch(() => {
+            nosuccess("error sending message");
+          });
 
-        var message = {
-          notification: {
-            body: name + " has under a 5 minute wait time!",
-            title: "Notification from Time Line"
-          },
-          topic: globalTopic
-        };
-        
-        admin.messaging().send(message)
-        .then(() => {
-          // Response is a message ID string.
-          success("sent message");
-        })
-        .catch(() => {
-          nosuccess("error sending message");
-        });
-      }
-      else{
-        success("no need for notification");
-      }
-    }).catch(() => {
-        nosuccess("not a valid restaurant id");
-    });
+      }).catch(() => {
+          nosuccess("not a valid restaurant id");
+      });
+    }
+    else{
+      success("no need for notification");
+    }
  });
 }
 

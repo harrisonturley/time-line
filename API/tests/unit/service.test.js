@@ -1,20 +1,16 @@
-//this is just for the beforeAll
+//For insertion in beforeAll
 const User = require("../../repository/user");
-//module we are testing
-const userService = require("../../service/userService");
-//this is just for the beforeAll
 const Lineup = require("../../repository/lineup");
-//module we are testing
+
+//Modules we are testing
+const userService = require("../../service/userService");
 const lineupService = require("../../service/lineupService");
-//module we are testing
 const searchService = require("../../service/searchService");
 
-//const app = require("./controller.test.js");
-// const mongoose = app.mongoose;
-// const listener = app.listener;
 const app = require("../../server.js");
 const mongoose = app.mongoose;
 const listener = app.listener;
+
 var userId1 = uuidv4();
 var lineupId1 = uuidv4();
 
@@ -30,63 +26,32 @@ var query = {},
     },
     options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
-//TODO: make seperate testing database?
 
-//TODO add entries to data base for gets?
-
-//TODO handle eaddr error: seperate listener? or put all tests in one file
-
-//could have mock db but for now just adds and deletes items it adds
 beforeAll(done => {
     User.findOneAndUpdate(query, updateUser, options).then(() => {
         Lineup.findOneAndUpdate(query, updateLineup, options)
         }).then(() => {
             //done();
         });
-    //});
-
-    /*User.findOneAndUpdate({
-        email: "servicetest@gmail.com",
-        name: "jenny",
-        balance: 0
-    }).then(() => {
-        Lineup.create({
-            id: "test id",
-            lineupTime: 5
-        }).then(() => {
-            //done();
-        });
-    });*/
 
     done();
 });
 
-//remove all that we added to database?
-//RUN WITH THAT FLAG THING IF IT HANGS
 afterAll(done => {
     // Allow Jest to exit successfully.
-    //mongoose.connection.close();
-    
-    //is this causing a race condition?
     User.findOneAndRemove({email: "servicetest@gmail.com"});
     User.findOneAndRemove({email: userId1});
     Lineup.findOneAndDelete({id: "test id"});
     Lineup.findOneAndDelete({id: lineupId1});
     mongoose.connection.close();
-    listener.close();
+    //listener.close();
     
     done();
 });
 
-// afterEach(done => {
-//     listener.close();
-//     done();
-// });
-
 
 describe("User Service", () => {
 
-    //HMMM why does this fail sometimes when we include controller.test?
     it("getUserByEmail OK", () => {
         //setTimeout(function(){
         return userService.getUserByEmail(
@@ -171,7 +136,6 @@ describe("Lineup Service", () => {
         });
     });
 
-    //TODO can add more later
     it("getLineupByIds OK", () => {
         return lineupService.getLineupsByIds(
             "test id").then(data => {
@@ -244,25 +208,7 @@ describe("Search Service", () => {
     
         return searchService.getRestaurantsByKeywordAndCoordinates(
              "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"})
-             .then(data => expect(data).toBe("jenny"));
-    
-        // const data = searchService.getRestaurantsByKeywordAndCoordinates(
-        //     "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"});
-        // expect(data).toBe("jenny");
-    
-    
-        // expect(searchService.getRestaurantsByKeywordAndCoordinates(
-        //     "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"}))
-        //     .resolves.toBe("Gary Danko");
-      
-    
-        // return searchService.getRestaurantsByKeywordAndCoordinates(
-        //     "Tim%20Hortons", 
-        //     {latitude: "49.258335", longitude: "-123.249585"}).then(data => {
-        //     expect(data).toBe("jenny");
-        // });
-    
-        //if mess up input "lonitude" returns status code 400
+             .then(data => expect(data.businesses.id).toBe("FX7Dw41atuJ4oeTK6WtDUQ"));
     });
   
     test("getRestaurants ERR", async () => {
