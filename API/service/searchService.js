@@ -28,7 +28,6 @@ function addLineupTimes(searchResults) {
         });
 
         searchResults.businesses = Array.from(businessIdToBusinessMap.values());
-        console.log(searchResults);
 
         return searchResults;
     });
