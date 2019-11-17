@@ -29,10 +29,5 @@ server.use(function (err, req, res, _) {
 // API docs
 docs(server, mongoose);
 
-const listener = server.listen(4000, function () {
-    console.log("API is up");
-});
-
 module.exports = server;
 module.exports.mongoose = mongoose;
-module.exports.listener = listener;
