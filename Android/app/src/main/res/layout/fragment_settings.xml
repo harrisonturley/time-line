@@ -10,15 +10,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/settingsConnectButton"
+        <TextView
+            android:id="@+id/enable_notifications_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Connect"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize='15dp'
+            android:text="Enable Notifications: "
+            android:textColor="@color/black"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <View
+            android:id="@+id/settings_border"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/lightGrey"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enable_notifications_switch"/>
+
+        <Switch
+            android:id="@+id/enable_notifications_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:theme="@style/Widget.AppCompat.CompoundButton.Switch"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/about_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity='center'
+            android:layout_marginTop="10dp"
+            android:text="Time Line was created by Clout Services.  Clout Services is a team in CPEN 321 at the University of British Columbia."
+            app:layout_constraintTop_toBottomOf="@id/settings_border"
+            app:layout_constraintLeft_toLeftOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
