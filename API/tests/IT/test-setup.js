@@ -38,10 +38,13 @@ module.exports = {
         beforeAll(async () => {
             const url = `mongodb://127.0.0.1/${databaseName}`;
             await mongoose.connect(url, {useNewUrlParser: true});
+            await removeAllCollections();
+            await dropAllCollections();
         });
 
         // Seeds database before each test
         beforeEach(async () => {
+            await removeAllCollections();
             await seedDatabase(runSaveMiddleware);
         });
 
