@@ -17,6 +17,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.os.Looper;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -110,13 +111,23 @@ public class SearchFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if (currentLocation == null) {
+                    currentLocation = new Location("TestLocation");
+                    currentLocation.setLatitude(49.258335);
+                    currentLocation.setLongitude(-123.249585);
+                }
+
                 RestaurantService restaurantService = RetrofitClientHelper.getRetrofitInstance().create(RestaurantService.class);
                 Call<Businesses> call = restaurantService.getJSON(query, currentLocation.getLatitude(), currentLocation.getLongitude());
+                long startTime = SystemClock.uptimeMillis();
 
                 call.enqueue(new Callback<Businesses>() {
                     @Override
                     public void onResponse(Call<Businesses> call, Response<Businesses> response) {
+                        long endTime = SystemClock.uptimeMillis();
+                        Log.w("QUERY RESPONSE TIME", "Response time: " + (endTime - startTime) + " milliseconds");
                         List<Restaurant> restaurants = response.body().getBusinesses();
+
                         Collections.sort(restaurants, new Comparator<Restaurant>() {
                             @Override
                             public int compare(Restaurant r1, Restaurant r2) {

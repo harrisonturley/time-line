@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.cpen321.cloutservices.timeline.model.Notification;
@@ -34,8 +35,9 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        Button b = view.findViewById(R.id.settingsConnectButton);
-        b.setOnClickListener(new View.OnClickListener() {
+        //Button b = view.findViewById(R.id.settingsConnectButton);
+        Switch s = view.findViewById(R.id.enable_notifications_switch);
+        s.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -63,14 +65,14 @@ public class SettingsFragment extends Fragment {
 
                             @Override
                             public void onFailure(Call<Notification> call, Throwable t) {
-                                Toast.makeText(getActivity(), "Something went wrong...Please try later! " + t.getCause(), Toast.LENGTH_SHORT).show();
-
+                                Log.e("NOTIFICATION SUB", "Possibly failed to subscribe, reason: " + t.getCause());
                             }
                         });
                     }
                 });
             }
         });
+
         return view;
     }
 }
