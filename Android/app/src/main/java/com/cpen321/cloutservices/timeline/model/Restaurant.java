@@ -19,6 +19,9 @@ public class Restaurant {
     @SerializedName("lineupTime")
     private int lineupTime;
 
+    @SerializedName("coordinates")
+    private Coordinates coordinates;
+
     @SerializedName("location")
     private Location location;
 
@@ -40,6 +43,10 @@ public class Restaurant {
 
     public int getLineupTime() {
         return lineupTime;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
     }
 
     public Location getLocation() {

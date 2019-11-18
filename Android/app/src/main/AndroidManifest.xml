@@ -15,6 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAIzV-82mMvfjOvsmID6BUXd5Ra4V43ckI"/>
         <activity android:name=".SearchActivity" />
         <activity android:name=".ReportQueueActivity"></activity>
         <activity android:name=".MainActivity">

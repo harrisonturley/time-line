@@ -23,6 +23,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     private static final String IMG = "img";
     private static final String ADDR = "addr";
     private static final String NAME = "name";
+    private static final String LATITUDE = "lat";
+    private static final String LONGITUDE = "long";
 
     public RestaurantAdapter(ArrayList<Restaurant> restaurants) {
         this.restaurants = restaurants;
@@ -52,6 +54,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 intent.putExtra(IMG, restaurants.get(index).getImageUrl());
                 intent.putExtra(ADDR, restaurants.get(index).getLocation().getDisplayAddressFormatted());
                 intent.putExtra(NAME, restaurants.get(index).getName());
+                intent.putExtra(LATITUDE, restaurants.get(index).getCoordinates().getLatitude());
+                intent.putExtra(LONGITUDE, restaurants.get(index).getCoordinates().getLongitude());
                 v.getContext().startActivity(intent);
             }
         });

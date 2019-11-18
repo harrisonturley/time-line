@@ -16,18 +16,32 @@ import android.widget.ProgressBar;
 import com.bumptech.glide.Glide;
 import com.cpen321.cloutservices.timeline.model.LineupService;
 import com.cpen321.cloutservices.timeline.model.Lineup;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import androidx.appcompat.widget.Toolbar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReportQueueActivity extends AppCompatActivity {
+public class ReportQueueActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private static final int ZOOM_LEVEL = 15;
+    private static final int ANIMATION_LENGTH = 1000;
 
     private EditText queueInput;
     private ProgressBar progressBar;
+    private GoogleMap mMap;
+    private Toolbar toolbar;
 
     // Passed from RestaurantAdapter;
     private String restaurantId;
+    private String restaurantName;
+    private double restaurantLatitude;
+    private double restaurantLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +51,27 @@ public class ReportQueueActivity extends AppCompatActivity {
         // findViews
         queueInput = findViewById(R.id.queue_input);
         progressBar = findViewById(R.id.progressBar);
+        toolbar = findViewById(R.id.toolbar_main);
         Button submitQueueBtn = findViewById(R.id.submit_btn);
         TextView restaurantname = findViewById(R.id.restaurant_name);
         TextView restaurantaddress = findViewById(R.id.restaurant_address);
         ImageView restaurantimage = findViewById(R.id.restaurant_image);
-
 
         /* retrieve restaurant from RestaurantAdapter */
         Intent intent = getIntent();
         restaurantId = intent.getStringExtra("id");
         String imageURL = intent.getStringExtra("img");
         String address = intent.getStringExtra("addr");
-        String name = intent.getStringExtra("name");
+        restaurantName = intent.getStringExtra("name");
+        restaurantLatitude = intent.getDoubleExtra("lat", 0);
+        restaurantLongitude = intent.getDoubleExtra("long", 0);
 
+        configureToolbar();
 
-        restaurantname.setText(name);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        restaurantname.setText(restaurantName);
         restaurantaddress.setText(address);
         Glide.with(ReportQueueActivity.this).load(imageURL).into(restaurantimage);
 
@@ -59,13 +79,33 @@ public class ReportQueueActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int lineupTime = Integer.parseInt(queueInput.getText().toString());
-                // send info to backend api call lets go
                 putLineupTime(restaurantId, lineupTime);
                 startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
             }
         });
     }
 
+    private void configureToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_24px);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        LatLng restaurant = new LatLng(restaurantLatitude, restaurantLongitude);
+        mMap.addMarker(new MarkerOptions().position(restaurant).title(restaurantName));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(restaurant));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(ZOOM_LEVEL), ANIMATION_LENGTH, null);
+    }
 
     // method to post the line up time
     public void putLineupTime(String restaurantId, Integer lineuptime) {
