@@ -60,6 +60,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     androidTestImplementation 'androidx.test:rules:1.2.0-beta01'
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    implementation 'com.github.medyo:fancybuttons:1.9.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
