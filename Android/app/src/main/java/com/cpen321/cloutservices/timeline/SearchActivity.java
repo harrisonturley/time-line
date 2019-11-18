@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -24,8 +25,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
@@ -40,6 +46,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextView navigationHeaderEmail;
     private ImageView navigationHeaderImageView;
     private GoogleSignInAccount account;
+    private GoogleSignInClient signInClient;
     private Handler handler;
 
     @Override
@@ -57,6 +64,11 @@ public class SearchActivity extends AppCompatActivity {
         navigationHeaderImageView = navigationHeaderView.findViewById(R.id.nav_header_imageView);
         account = GoogleSignIn.getLastSignedInAccount(this);
         handler = new Handler();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        signInClient = GoogleSignIn.getClient(this, gso);
 
         configureToolbar();
         configureNavigationView();
@@ -108,6 +120,9 @@ public class SearchActivity extends AppCompatActivity {
                     case R.id.nav_settings:
                         fragmentClass = SettingsFragment.class;
                         break;
+                    case R.id.nav_sign_out:
+                        signOut();
+                        return true;
                     default: break;
                 }
 
@@ -143,6 +158,16 @@ public class SearchActivity extends AppCompatActivity {
 
         drawer.closeDrawers();
         invalidateOptionsMenu();
+    }
+
+    private void signOut() {
+        signInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Intent i = new Intent(SearchActivity.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
