@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,11 +44,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
-
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
     private SearchView searchView;
     private RecyclerView recyclerView;
+    private ConstraintLayout searchInstructions;
 
     private final int PERMISSION_ID = 42;
 
@@ -61,8 +62,11 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        searchInstructions = view.findViewById(R.id.empty_symbol);
+
         getLastLocation();
         configureSearchView(view);
+
         return view;
     }
 
@@ -127,6 +131,12 @@ public class SearchFragment extends Fragment {
                         long endTime = SystemClock.uptimeMillis();
                         Log.w("QUERY RESPONSE TIME", "Response time: " + (endTime - startTime) + " milliseconds");
                         List<Restaurant> restaurants = response.body().getBusinesses();
+
+                        if (restaurants.size() == 0) {
+                            searchInstructions.setVisibility(View.VISIBLE);
+                        } else {
+                            searchInstructions.setVisibility(View.GONE);
+                        }
 
                         Collections.sort(restaurants, new Comparator<Restaurant>() {
                             @Override
