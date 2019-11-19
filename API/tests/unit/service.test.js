@@ -1,14 +1,7 @@
-//For insertion in beforeAll
-//const User = require("../../repository/user");
-//const Lineup = require("../../repository/lineup");
-
 //Modules we are testing
 const userService = require("../../service/userService");
 const lineupService = require("../../service/lineupService");
-const searchService = require("../../service/searchService");
 
-//lineupservice needs this mocked
-//edit to make it work
 import notificationService, {notificationServiceMock} from "../../service/notificationService";
 jest.mock("../../service/notificationService");
 
@@ -19,44 +12,16 @@ import User, {userMock} from "../../repository/user";
 jest.mock("../../repository/user");
 
 const app = require("../../server.js");
-const mongoose = app.mongoose;
-//const listener = app.listener;
 
 var userId1 = uuidv4();
 var lineupId1 = uuidv4();
 
-var query = {},
-    updateUser = {
-        email: "servicetest@gmail.com",
-        name: "jenny",
-        balance: 0
-    },
-    updateLineup = {
-        id: "test id",
-        lineupTime: 5
-    },
-    options = { upsert: true, new: true, setDefaultsOnInsert: true };
-
 
 beforeAll(done => {
-    /*User.findOneAndUpdate(query, updateUser, options)/*.then(() => {
-        Lineup.findOneAndUpdate(query, updateLineup, options)
-        }).then(() => {
-            //done();
-        });*/
-
     done();
 });
 
 afterAll(done => {
-    // Allow Jest to exit successfully.
-    //User.findOneAndRemove({email: "servicetest@gmail.com"});
-    //User.findOneAndRemove({email: userId1});
-    //Lineup.findOneAndDelete({id: "test id"});
-    //Lineup.findOneAndDelete({id: lineupId1});
-    //mongoose.connection.close();
-    //listener.close();
-    
     done();
 });
 
@@ -64,13 +29,11 @@ afterAll(done => {
 describe("User Service", () => {
 
     it("getUserByEmail OK", () => {
-        //setTimeout(function(){
         return userService.getUserByEmail(
             "servicetest@gmail.com").then(data => {
             expect(data.name).toBe("jenny");
             expect(data.balance).toBe(0);
         });
-        //}, 500);
     });
     
     it("getUserByEmail ERR", () => {
@@ -177,7 +140,6 @@ describe("Lineup Service", () => {
     });
     
     it("updateLineup OK", () => {
-        //setTimeout(function(){
         return lineupService.updateLineup(
             "Tim Hortons", {
                 id: "Tim Hortons",
@@ -185,7 +147,6 @@ describe("Lineup Service", () => {
             }).then(data => {
             expect(data.lineupTime).toBe(7);
         });
-        //}, 500);
     });
     
     it("updateLineup ERR", () => {
@@ -210,24 +171,6 @@ describe("Lineup Service", () => {
     });
    
 });
-/*
-describe("Search Service", () => {
-    
-    test("getRestaurants OK", () => {
-    
-        jest.setTimeout(15000);
-    
-        return searchService.getRestaurantsByKeywordAndCoordinates(
-             "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"})
-             .then(data => expect(data.businesses.id).toBe("FX7Dw41atuJ4oeTK6WtDUQ"));
-    });
-  
-    test("getRestaurants ERR", async () => {
-        expect(searchService.getRestaurantsByKeywordAndCoordinates(
-            "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"}))
-            .rejects.toContain("error");
-    });
-  })*/
 
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx'.replace(/[xy]/g, function(c) {
