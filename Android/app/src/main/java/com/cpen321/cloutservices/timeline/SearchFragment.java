@@ -49,6 +49,7 @@ public class SearchFragment extends Fragment {
     private SearchView searchView;
     private RecyclerView recyclerView;
     private ConstraintLayout searchInstructions;
+    private String lastSearchTerm;
 
     private final int PERMISSION_ID = 42;
 
@@ -73,6 +74,10 @@ public class SearchFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        if (lastSearchTerm != null) {
+            searchView.setQuery(lastSearchTerm, true);
+        }
     }
 
     @Override
@@ -115,51 +120,8 @@ public class SearchFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (currentLocation == null) {
-                    currentLocation = new Location("TestLocation");
-                    currentLocation.setLatitude(49.258335);
-                    currentLocation.setLongitude(-123.249585);
-                }
-
-                RestaurantService restaurantService = RetrofitClientHelper.getRetrofitInstance().create(RestaurantService.class);
-                Call<Businesses> call = restaurantService.getJSON(query, currentLocation.getLatitude(), currentLocation.getLongitude());
-                long startTime = SystemClock.uptimeMillis();
-
-                call.enqueue(new Callback<Businesses>() {
-                    @Override
-                    public void onResponse(Call<Businesses> call, Response<Businesses> response) {
-                        long endTime = SystemClock.uptimeMillis();
-                        Log.w("QUERY RESPONSE TIME", "Response time: " + (endTime - startTime) + " milliseconds");
-                        List<Restaurant> restaurants = response.body().getBusinesses();
-
-                        if (restaurants.size() == 0) {
-                            searchInstructions.setVisibility(View.VISIBLE);
-                        } else {
-                            searchInstructions.setVisibility(View.GONE);
-                        }
-
-                        Collections.sort(restaurants, new Comparator<Restaurant>() {
-                            @Override
-                            public int compare(Restaurant r1, Restaurant r2) {
-                                if (r1.getDistance() < r2.getDistance()) {
-                                    return -1;
-                                } else {
-                                    return 1;
-                                }
-                            }
-                        });
-
-                        RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants);
-                        recyclerView.setAdapter(restaurantAdapter);
-                    }
-
-                    @Override
-                    public void onFailure(Call<Businesses> call, Throwable t) {
-                        Toast.makeText(getActivity(), "Failed to retrieve restaurants: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e("QUERY_FAIL", t.getMessage());
-                    }
-                });
-
+                lastSearchTerm = query;
+                submitQuery(query);
                 searchView.clearFocus();
                 return true;
             }
@@ -188,6 +150,53 @@ public class SearchFragment extends Fragment {
         };
 
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+    }
+
+    private void submitQuery(String query) {
+        if (currentLocation == null) {
+            currentLocation = new Location("TestLocation");
+            currentLocation.setLatitude(49.258335);
+            currentLocation.setLongitude(-123.249585);
+        }
+
+        RestaurantService restaurantService = RetrofitClientHelper.getRetrofitInstance().create(RestaurantService.class);
+        Call<Businesses> call = restaurantService.getJSON(query, currentLocation.getLatitude(), currentLocation.getLongitude());
+        long startTime = SystemClock.uptimeMillis();
+
+        call.enqueue(new Callback<Businesses>() {
+            @Override
+            public void onResponse(Call<Businesses> call, Response<Businesses> response) {
+                long endTime = SystemClock.uptimeMillis();
+                Log.w("QUERY RESPONSE TIME", "Response time: " + (endTime - startTime) + " milliseconds");
+                List<Restaurant> restaurants = response.body().getBusinesses();
+
+                if (restaurants.size() == 0) {
+                    searchInstructions.setVisibility(View.VISIBLE);
+                } else {
+                    searchInstructions.setVisibility(View.GONE);
+                }
+
+                Collections.sort(restaurants, new Comparator<Restaurant>() {
+                    @Override
+                    public int compare(Restaurant r1, Restaurant r2) {
+                        if (r1.getDistance() < r2.getDistance()) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }
+                });
+
+                RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants);
+                recyclerView.setAdapter(restaurantAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<Businesses> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to retrieve restaurants: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("QUERY_FAIL", t.getMessage());
+            }
+        });
     }
 
     private boolean checkLocationEnabled() {

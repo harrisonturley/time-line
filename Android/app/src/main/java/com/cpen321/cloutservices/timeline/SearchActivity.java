@@ -74,14 +74,7 @@ public class SearchActivity extends AppCompatActivity {
         configureNavigationView();
 
         if (savedInstanceState == null) {
-            Class fragmentClass = SearchFragment.class;
-
-            try {
-                mainFragment = (Fragment) fragmentClass.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+            mainFragment = new SearchFragment();
             loadHomeFragment();
         }
     }
@@ -116,14 +109,22 @@ public class SearchActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.nav_search:
                         fragmentClass = SearchFragment.class;
+                        toolbar.setTitle("Time Line");
                         break;
                     case R.id.nav_settings:
                         fragmentClass = SettingsFragment.class;
+                        toolbar.setTitle("Settings");
+                        break;
+                    case R.id.nav_favorites:
+                        fragmentClass = FavoritesFragment.class;
+                        toolbar.setTitle("Favorites");
                         break;
                     case R.id.nav_sign_out:
                         signOut();
                         return true;
-                    default: break;
+                    default:
+                        toolbar.setTitle("Time Line");
+                        break;
                 }
 
                 try {
