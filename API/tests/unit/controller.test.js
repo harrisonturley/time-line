@@ -1,7 +1,5 @@
 const request = require("supertest");
 const app = require("../../server.js");
-const mongoose = app.mongoose;
-//const listener = app.listener;
 
 const queryString = "/api/search/restaurants?keyword=Tim%20Hortons&latitude=49.258335&longitude=-123.249585";
 
@@ -24,8 +22,6 @@ beforeAll(done => {
 });
   
 afterAll(done => {
-    mongoose.connection.close();
-    //listener.close();
     done();
 });
 
@@ -176,7 +172,6 @@ describe("User Controller", () => {
         name: "victoria",
         balance: 1
    });
-    console.log(res);
     expect(res.statusCode).toEqual(200);
     expect(res.body.name).toBe("victoria");
     expect(res.body.balance).toBe(1);
