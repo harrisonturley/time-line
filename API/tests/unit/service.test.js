@@ -1,5 +1,5 @@
 //For insertion in beforeAll
-const User = require("../../repository/user");
+//const User = require("../../repository/user");
 //const Lineup = require("../../repository/lineup");
 
 //Modules we are testing
@@ -14,6 +14,9 @@ jest.mock("../../service/notificationService");
 
 import Lineup, {lineupMock} from "../../repository/lineup";
 jest.mock("../../repository/lineup");
+
+import User, {userMock} from "../../repository/user";
+jest.mock("../../repository/user");
 
 const app = require("../../server.js");
 const mongoose = app.mongoose;
@@ -36,7 +39,7 @@ var query = {},
 
 
 beforeAll(done => {
-    User.findOneAndUpdate(query, updateUser, options)/*.then(() => {
+    /*User.findOneAndUpdate(query, updateUser, options)/*.then(() => {
         Lineup.findOneAndUpdate(query, updateLineup, options)
         }).then(() => {
             //done();
@@ -47,11 +50,11 @@ beforeAll(done => {
 
 afterAll(done => {
     // Allow Jest to exit successfully.
-    User.findOneAndRemove({email: "servicetest@gmail.com"});
-    User.findOneAndRemove({email: userId1});
+    //User.findOneAndRemove({email: "servicetest@gmail.com"});
+    //User.findOneAndRemove({email: userId1});
     //Lineup.findOneAndDelete({id: "test id"});
     //Lineup.findOneAndDelete({id: lineupId1});
-    mongoose.connection.close();
+    //mongoose.connection.close();
     //listener.close();
     
     done();
@@ -73,7 +76,7 @@ describe("User Service", () => {
     it("getUserByEmail ERR", () => {
         return userService.getUserByEmail(
             "non existent").then(data => {
-            expect(data).toBeNull();
+            expect(data).toBeUndefined();
         });
     });
 
@@ -100,7 +103,7 @@ describe("User Service", () => {
             email: userId1,
             balance: 9
         }).then(data => {
-            expect(data).toBe(9);
+            expect(data.balance).toBe(9);
         });
         }, 500);
     });
@@ -122,7 +125,7 @@ describe("User Service", () => {
     it("deleteUser ERR", () => {
         return userService.deleteUser(
             "non existent").then(data => {
-            expect(data).toBeNull();
+            expect(data).toBeUndefined();
         });
     });
     
@@ -207,7 +210,7 @@ describe("Lineup Service", () => {
     });
    
 });
-
+/*
 describe("Search Service", () => {
     
     test("getRestaurants OK", () => {
@@ -224,7 +227,7 @@ describe("Search Service", () => {
             "Tim%20Hortons", {latitude: "49.258335", longitude: "-123.249585"}))
             .rejects.toContain("error");
     });
-  })
+  })*/
 
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx'.replace(/[xy]/g, function(c) {
