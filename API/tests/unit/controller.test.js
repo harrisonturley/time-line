@@ -107,26 +107,6 @@ describe("Search Controller", () => {
   })
 })
 
-describe("Notification Controller", () => {
-    it("Post OK", async () => {
-      const res = await request(app)
-        .post("/api/notification/subscribe")
-        .send({
-          registrationToken: "this test is cool"
-        })
-      expect(res.statusCode).toEqual(200);
-    })
-  
-    it("Post ERR", async () => {
-      const res = await request(app)
-        .post("/api/notification/subscribe")
-        .send({
-          badToken: "badToken"
-        })
-      expect(res.statusCode).toEqual(422);
-    })
-})
-
 describe("User Controller", () => {
 
   it("Get OK", async () => {
