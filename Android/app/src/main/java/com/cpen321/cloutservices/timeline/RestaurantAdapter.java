@@ -30,6 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
+
     private static final String ID_TAG = "id";
     private static final String IMG = "img";
     private static final String ADDR = "addr";
