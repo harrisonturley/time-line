@@ -4,7 +4,7 @@ const userServiceMock = jest.genMockFromModule(
   function getUserByEmail(id) {
     return new Promise(function(success, nosuccess){
       if(id.includes("hello")){
-          success({name: "victoria"});
+          success({name: "victoria", balance: 1});
       }
       if(id.includes("hello1")){
         success({name: "victoria", balance: 1});
