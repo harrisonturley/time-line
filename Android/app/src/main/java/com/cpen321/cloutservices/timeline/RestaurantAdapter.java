@@ -16,15 +16,16 @@ import java.util.ArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
-
-    private ArrayList<Restaurant> restaurants;
-
     private static final String ID_TAG = "id";
     private static final String IMG = "img";
     private static final String ADDR = "addr";
     private static final String NAME = "name";
     private static final String LATITUDE = "lat";
     private static final String LONGITUDE = "long";
+    private static final String SEARCH = "search";
+
+    private ArrayList<Restaurant> restaurants;
+    private String searchTerm;
 
     public RestaurantAdapter(ArrayList<Restaurant> restaurants) {
         this.restaurants = restaurants;

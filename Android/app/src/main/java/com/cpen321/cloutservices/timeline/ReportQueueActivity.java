@@ -116,7 +116,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                     handler.removeCallbacks(runnable);
                     handler = null;
                     runnable = null;
-                    startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
+                    onBackPressed();
                 }
             }
         });
