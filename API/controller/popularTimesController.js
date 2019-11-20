@@ -36,7 +36,7 @@ router.get("/googleidfromyelpid/:id", function (req, res, next) {
     getGoogleIdInfo(id).then(function(info) {
         getGoogleId(info.phone).then(function (id) {
         res.send(id);
-    });
+    }).catch(next);
     }).catch(next);
 
 });
@@ -72,18 +72,28 @@ function startPythonProcess(id){
 
         const spawn = require("child_process").spawn;
 
+        //get current day and hour here
+        var day = 1;
+        var hour = 17;
+
         //hmm seems to need full path..this will have to change on VM
         const pythonProcess = spawn("python",
-            ["C:/Users/victo/Documents/year3/CPEN321/time-line repo/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
-        pythonProcess.stdout.on("data", (data) => {
+            ["C:/Users/victo/Documents/year3/CPEN321/time-line repo/time-line/API/popularTimes/popularTimes.py", placesKey, id, day, hour]);
+        pythonProcess.stdout.on("data", (returnVal) => {
             //find date and extract stuff here
             //populartimes for each day is an array of length 24
             //starting from hour 0 to 23 in minutes
-            success(data);
+            //so this is already the populartimes
+
+            // var result = JSON.parse(data)
+            // console.log(data);
+            // console.log(data.name.Monday)
+            // console.log(result.name.Monday)
+            success("wait time is: " + returnVal);
         });
         pythonProcess.stderr.on("data", (data) => {
-            //no popular time exists for this location
-            success({waittime: 0});
+            //no popular time exists for this location, just return 0
+            success("no data exists");
         });
 })};
 
