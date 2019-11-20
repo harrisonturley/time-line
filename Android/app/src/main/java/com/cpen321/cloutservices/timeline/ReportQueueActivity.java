@@ -45,7 +45,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private ProgressBar progressBar;
     private GoogleMap mMap;
     private Toolbar toolbar;
-//    private double timer;
+    //    private double timer;
     private Handler handler;
 
     // Passed from RestaurantAdapter;
@@ -89,39 +89,36 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         restaurantname.setText(restaurantName);
         restaurantaddress.setText(address);
         queueTime.setText("00:00:00");
-        reportQueueBtn.setChecked(true);    // start it as true
+        reportQueueBtn.setChecked(false);    // start it as true
         Glide.with(ReportQueueActivity.this).load(imageURL).into(restaurantimage);
 
         reportQueueBtn.setOnClickListener (new View.OnClickListener(){
-           @Override
-           public void onClick(View v) {
-               //... start calculation
-               if (reportQueueBtn.isChecked()) {
-                   // textOn="Start Queue"
-                   startTime = SystemClock.uptimeMillis();
-                   handler.postDelayed(runnable, 0);    // passing in 0, will make postDelayed run forever
-                   // get ready for the next state
-               }
-               else {   // textOff="End Queue"
-                   // this is the resetting part but first send lineup to backend
-                   putLineupTime(restaurantId, (int)totalTime);    // THIS MAY BE BUGGY. WILL TEST
-                   // store restaurant!
-
-                   // resetting now
-                   millisecondTime = 0L ;
-                   startTime = 0L ;
-                   timeBuff = 0L ;
-                   totalTime = 0L ;
-                   seconds = 0 ;
-                   minutes = 0 ;
-                   milliseconds = 0 ;
-                   queueTime.setText("00:00:00");
-                   // get ready for the next state
-
-                   // go back to search
-                   startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
-               }
-           }
+            @Override
+            public void onClick(View v) {
+                //... start calculation
+                if (reportQueueBtn.isChecked()) {
+                    // textOn="Start Queue"
+                    startTime = SystemClock.uptimeMillis();
+                    handler.postDelayed(runnable, 0);    // passing in 0, will make postDelayed run forever
+                    // go back to search
+                }
+                else {   // textOff="End Queue"
+                    // this is the resetting part but first send lineup to backend
+                    putLineupTime(restaurantId, (int)totalTime);
+                    millisecondTime = 0L ;
+                    startTime = 0L ;
+                    timeBuff = 0L ;
+                    totalTime = 0L ;
+                    seconds = 0 ;
+                    minutes = 0 ;
+                    milliseconds = 0 ;
+                    queueTime.setText("00:00:00");
+                    handler.removeCallbacks(runnable);
+                    handler = null;
+                    runnable = null;
+                    startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
+                }
+            }
         });
 
         // end of OnCreate
