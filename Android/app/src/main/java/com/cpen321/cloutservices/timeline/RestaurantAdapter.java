@@ -85,11 +85,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 if (!favoritedRestaurantID.contains(restaurants.get(index).getId())) {
                     viewHolder.favoriteStar.setImageResource(R.drawable.ic_star_24px);
                     favoritedRestaurantID.add(restaurants.get(index).getId());
-                    subscribe(restaurants.get(index).getId());
+                    favoriteRestaurant(restaurants.get(index));
                 } else {
                     viewHolder.favoriteStar.setImageResource(R.drawable.ic_star_border_24px);
                     favoritedRestaurantID.remove(restaurants.get(index).getId());
-                    unsubscribe(restaurants.get(index).getId());
+                    unfavoriteRestaurant(restaurants.get(index));
                 }
             }
         });
@@ -122,7 +122,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         }
     }
 
-    private void subscribe(String restaurantID) {
+    private void favoriteRestaurant(Restaurant restaurant) {
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -137,7 +137,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 // Log and toast
                 Log.d("GET_INSTANCE_ID", token);
 
-                Notification notification = new Notification(token, restaurantID);
+                /*Notification notification = new Notification(token, restaurantID);
                 NotificationService notificationSub = RetrofitClientHelper.getRetrofitInstance().create(NotificationService.class);
                 Call<Notification> call = notificationSub.sendSubscribe(notification);
                 call.enqueue(new Callback<Notification>() {
@@ -150,12 +150,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                     public void onFailure(Call<Notification> call, Throwable t) {
                         Log.e("NOTIFICATION SUB", "Possibly failed to subscribe, reason: " + t.getCause());
                     }
-                });
+                });*/
             }
         });
     }
 
-    private void unsubscribe(String restaurantID) {
+    private void unfavoriteRestaurant(Restaurant restaurant) {
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -170,7 +170,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 // Log and toast
                 Log.d("GET_INSTANCE_ID", token);
 
-                Notification notification = new Notification(token, restaurantID);
+                /*Notification notification = new Notification(token, restaurantID);
                 NotificationService notificationSub = RetrofitClientHelper.getRetrofitInstance().create(NotificationService.class);
                 Call<Notification> call = notificationSub.sendUnsubscribe(notification);
                 call.enqueue(new Callback<Notification>() {
@@ -183,7 +183,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                     public void onFailure(Call<Notification> call, Throwable t) {
                         Log.e("NOTIFICATION SUB", "Possibly failed to subscribe, reason: " + t.getCause());
                     }
-                });
+                });*/
             }
         });
     }
