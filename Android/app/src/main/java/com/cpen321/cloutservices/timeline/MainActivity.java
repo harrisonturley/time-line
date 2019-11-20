@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestProfile()
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
-            verifyUser(account);
+            createUser(account);
             startActivity(new Intent(MainActivity.this, SearchActivity.class));
         }
         else {
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             completedTask.getResult(ApiException.class);
             // Sign in successfully, show authenticated UI
             /* TODO: doublecheck this logic please */
-            verifyUser(GoogleSignIn.getLastSignedInAccount(this));
+            createUser(GoogleSignIn.getLastSignedInAccount(this));
             startActivity(new Intent(MainActivity.this, SearchActivity.class));
         } catch (ApiException e ) {
             // The ApiException status code indicates the detailed failure reason
@@ -177,30 +178,36 @@ public class MainActivity extends AppCompatActivity {
 
     /* uses post method */
     public void createUser(GoogleSignInAccount account) {
-        User user = new User();
-        user.setEmail(account.getEmail());
-        user.setName(account.getDisplayName());
-        user.setBalance(0);
-
-        UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
-        Call<User> call = service.postUser(user);
-
-        call.enqueue(new Callback<User>() {
+        new Thread(new Runnable() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    // success!
-                } else {
-                    // failure!
-                    System.out.println("ERROR "+response.raw().body());
-                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
-                }
+            public void run() {
+                User user = new User();
+                user.setEmail(account.getEmail());
+                user.setName(account.getDisplayName());
+                user.setBalance(0);
+
+                UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
+                Call<User> call = service.postUser(user);
+
+                call.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
+                            // success!
+                        } else {
+                            // failure!
+                            System.out.println("ERROR " + response.raw().body());
+                            Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Log.wtf("Error in createUser", t.getMessage());
+                    }
+                });
             }
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.wtf("Error in createUser", t.getMessage());
-            }
-        });
+        }).start();
     }   // end of createUser
 
 
