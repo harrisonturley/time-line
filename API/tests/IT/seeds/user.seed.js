@@ -1,5 +1,3 @@
-const uuid = require('uuid');
-
 module.exports = [
     {
         email: "alice@test.com",
@@ -11,12 +9,12 @@ module.exports = [
         email: "bob@test.com",
         name: "Bob",
         balance: 100,
-        favorites: [uuid.v1(), uuid.v1(), uuid.v1()]
+        favorites: ['vnKoBdTuh2lsUKASMwQYbA', 'JgSGpSMHbGecAXs_o1rE_g', 'K1943yeGQELTUeiH6bDa2g']
     },
     {
         email: "chen@test.com",
         name: "Chen",
         balance: 200,
-        favorites: [uuid.v1()]
+        favorites: ['JgSGpSMHbGecAXs_o1rE_g']
     }
 ];
