@@ -13,7 +13,7 @@ var userEmail2 = uuidv4() + "@gmail.com";
 import lineupService, {lineupServiceMock} from "../../service/lineupService";
 jest.mock("../../service/lineupService");
 
-import userService, {userServiceMock} from "../../service/userService";
+import userService, {userServiceMock} from "../../service/user/userService";
 jest.mock("../../service/userService");
 
 import searchService, {searchServiceMock} from "../../service/searchService";

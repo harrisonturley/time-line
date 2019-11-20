@@ -1,4 +1,4 @@
-const User = require("../repository/user");
+const User = require("../../repository/user");
 
 function getUserByEmail(email) {
     return User.findOne({email});
