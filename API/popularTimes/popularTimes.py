@@ -8,6 +8,6 @@ id = sys.argv[2]
 #get back specific day and time
 dataToSendBack = populartimes.get_id(api, id)
 
-print(dataToSendBack['populartimes'])
+print(dataToSendBack["populartimes"])
 
 sys.stdout.flush()

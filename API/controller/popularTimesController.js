@@ -7,13 +7,24 @@ const request = require("request-promise");
 
 //todo: translate yelp id into google id
 //todo: error handling for whole thing
+// send in id and get whole time off day and hour calculation
+// figure out why jest tests fail from api key
 router.get("/populartimes/:id", function (req, res, next) {
 
     const id = req.params.id;
     //gonna need to know how to translate yelp id 
-    startPythonProcess(id).then(function(fromRunpy) {
+    
+    /*startPythonProcess(id).then(function(fromRunpy) {
         console.log(fromRunpy.toString());
         res.send(fromRunpy);
+    }).catch(next);*/
+
+    getGoogleIdInfo(id).then(function(info) {
+        getGoogleId(info.phone).then(function (gid) {
+            startPythonProcess(gid).then(function (fromRunpy) {
+                res.send(fromRunpy);
+            }).catch(next);
+    }).catch(next);
     }).catch(next);
 
 });
@@ -45,14 +56,13 @@ function getGoogleIdInfo(yelpId) {
   }
 
 function getGoogleId(phone) {
-    console.log("phone is :" + phone)
-
+    console.log(phone)
     var options = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%2B" + 
         phone + "&inputtype=phonenumber&fields=place_id&key=" + placesKey
   
     return request(options).then(function (searchResults) {
-        //return {placeid: searchResults.candidates.place_id};
-        return searchResults;
+        var result = JSON.parse(searchResults)
+        return result.candidates[0].place_id;
     }).catch(err => console.log ("error with places id: "+ err));
 }
 
@@ -61,24 +71,20 @@ function startPythonProcess(id){
     return new Promise(function(success, nosuccess) {
 
         const spawn = require("child_process").spawn;
-        //const pythonProcess = spawn('python',["./popularTimes.py", "ChIJSYuuSx9awokRyrrOFTGg0GY"]);
-        //hmm seems to need full path
+
+        //hmm seems to need full path..this will have to change on VM
         const pythonProcess = spawn("python",
             ["C:/Users/victo/Documents/year3/CPEN321/time-line repo/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
         pythonProcess.stdout.on("data", (data) => {
-            console.log("")
-            console.log("")
-            console.log("")
-            console.log("in node js function, data is: "+ data);
-            success("success");
+            //find date and extract stuff here
+            //populartimes for each day is an array of length 24
+            //starting from hour 0 to 23 in minutes
+            success(data);
         });
         pythonProcess.stderr.on("data", (data) => {
-            console.log("error: "+ data.toString());
-            nosuccess("error");
+            //no popular time exists for this location
+            success({waittime: 0});
         });
 })};
 
 module.exports = router;
-
-//populartimes for each day is an array of length 24
-//starting from hour 0 to 23 in minutes
