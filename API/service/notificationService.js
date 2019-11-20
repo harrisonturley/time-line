@@ -3,8 +3,8 @@ var admin = firebaseAdmin.admin;
 const API_KEY = "rw0fMRw0_c05_ankeAlpIBhpuejV80QfLKT8Ktx7Mywhj8gw1R8a8_sqmYYvt2HBvaXus2kB7xrwiWreoSXHtNqW0ASxeM4GVsWEfZKaYNI9JT7IrmGBa4owV8WoXXYx";
 const request = require("request-promise");
 
-// everyone should already be subscribed to this topic
-var globalTopic = "globalTopic";
+//topic is simply restaurant id
+//var globalTopic = "globalTopic";
 
 // requires a valid yelp id
 function getRestaurantsById(id) {
@@ -34,13 +34,14 @@ function checkToSendPushNotification(body, id) {
               body: name + " has under a 5 minute wait time!",
               title: "Notification from Time Line"
             },
-            topic: globalTopic
+            //CHANGED
+            topic: id
           };
           
           admin.messaging().send(message)
           .then(() => {
             // Response is a message ID string.
-            success("sent message");
+            success("sent message to topic"+ id);
           })
           .catch(() => {
             nosuccess("error sending message");
