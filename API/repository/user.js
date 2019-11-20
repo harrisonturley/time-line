@@ -15,6 +15,10 @@ const UserSchema = new Schema({
         type: Number,
         default: 0
     },
+    favorites: {
+        type: [String],
+        default: []
+    }
 });
 
 const User = mongoose.model("user", UserSchema);
