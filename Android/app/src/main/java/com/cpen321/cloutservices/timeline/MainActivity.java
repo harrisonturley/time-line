@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             completedTask.getResult(ApiException.class);
             // Sign in successfully, show authenticated UI
-            /* TODO: doublecheck this logic please */
             verifyUser(GoogleSignIn.getLastSignedInAccount(this));
             startActivity(new Intent(MainActivity.this, SearchActivity.class));
         } catch (ApiException e ) {
@@ -144,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void verifyUser(GoogleSignInAccount account) {
         new Thread(new Runnable() {
+            boolean accountExists;
             @Override
             public void run() {
                 UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
@@ -154,17 +154,15 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.isSuccessful()) {
                             /* empty body, this means account does not exist! */
-                            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                             if (response.body() == null) {
-                                System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                                createUser(account);
+                                accountExists = false;
                             }
                             /* account exists */
                             else {
-                                System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-                                updateUser(account);
+                                accountExists = true;
                             }
-                        } else {    /* unnsuccessful response */
+                        }
+                        else {    /* unnsuccessful response */
                             System.out.println("ERROR "+response.raw().body());
                             Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
                         }
@@ -174,6 +172,14 @@ public class MainActivity extends AppCompatActivity {
                         Log.wtf("Error", t.getMessage());
                     }
                 });
+
+                if (!accountExists) {
+                    createUser(account);
+
+                }
+                else {
+                    updateUser(account);
+                }
             }   // end of run
         }).start();
     }   // end of verifyUser
@@ -194,7 +200,8 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     // success!
-                } else {
+                }
+                else {
                     // failure!
                     System.out.println("ERROR "+response.raw().body());
                     Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
@@ -222,7 +229,8 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     // success!
-                } else {
+                }
+                else {
                     // failure!
                     System.out.println("ERROR "+response.raw().body());
                     Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
@@ -234,5 +242,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }   // end of updateUser
-
 }   // end of MainActivity
