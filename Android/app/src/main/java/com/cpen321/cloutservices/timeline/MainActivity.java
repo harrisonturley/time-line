@@ -158,8 +158,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             /* account exists */
                             else {
-                                User user = response.body().getUser();
-                                updateUser(account, user.getBalance());
+                                updateUser(account);
                             }
                         } else {    /* unnsuccessful response */
                             System.out.println("ERROR "+response.raw().body());
@@ -197,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
                 }
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Log.wtf("Error in createUser", t.getMessage());
@@ -207,11 +205,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     /* uses put method */
-    public void updateUser(GoogleSignInAccount account, int balance) {
+    public void updateUser(GoogleSignInAccount account) {
         User user = new User();
         user.setEmail(account.getEmail());
         user.setName(account.getDisplayName());
-        user.setBalance(balance);
 
         UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
         Call<User> call = service.putUserByEmail(account.getEmail(), user);
@@ -227,14 +224,11 @@ public class MainActivity extends AppCompatActivity {
                     Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
                 }
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Log.wtf("Error in updateUser", t.getMessage());
             }
         });
     }   // end of updateUser
-
-
 
 }   // end of MainActivity
