@@ -1,7 +1,12 @@
-var firebaseAdmin = require("../controller/notificationController");
-var admin = firebaseAdmin.admin;
+//var firebaseAdmin = require("../controller/notificationController");
+//var admin = firebaseAdmin.admin;
 const API_KEY = "rw0fMRw0_c05_ankeAlpIBhpuejV80QfLKT8Ktx7Mywhj8gw1R8a8_sqmYYvt2HBvaXus2kB7xrwiWreoSXHtNqW0ASxeM4GVsWEfZKaYNI9JT7IrmGBa4owV8WoXXYx";
 const request = require("request-promise");
+var admin = require("firebase-admin");
+
+admin.initializeApp({
+  credential: admin.credential.applicationDefault()
+});
 
 //topic is simply restaurant id
 //var globalTopic = "globalTopic";
@@ -57,4 +62,32 @@ function checkToSendPushNotification(body, id) {
  });
 }
 
-module.exports = {checkToSendPushNotification, getRestaurantsById};
+function subscribe(token, restaurantId) {
+  
+  return new Promise(function(success, nosuccess){
+
+    admin.messaging().subscribeToTopic(token, restaurantId)
+    .then(() => {
+      success();
+    })
+    .catch(() => {
+      nosuccess();
+    });
+ });
+}
+
+function unsubscribe(token, restaurantId) {
+  
+  return new Promise(function(success, nosuccess){
+
+    admin.messaging().unsubscribeFromTopic(token, restaurantId)
+    .then(() => {
+      success();
+    })
+    .catch(() => {
+      nosuccess();
+    });
+ });
+}
+
+module.exports = {checkToSendPushNotification, getRestaurantsById, subscribe, unsubscribe};
