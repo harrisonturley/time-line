@@ -87,7 +87,6 @@ describe("searchController", () => {
         const res = await request.get('/api/search/restaurants/favorited')
             .query({restaurantIds: ids});
         let businesses = res.body.businesses;
-        console.log(businesses);
 
         expect(res.status).toBe(200);
         expect(res.body.total).toBe(2);
