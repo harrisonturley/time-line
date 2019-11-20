@@ -88,7 +88,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 } else {
                     viewHolder.favoriteStar.setImageResource(R.drawable.ic_star_border_24px);
                     favoritedRestaurantID.remove(restaurants.get(index).getId());
-                    subscribe(restaurants.get(index).getId());
+                    unsubscribe(restaurants.get(index).getId());
                 }
             }
         });
