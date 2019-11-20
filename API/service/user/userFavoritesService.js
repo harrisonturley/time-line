@@ -1,26 +1,23 @@
 const User = require("../../repository/user");
 const utils = require("../../util/collections");
+const favoritedRestaurantService = require("../favoritedRestaurantService");
 
 function getUserFavorites(email) {
     return User.findOne({email}, {_id: 0, favorites: 1}).lean();
 }
 
-function addUserFavorite(email, favorite) {
-    return getUserFavorites(email).then(
-        function (favorites) {
-            favorites.favorites.push(favorite);
-            return updateUserFavorites(email, favorites);
-        }
-    );
+async function addUserFavorite(email, restaurant) {
+    const favorites = await getUserFavorites(email);
+    favorites.favorites.push(restaurant.id);
+    await favoritedRestaurantService.addFavoritedRestaurant(restaurant);
+    return updateUserFavorites(email, favorites);
 }
 
-function deleteUserFavorite(email, favorite) {
-    return getUserFavorites(email).then(
-        function (favorites) {
-            utils.removeFromArray(favorites.favorites, favorite);
-            return updateUserFavorites(email, favorites);
-        }
-    );
+async function deleteUserFavorite(email, restaurantId) {
+    const favorites = await getUserFavorites(email);
+    utils.removeFromArray(favorites.favorites, restaurantId);
+    // await favoritedRestaurantService.deleteFavoritedRestaurant(restaurantId);
+    return updateUserFavorites(email, favorites);
 }
 
 function updateUserFavorites(email, favorites) {

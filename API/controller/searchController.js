@@ -10,4 +10,13 @@ router.get("/search/restaurants", function (req, res, next) {
     }).catch(next);
 });
 
+router.get("/search/restaurants/favorited", function (req, res, next) {
+    const restaurantIds = JSON.parse(req.query.restaurantIds);
+    searchService.getRestaurantsByIds(
+        restaurantIds
+    ).then(function (searchResults) {
+        res.send(searchResults);
+    }).catch(next);
+});
+
 module.exports = router;
