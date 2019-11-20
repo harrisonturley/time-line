@@ -117,6 +117,9 @@ public class SearchActivity extends AppCompatActivity {
                     case R.id.nav_search:
                         fragmentClass = SearchFragment.class;
                         break;
+                    case R.id.nav_awards:
+                        fragmentClass = AwardsFragment.class;
+                        break;
                     case R.id.nav_settings:
                         fragmentClass = SettingsFragment.class;
                         break;
