@@ -9,14 +9,14 @@ router.get("/users/:email/favorites", function (req, res, next) {
 });
 
 router.post("/users/:email/favorites", function (req, res, next) {
-    userService.addUserFavorite(req.params.email, req.body.favorite).then(function (favorites) {
+    userService.addUserFavorite(req.params.email, req.body.restaurant).then(function (favorites) {
         res.send(favorites);
     }).catch(next);
 });
 
 // favorite = yelp restaurant id
-router.delete("/users/:email/favorites/:favorite", function (req, res, next) {
-    userService.deleteUserFavorite(req.params.email, req.params.favorite).then(function (favorites) {
+router.delete("/users/:email/favorites/:restaurantId", function (req, res, next) {
+    userService.deleteUserFavorite(req.params.email, req.params.restaurantId).then(function (favorites) {
         res.send(favorites);
     }).catch(next);
 });

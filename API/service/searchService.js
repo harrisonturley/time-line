@@ -3,6 +3,7 @@ const request = require("request-promise");
 //const API_KEY = keyModule.API_KEY;
 const API_KEY = "rw0fMRw0_c05_ankeAlpIBhpuejV80QfLKT8Ktx7Mywhj8gw1R8a8_sqmYYvt2HBvaXus2kB7xrwiWreoSXHtNqW0ASxeM4GVsWEfZKaYNI9JT7IrmGBa4owV8WoXXYx";
 const lineupService = require("../service/lineupService");
+const favoritedRestaurantService = require("../service/favoritedRestaurantService");
 
 /**
  * @param searchResults {{businesses:{lineupTime:Number}}}
@@ -51,4 +52,8 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
     return request(options).then(addLineupTimes);
 }
 
-module.exports = {getRestaurantsByKeywordAndCoordinates};
+function getRestaurantsByIds(restaurantIds) {
+    return favoritedRestaurantService.getFavoritedRestaurants(restaurantIds);
+}
+
+module.exports = {getRestaurantsByKeywordAndCoordinates, getRestaurantsByIds};
