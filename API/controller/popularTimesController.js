@@ -56,7 +56,7 @@ function getGoogleIdInfo(yelpId) {
   }
 
 function getGoogleId(phone) {
-    console.log(phone)
+    //console.log(phone)
     var options = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%2B" + 
         phone + "&inputtype=phonenumber&fields=place_id&key=" + placesKey
   
@@ -72,13 +72,9 @@ function startPythonProcess(id){
 
         const spawn = require("child_process").spawn;
 
-        //get current day and hour here
-        var day = 1;
-        var hour = 17;
-
         //hmm seems to need full path..this will have to change on VM
         const pythonProcess = spawn("python",
-            ["C:/Users/victo/Documents/year3/CPEN321/time-line repo/time-line/API/popularTimes/popularTimes.py", placesKey, id, day, hour]);
+            ["C:/Users/victo/Documents/year3/CPEN321/time-line repo/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
         pythonProcess.stdout.on("data", (returnVal) => {
             //find date and extract stuff here
             //populartimes for each day is an array of length 24

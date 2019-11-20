@@ -1,13 +1,13 @@
 import sys
+import datetime
 import populartimes
 
 api = sys.argv[1]
 id = sys.argv[2]
-day = sys.argv[3]
-hour = sys.argv[4]
 
-#problem with yelp id vs google id
-#get back specific day and time
+day = datetime.datetime.today().weekday()
+hour = datetime.datetime.today().hour
+
 dataToSendBack = populartimes.get_id(api, id)
 
 #first number corresponds to day of week monday: 0 sunday: 6
