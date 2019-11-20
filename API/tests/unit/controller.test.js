@@ -12,7 +12,7 @@ import lineupService, {lineupServiceMock} from "../../service/lineupService";
 jest.mock("../../service/lineupService");
 
 import userService, {userServiceMock} from "../../service/user/userService";
-jest.mock("../../service/userService");
+jest.mock("../../service/user/userService");
 
 import searchService, {searchServiceMock} from "../../service/searchService";
 jest.mock("../../service/searchService");
