@@ -98,16 +98,14 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                //... start calculation
                if (reportQueueBtn.isChecked()) {
                    // textOn="Start Queue"
-                   startTime = SystemClock.elapsedRealtime();
+                   startTime = SystemClock.uptimeMillis();
                    handler.postDelayed(runnable, 0);    // passing in 0, will make postDelayed run forever
                    // get ready for the next state
-                   reportQueueBtn.setChecked(false);
                }
                else {   // textOff="End Queue"
                    // this is the resetting part but first send lineup to backend
                    putLineupTime(restaurantId, (int)totalTime);    // THIS MAY BE BUGGY. WILL TEST
                    // store restaurant!
-
 
                    // resetting now
                    millisecondTime = 0L ;
@@ -119,7 +117,6 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                    milliseconds = 0 ;
                    queueTime.setText("00:00:00");
                    // get ready for the next state
-                   reportQueueBtn.setChecked(true);
 
                    // go back to search
                    startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
@@ -132,7 +129,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
 
     public Runnable runnable = new Runnable() {
         public void run() {
-            millisecondTime = SystemClock.elapsedRealtime() - startTime;
+            millisecondTime = SystemClock.uptimeMillis() - startTime;
             totalTime = timeBuff + millisecondTime;
             seconds = (int) (totalTime / 1000);
             minutes = seconds / 60;
