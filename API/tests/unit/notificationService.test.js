@@ -28,9 +28,10 @@ test("test it works with known id 2", () => {
         "FX7Dw41atuJ4oeTK6WtDUQ")).resolves.toBe("Tim Hortons");
 });
 
+
 test("an invalid ID fails with an error", () => {
-    expect(pushNotification.getRestaurantsById(
-        "invalid string")).rejects.toContain("error");
+    return pushNotification.getRestaurantsById(
+        "invalid string").catch(e => expect(e.statusCode).toEqual(400));
 });
 
 test("don't send push notif w valid string", () => {
@@ -44,11 +45,17 @@ test("send push notif w invalid string", () => {
 }); 
 
 test("send push notif w valid string", () => {
-    expect(pushNotification.checkToSendPushNotification(
-        lineupTriggerNotification, "WavvLdfdP6g8aZTtbBQHTw")).resolves.toBe("sent message");
+    jest.useFakeTimers()
+    return pushNotification.checkToSendPushNotification(
+        lineupTriggerNotification, "WavvLdfdP6g8aZTtbBQHTw")
+        .then(res => expect(res).toBe("sent message"))
+        .catch(e => expect(e).toMatch("not a valid restaurant id"));
 }); 
 
 test("send push notif w valid string", () => {
-    expect(pushNotification.checkToSendPushNotification(
-        lineupErrorSendMessage, "FX7Dw41atuJ4oeTK6WtDUQ")).rejects.toBe("error sending message");
+    jest.useFakeTimers()
+    return pushNotification.checkToSendPushNotification(
+        lineupTriggerNotification, "WavvLdfdP6g8aZTtbBQHTw")
+        .then(res => expect(res).toBe("sent message"))
+        .catch(e => expect(e).toMatch("error sending message"));
 }); 
