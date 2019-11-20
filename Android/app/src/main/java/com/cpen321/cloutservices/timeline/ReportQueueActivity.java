@@ -102,6 +102,12 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
             public void onClick(View v) {
                 isFavorited = !isFavorited;
                 setFavoriteStar();
+
+                if (isFavorited) {
+                    Toast.makeText(ReportQueueActivity.this, "Favorited Restaurant", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ReportQueueActivity.this, "Unfavorited Restaurant", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -155,10 +161,8 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private void setFavoriteStar() {
         if (isFavorited) {
             favoritedStar.setImageResource(R.drawable.ic_star_24px);
-            Toast.makeText(this, "Favorited Restaurant", Toast.LENGTH_SHORT).show();
         } else {
             favoritedStar.setImageResource(R.drawable.ic_star_border_24px);
-            Toast.makeText(this, "Unfavorited Restaurant", Toast.LENGTH_SHORT).show();
         }
     }
 
