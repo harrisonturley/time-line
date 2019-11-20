@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ProgressBar;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.cpen321.cloutservices.timeline.model.LineupService;
@@ -23,6 +26,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import androidx.appcompat.widget.Toolbar;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,31 +37,38 @@ import retrofit2.Response;
 public class ReportQueueActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int ZOOM_LEVEL = 15;
     private static final int ANIMATION_LENGTH = 1000;
-
-    private EditText queueInput;
+    private TextView queueTime;
+    private TextView restaurantname;
+    private TextView restaurantaddress;
+    private ImageView restaurantimage;
+    private ToggleButton reportQueueBtn;
     private ProgressBar progressBar;
     private GoogleMap mMap;
     private Toolbar toolbar;
+    //    private double timer;
+    private Handler handler;
 
     // Passed from RestaurantAdapter;
     private String restaurantId;
     private String restaurantName;
     private double restaurantLatitude;
     private double restaurantLongitude;
+    private int seconds, minutes, milliseconds ;
+    long millisecondTime, startTime, timeBuff, totalTime = 0L ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_queue);
 
-        // findViews
-        queueInput = findViewById(R.id.queue_input);
+        /* findViews */
         progressBar = findViewById(R.id.progressBar);
         toolbar = findViewById(R.id.toolbar_main);
-        Button submitQueueBtn = findViewById(R.id.submit_btn);
-        TextView restaurantname = findViewById(R.id.restaurant_name);
-        TextView restaurantaddress = findViewById(R.id.restaurant_address);
-        ImageView restaurantimage = findViewById(R.id.restaurant_image);
+        restaurantname = findViewById(R.id.restaurant_name);
+        restaurantaddress = findViewById(R.id.restaurant_address);
+        restaurantimage = findViewById(R.id.restaurant_image);
+        queueTime = findViewById(R.id.queue_time);
+        reportQueueBtn = findViewById(R.id.report_btn);
 
         /* retrieve restaurant from RestaurantAdapter */
         Intent intent = getIntent();
@@ -66,6 +79,8 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         restaurantLatitude = intent.getDoubleExtra("lat", 0);
         restaurantLongitude = intent.getDoubleExtra("long", 0);
 
+        handler = new Handler();
+
         configureToolbar();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -73,17 +88,56 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
 
         restaurantname.setText(restaurantName);
         restaurantaddress.setText(address);
+        queueTime.setText("00:00:00");
+        reportQueueBtn.setChecked(false);    // start it as true
         Glide.with(ReportQueueActivity.this).load(imageURL).into(restaurantimage);
 
-        submitQueueBtn.setOnClickListener(new View.OnClickListener() {
+        reportQueueBtn.setOnClickListener (new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                int lineupTime = Integer.parseInt(queueInput.getText().toString());
-                putLineupTime(restaurantId, lineupTime);
-                startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
+                //... start calculation
+                if (reportQueueBtn.isChecked()) {
+                    // textOn="Start Queue"
+                    startTime = SystemClock.uptimeMillis();
+                    handler.postDelayed(runnable, 0);    // passing in 0, will make postDelayed run forever
+                    // go back to search
+                }
+                else {   // textOff="End Queue"
+                    // this is the resetting part but first send lineup to backend
+                    putLineupTime(restaurantId, (int)totalTime);
+                    millisecondTime = 0L ;
+                    startTime = 0L ;
+                    timeBuff = 0L ;
+                    totalTime = 0L ;
+                    seconds = 0 ;
+                    minutes = 0 ;
+                    milliseconds = 0 ;
+                    queueTime.setText("00:00:00");
+                    handler.removeCallbacks(runnable);
+                    handler = null;
+                    runnable = null;
+                    startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
+                }
             }
         });
+
+        // end of OnCreate
     }
+
+    public Runnable runnable = new Runnable() {
+        public void run() {
+            millisecondTime = SystemClock.uptimeMillis() - startTime;
+            totalTime = timeBuff + millisecondTime;
+            seconds = (int) (totalTime / 1000);
+            minutes = seconds / 60;
+            seconds = seconds % 60;
+            milliseconds = (int) (totalTime % 1000);
+            queueTime.setText("" + minutes + ":"
+                    + String.format("%02d", seconds) + ":"
+                    + String.format("%03d", milliseconds));
+            handler.postDelayed(this, 0);
+        }
+    };
 
     private void configureToolbar() {
         setSupportActionBar(toolbar);
@@ -151,6 +205,5 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
             }
         });
     }
-
     /* end of class */
 }
