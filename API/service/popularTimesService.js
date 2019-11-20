@@ -1,48 +1,12 @@
 const express = require("express");
 const router = express.Router();
-//const keyModule = require("../api_keys/apiKeys");
-//const placesKey = keyModule.PLACES_KEY;
-//const apiKey = keyModule.API_KEY;
+// const keyModule = require("../api_keys/apiKeys");
+// const placesKey = keyModule.PLACES_KEY;
+// const apiKey = keyModule.API_KEY;
 const apiKey = "rw0fMRw0_c05_ankeAlpIBhpuejV80QfLKT8Ktx7Mywhj8gw1R8a8_sqmYYvt2HBvaXus2kB7xrwiWreoSXHtNqW0ASxeM4GVsWEfZKaYNI9JT7IrmGBa4owV8WoXXYx"
 const placesKey = "AIzaSyBVDI23V1oCRqdGAsxU7ARKuXplmWhTDRM"
 
 const request = require("request-promise");
-
-//todo: translate yelp id into google id
-//todo: error handling for whole thing
-// send in id and get whole time off day and hour calculation
-// figure out why jest tests fail from api key
-router.get("/populartimes/:id", function (req, res, next) {
-
-    const id = req.params.id;
-    //gonna need to know how to translate yelp id 
-    
-    /*startPythonProcess(id).then(function(fromRunpy) {
-        console.log(fromRunpy.toString());
-        res.send(fromRunpy);
-    }).catch(next);*/
-
-    getGoogleIdInfo(id).then(function(info) {
-        getGoogleId(info.phone).then(function (gid) {
-            startPythonProcess(gid).then(function (fromRunpy) {
-                res.send(fromRunpy);
-            }).catch(next);
-    }).catch(next);
-    }).catch(next);
-
-});
-
-//todo: translate yelp id into google id
-router.get("/googleidfromyelpid/:id", function (req, res, next) {
-
-    const id = req.params.id;
-    getGoogleIdInfo(id).then(function(info) {
-        getGoogleId(info.phone).then(function (id) {
-        res.send(id);
-    }).catch(next);
-    }).catch(next);
-
-});
 
 function getPopularTimes(id) {
     return new Promise(function(success, nosuccess){

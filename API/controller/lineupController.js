@@ -1,10 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const lineupService = require("../service/lineupService");
+const popTimes = require("../service/popularTimesService");
 
 router.get("/lineups/:id", function (req, res, next) {
-    lineupService.getLineupById(req.params.id).then(function (lineup) {
+    /*lineupService.getLineupById(req.params.id).then(function (lineup) {
         res.send(lineup);
+    }).catch(next);*/
+    lineupService.getLineupById(req.params.id, req.body).then(function (lineup) {
+        popTimes.getPopularTimes(req.params.id).then(function (updatedLineup) {
+            res.send(updatedLineup);
+        });
     }).catch(next);
 });
 

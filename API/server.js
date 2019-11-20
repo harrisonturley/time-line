@@ -20,7 +20,6 @@ server.use("/api", require("./controller/user/userFavoritesController"));
 server.use("/api", require("./controller/lineupController"));
 server.use("/api", require("./controller/searchController"));
 server.use("/api", require("./controller/notificationController"));
-server.use('/api', require('./controller/popularTimesController'));
 
 // error handling middleware
 server.use(function (err, req, res, _) {
