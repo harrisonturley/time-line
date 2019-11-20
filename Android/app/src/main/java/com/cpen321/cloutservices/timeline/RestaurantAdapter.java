@@ -43,7 +43,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         Picasso.get().load(Uri.parse(restaurants.get(i).getImageUrl())).error(R.drawable.ic_clear_24px).into(viewHolder.restaurantImage);
         viewHolder.restaurantName.setText(restaurants.get(i).getName());
         viewHolder.restaurantAddress.setText(restaurants.get(i).getLocation().getDisplayAddressFormatted());
-        viewHolder.restaurantLineup.setText("Lineup: " + restaurants.get(i).getLineupTime() + " minutes");
+        viewHolder.restaurantLineup.setText("Lineup: " + restaurants.get(i).getLineupTime()/1000 + " seconds");
         viewHolder.restaurantDistance.setText("Distance: " + (int)restaurants.get(i).getDistance() + " metres");
 
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
