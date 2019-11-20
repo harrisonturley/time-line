@@ -111,10 +111,6 @@ public class SearchActivity extends AppCompatActivity {
                         fragmentClass = SearchFragment.class;
                         toolbar.setTitle("Time Line");
                         break;
-                    case R.id.nav_settings:
-                        fragmentClass = SettingsFragment.class;
-                        toolbar.setTitle("Settings");
-                        break;
                     case R.id.nav_favorites:
                         fragmentClass = FavoritesFragment.class;
                         toolbar.setTitle("Favorites");
