@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.cpen321.cloutservices.timeline.model.Lineup;
 import com.cpen321.cloutservices.timeline.model.LineupService;
+import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.cpen321.cloutservices.timeline.model.User;
 import com.cpen321.cloutservices.timeline.model.UserService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -26,6 +27,9 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 
 import androidx.annotation.Nullable;
+
+import java.util.List;
+
 import mehdi.sakout.fancybuttons.FancyButton;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -138,16 +142,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void verifyUser(GoogleSignInAccount account) {
-        AsyncTask.execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                /* putUser, if body is empty then postUser, otherwise do nothing */
-
-//                User user = new User();
-//                user.setEmail(account.getEmail());
-//                user.setName(account.getDisplayName());
-//                user.setBalance(0.0);
-                boolean userExists = false;
                 UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
                 Call<User> call = service.getUserByEmail(account.getEmail());
 
@@ -155,39 +152,89 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.isSuccessful()) {
-                            /* empty body, this means account exists! */
-                            if (response.body() == null) {  // response == null ??
-                                /* update user */
-                                updateUser(account);
-
-                            }
-                            else {
-                                /* create user */
+                            /* empty body, this means account does not exist! */
+                            if (response.body() == null) {                                  // response == null ??/
                                 createUser(account);
                             }
-                        /* unnsuccessful response */
-                        } else {
+                            /* account exists */
+                            else {
+                                User user = response.body().getUser();
+                                updateUser(account, user.getBalance());
+                            }
+                        } else {    /* unnsuccessful response */
                             System.out.println("ERROR "+response.raw().body());
                             Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
                         }
                     }
-
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
                         Log.wtf("Error", t.getMessage());
                     }
                 });
-
             }   // end of run
+        }).start();
+    }   // end of verifyUser
+
+
+    /* uses post method */
+    public void createUser(GoogleSignInAccount account) {
+        User user = new User();
+        user.setEmail(account.getEmail());
+        user.setName(account.getDisplayName());
+        user.setBalance(0);
+
+        UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
+        Call<User> call = service.postUser(user);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    // success!
+                } else {
+                    // failure!
+                    System.out.println("ERROR "+response.raw().body());
+                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.wtf("Error in createUser", t.getMessage());
+            }
         });
     }   // end of createUser
 
-    public void updateUser(GoogleSignInAccount account) {
-        ;
-    }
 
-    public void createUser(GoogleSignInAccount account) {
-        ;
-    }
+    /* uses put method */
+    public void updateUser(GoogleSignInAccount account, int balance) {
+        User user = new User();
+        user.setEmail(account.getEmail());
+        user.setName(account.getDisplayName());
+        user.setBalance(balance);
+
+        UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
+        Call<User> call = service.putUserByEmail(account.getEmail(), user);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    // success!
+                } else {
+                    // failure!
+                    System.out.println("ERROR "+response.raw().body());
+                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.wtf("Error in updateUser", t.getMessage());
+            }
+        });
+    }   // end of updateUser
+
+
 
 }   // end of MainActivity
