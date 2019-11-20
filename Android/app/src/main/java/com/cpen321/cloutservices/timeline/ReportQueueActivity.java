@@ -45,6 +45,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private ProgressBar progressBar;
     private GoogleMap mMap;
     private Toolbar toolbar;
+    private ImageView favoritedStar;
     //    private double timer;
     private Handler handler;
 
@@ -55,6 +56,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private double restaurantLongitude;
     private int seconds, minutes, milliseconds ;
     long millisecondTime, startTime, timeBuff, totalTime = 0L ;
+    private boolean isFavorited;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         restaurantimage = findViewById(R.id.restaurant_image);
         queueTime = findViewById(R.id.queue_time);
         reportQueueBtn = findViewById(R.id.report_btn);
+        favoritedStar = findViewById(R.id.favorites_star);
 
         /* retrieve restaurant from RestaurantAdapter */
         Intent intent = getIntent();
@@ -78,10 +81,12 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         restaurantName = intent.getStringExtra("name");
         restaurantLatitude = intent.getDoubleExtra("lat", 0);
         restaurantLongitude = intent.getDoubleExtra("long", 0);
+        isFavorited = intent.getBooleanExtra("isFavorited", false);
 
         handler = new Handler();
 
         configureToolbar();
+        setFavoriteStar();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -91,6 +96,14 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         queueTime.setText("00:00:00");
         reportQueueBtn.setChecked(false);    // start it as true
         Glide.with(ReportQueueActivity.this).load(imageURL).into(restaurantimage);
+
+        favoritedStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isFavorited = !isFavorited;
+                setFavoriteStar();
+            }
+        });
 
         reportQueueBtn.setOnClickListener (new View.OnClickListener(){
             @Override
@@ -138,6 +151,16 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
             handler.postDelayed(this, 0);
         }
     };
+
+    private void setFavoriteStar() {
+        if (isFavorited) {
+            favoritedStar.setImageResource(R.drawable.ic_star_24px);
+            Toast.makeText(this, "Favorited Restaurant", Toast.LENGTH_SHORT).show();
+        } else {
+            favoritedStar.setImageResource(R.drawable.ic_star_border_24px);
+            Toast.makeText(this, "Unfavorited Restaurant", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void configureToolbar() {
         setSupportActionBar(toolbar);

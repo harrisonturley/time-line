@@ -2,16 +2,20 @@ package com.cpen321.cloutservices.timeline;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,13 +26,14 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     private static final String NAME = "name";
     private static final String LATITUDE = "lat";
     private static final String LONGITUDE = "long";
-    private static final String SEARCH = "search";
+    private static final String FAVORITED = "isFavorited";
 
     private ArrayList<Restaurant> restaurants;
-    private String searchTerm;
+    private HashSet<String> favoritedRestaurantID;
 
-    public RestaurantAdapter(ArrayList<Restaurant> restaurants) {
+    public RestaurantAdapter(ArrayList<Restaurant> restaurants, HashSet<String> favoritedRestaurantID) {
         this.restaurants = restaurants;
+        this.favoritedRestaurantID = favoritedRestaurantID;
     }
 
     @Override
@@ -57,7 +62,22 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 intent.putExtra(NAME, restaurants.get(index).getName());
                 intent.putExtra(LATITUDE, restaurants.get(index).getCoordinates().getLatitude());
                 intent.putExtra(LONGITUDE, restaurants.get(index).getCoordinates().getLongitude());
+                intent.putExtra(FAVORITED, favoritedRestaurantID.contains(restaurants.get(index).getId()));
                 v.getContext().startActivity(intent);
+            }
+        });
+
+        viewHolder.favoriteStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // if set contains it, set to border/remove from set/send delete to backend, else set to normal/add to set/send add to backend
+                if (!favoritedRestaurantID.contains(restaurants.get(index).getId())) {
+                    viewHolder.favoriteStar.setImageResource(R.drawable.ic_star_24px);
+                    favoritedRestaurantID.add(restaurants.get(index).getId());
+                } else {
+                    viewHolder.favoriteStar.setImageResource(R.drawable.ic_star_border_24px);
+                    favoritedRestaurantID.remove(restaurants.get(index).getId());
+                }
             }
         });
     }
@@ -74,6 +94,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         private TextView restaurantAddress;
         private TextView restaurantLineup;
         private TextView restaurantDistance;
+        private ImageView favoriteStar;
 
         public ViewHolder(View v) {
             super(v);
@@ -84,6 +105,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             restaurantAddress = v.findViewById(R.id.restaurantAddress);
             restaurantLineup = v.findViewById(R.id.restaurantLineup);
             restaurantDistance = v.findViewById(R.id.restaurantDistance);
+            favoriteStar = v.findViewById(R.id.favorites_star);
         }
     }
 }

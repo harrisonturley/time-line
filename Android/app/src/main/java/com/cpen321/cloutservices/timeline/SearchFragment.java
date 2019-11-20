@@ -41,6 +41,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
@@ -121,6 +122,7 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 lastSearchTerm = query;
+
                 submitQuery(query);
                 searchView.clearFocus();
                 return true;
@@ -187,7 +189,7 @@ public class SearchFragment extends Fragment {
                     }
                 });
 
-                RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants);
+                RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants, new HashSet<>());
                 recyclerView.setAdapter(restaurantAdapter);
             }
 
