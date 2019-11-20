@@ -13,6 +13,8 @@ const utils = require("../../../util/collections");
 // create a test database specific to this test file & seed it with data
 setupDB(databaseName);
 
+// todo verify that subscriptions/unsubscriptions are being made
+
 describe("userFavoritesController", () => {
     it('reads an existing user favorites', async done => {
         const seededUser = userSeeds[0];
