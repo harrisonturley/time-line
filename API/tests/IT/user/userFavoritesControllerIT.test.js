@@ -35,42 +35,24 @@ describe("userFavoritesController", () => {
         const favorites = seededUser.favorites;
         const newFavoriteRestaurant = {
             id: 'vtGxOG7DVS7ftBzRW94uDA',
-            alias: 'super-chef-grill-vancouver',
             name: 'Super Chef Grill',
             image_url: 'https://s3-media2.fl.yelpcdn.com/bphoto/Z7UPEekmVioWdtzRSMNIGA/o.jpg',
             is_closed: false,
-            url: 'https://www.yelp.com/biz/super-chef-grill-vancouver?adjust_creative=2ojO4ZImtGy71cMqoKgOQw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2ojO4ZImtGy71cMqoKgOQw',
-            review_count: 68,
-            categories: [
-                {
-                    alias: 'chinese',
-                    title: 'Chinese'
-                }
-            ],
             rating: 4.5,
             coordinates: {
                 latitude: 49.279012421188,
                 longitude: -123.116581099631
             },
-            transactions: [],
-            price: '$',
             location: {
-                address1: '280 Robson Street',
-                address2: '',
-                address3: '',
-                city: 'Vancouver',
-                zip_code: 'V6B 0E7',
-                country: 'CA',
-                state: 'BC',
                 display_address: [
                     '280 Robson Street',
                     'Vancouver, BC V6B 0E7',
                     'Canada'
                 ]
             },
-            phone: '+16048282083',
-            display_phone: '+1 604-828-2083',
             distance: 507.3463646289611,
+            lineupTime: null,
+            timestamp: 1674378529
         };
         favorites.push(newFavoriteRestaurant.id);
 

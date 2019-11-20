@@ -8,6 +8,19 @@ const favoritedRestaurantService = require("../service/favoritedRestaurantServic
 /**
  * @param searchResults {{businesses:{lineupTime:Number}}}
  **/
+function removeExtraInfo(searchResults){
+    delete searchResults.alias;
+    delete searchResults.url;
+    delete searchResults.review_count;
+    delete searchResults.categories;
+    delete searchResults.transactions;
+    delete searchResults.price;
+    delete searchResults.phone;
+    delete searchResults.display_phone;
+
+    return searchResults;
+}
+
 function addLineupTimes(searchResults) {
     let businessIdToBusinessMap = new Map();
 
@@ -49,7 +62,7 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
         json: true
     };
 
-    return request(options).then(addLineupTimes);
+    return request(options).then(addLineupTimes).then(removeExtraInfo);
 }
 
 function getRestaurantsByIds(restaurantIds) {

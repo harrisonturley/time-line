@@ -8,10 +8,6 @@ const FavoritedRestaurantSchema = new Schema({
         unique: true,
         required: true
     },
-    alias: {
-        type: String,
-        required: true
-    },
     name: {
         type: String,
         required: true
@@ -23,28 +19,6 @@ const FavoritedRestaurantSchema = new Schema({
     is_closed: {
         type: Boolean,
         required: true
-    },
-    url: {
-        type: String,
-        required: true
-    },
-    review_count: {
-        type: Number,
-        required: true
-    },
-    categories: {
-        type: [{
-            _id: false,
-            alias: {
-                type: String,
-                required: true
-            },
-            title: {
-                type: String,
-                required: true
-            }
-        }],
-        required: true,
     },
     rating: {
         type: Number,
@@ -63,57 +37,13 @@ const FavoritedRestaurantSchema = new Schema({
         },
         required: true
     },
-    transactions: {
-        type: [String],
-        required: true
-    },
-    price: {
-        type: String,
-        required: true
-    },
     location: {
         type: {
-            address1: {
-                type: String,
-                required: true
-            },
-            address2: {
-                type: String,
-                required: true
-            },
-            address3: {
-                type: String,
-                required: true
-            },
-            city: {
-                type: String,
-                required: true
-            },
-            zip_code: {
-                type: String,
-                required: true
-            },
-            country: {
-                type: String,
-                required: true
-            },
-            state: {
-                type: String,
-                required: true
-            },
             display_address: {
                 type: [String],
                 required: true
             }
         },
-        required: true
-    },
-    phone: {
-        type: String,
-        required: true
-    },
-    display_phone: {
-        type: String,
         required: true
     },
     distance: {
