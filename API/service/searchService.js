@@ -57,7 +57,8 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
             term: keyword,
             latitude: coordinates.latitude,
             longitude: coordinates.longitude,
-            limit: 20
+            limit: 20,
+            categories: "restaurants, All"
         },
         json: true
     };
