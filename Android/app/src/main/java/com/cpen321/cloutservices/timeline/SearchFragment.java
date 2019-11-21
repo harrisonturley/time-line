@@ -58,7 +58,6 @@ public class SearchFragment extends Fragment {
     private SearchView searchView;
     private RecyclerView recyclerView;
     private ConstraintLayout searchInstructions;
-    private String lastSearchTerm;
 
     private final int PERMISSION_ID = 42;
 
@@ -84,8 +83,8 @@ public class SearchFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if (lastSearchTerm != null) {
-            searchView.setQuery(lastSearchTerm, true);
+        if (SearchTermHelper.getSearchTerm() != null) {
+            searchView.setQuery(SearchTermHelper.getSearchTerm(), true);
         }
     }
 
@@ -129,8 +128,6 @@ public class SearchFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                lastSearchTerm = query;
-
                 submitQuery(query);
                 searchView.clearFocus();
                 return true;
@@ -141,6 +138,10 @@ public class SearchFragment extends Fragment {
                 return false;
             }
         });
+
+        if (SearchTermHelper.getSearchTerm() != null) {
+            searchView.setQuery(SearchTermHelper.getSearchTerm(), true);
+        }
     }
 
     private void requestNewLocationData() {
@@ -169,6 +170,7 @@ public class SearchFragment extends Fragment {
             currentLocation.setLongitude(-123.249585);
         }
 
+        SearchTermHelper.setSearchTerm(query);
         FavoriteService favoriteService = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
         Call<Favorites> call = favoriteService.getUserFavorites(GoogleSignIn.getLastSignedInAccount(getActivity()).getEmail());
 
@@ -191,6 +193,7 @@ public class SearchFragment extends Fragment {
                     public void onResponse(Call<Businesses> call, Response<Businesses> response) {
                         long endTime = SystemClock.uptimeMillis();
                         Log.w("QUERY RESPONSE TIME", "Response time: " + (endTime - startTime) + " milliseconds");
+
                         if (response.body() == null) {
                             Toast.makeText(getActivity(), "Search failed, please try again!", Toast.LENGTH_SHORT).show();
                             return;
