@@ -3,10 +3,24 @@ const request = require("request-promise");
 //const API_KEY = keyModule.API_KEY;
 const API_KEY = "rw0fMRw0_c05_ankeAlpIBhpuejV80QfLKT8Ktx7Mywhj8gw1R8a8_sqmYYvt2HBvaXus2kB7xrwiWreoSXHtNqW0ASxeM4GVsWEfZKaYNI9JT7IrmGBa4owV8WoXXYx";
 const lineupService = require("../service/lineupService");
+const favoritedRestaurantService = require("../service/favoritedRestaurantService");
 
 /**
  * @param searchResults {{businesses:{lineupTime:Number}}}
  **/
+function removeExtraInfo(searchResults){
+    delete searchResults.alias;
+    delete searchResults.url;
+    delete searchResults.review_count;
+    delete searchResults.categories;
+    delete searchResults.transactions;
+    delete searchResults.price;
+    delete searchResults.phone;
+    delete searchResults.display_phone;
+
+    return searchResults;
+}
+
 function addLineupTimes(searchResults) {
     let businessIdToBusinessMap = new Map();
 
@@ -48,7 +62,11 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
         json: true
     };
 
-    return request(options).then(addLineupTimes);
+    return request(options).then(addLineupTimes).then(removeExtraInfo);
 }
 
-module.exports = {getRestaurantsByKeywordAndCoordinates};
+function getRestaurantsByIds(restaurantIds) {
+    return favoritedRestaurantService.getFavoritedRestaurants(restaurantIds);
+}
+
+module.exports = {getRestaurantsByKeywordAndCoordinates, getRestaurantsByIds};

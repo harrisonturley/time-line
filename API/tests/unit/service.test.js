@@ -3,7 +3,7 @@ const User = require("../../repository/user");
 const Lineup = require("../../repository/lineup");
 
 //Modules we are testing
-const userService = require("../../service/userService");
+const userService = require("../../service/user/userService");
 const lineupService = require("../../service/lineupService");
 const searchService = require("../../service/searchService");
 

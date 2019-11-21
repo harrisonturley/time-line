@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const userService = require("../service/userService");
+const userService = require("../../service/user/userService");
 
 router.get("/users/:email", function (req, res, next) {
     userService.getUserByEmail(req.params.email, res).then(function (user) {

@@ -3,6 +3,7 @@ const supertest = require('supertest');
 const request = supertest(app);
 const {setupDB} = require('./test-setup');
 const databaseName = 'searchControllerITDB';
+const favoritedRestaurantSeeds = require('./seeds/favoritedRestaurant.seed');
 
 // create a test database specific to this test file & seed it with data
 setupDB(databaseName, true);
@@ -76,6 +77,22 @@ describe("searchController", () => {
         for(let i = 3; i < newBusinessesRes.length; i++){
             expect(newBusinesses[i].lineupTime).toBeNull();
         }
+        done();
+    });
+
+    it('gets favorited restaurants by ids', async done => {
+        const ids = "[\"vnKoBdTuh2lsUKASMwQYbA\",\"JgSGpSMHbGecAXs_o1rE_g\", \"invalidId\"]";
+        const seededBusinesses = favoritedRestaurantSeeds;
+
+        const res = await request.get('/api/search/restaurants/favorited')
+            .query({restaurantIds: ids});
+        let businesses = res.body.businesses;
+
+        expect(res.status).toBe(200);
+        expect(res.body.total).toBe(2);
+        expect(businesses).toHaveLength(2);
+        expect(businesses[0]).toEqual(seededBusinesses[0]);
+        expect(businesses[1]).toEqual(seededBusinesses[1]);
         done();
     });
 });
