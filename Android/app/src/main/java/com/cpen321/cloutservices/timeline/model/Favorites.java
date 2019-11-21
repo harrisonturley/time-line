@@ -15,7 +15,16 @@ public class Favorites {
     }
 
     public String getFavoritesString() {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+
+        for (String favorite: favorites) {
+            sb.append("\"" + favorite + "\",");
+        }
+
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append("]");
+        return sb.toString();
     }
 
     public HashSet<String> getFavoritesSet() {
