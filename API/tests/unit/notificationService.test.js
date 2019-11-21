@@ -39,7 +39,7 @@ test("send push notif w valid string", () => {
     return pushNotification.checkToSendPushNotification(
         lineupTriggerNotification, "WavvLdfdP6g8aZTtbBQHTw")
         .then(res => expect(res).toBe("sent message"))
-        .catch(e => expect(e).toMatch("error sending message"));
+        .catch(e => expect(e).toMatch("not a valid restaurant id"));
 }); 
 
 test("send push notif w invalid string", () => {
