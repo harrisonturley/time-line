@@ -1,5 +1,3 @@
-//var firebaseAdmin = require("../controller/notificationController");
-//var admin = firebaseAdmin.admin;
 const API_KEY = "rw0fMRw0_c05_ankeAlpIBhpuejV80QfLKT8Ktx7Mywhj8gw1R8a8_sqmYYvt2HBvaXus2kB7xrwiWreoSXHtNqW0ASxeM4GVsWEfZKaYNI9JT7IrmGBa4owV8WoXXYx";
 const request = require("request-promise");
 var admin = require("firebase-admin");
@@ -7,9 +5,6 @@ var admin = require("firebase-admin");
 admin.initializeApp({
   credential: admin.credential.applicationDefault()
 });
-
-//topic is simply restaurant id
-//var globalTopic = "globalTopic";
 
 // requires a valid yelp id
 function getRestaurantsById(id) {
@@ -39,7 +34,6 @@ function checkToSendPushNotification(body, id) {
               body: name + " has under a 5 minute wait time!",
               title: "Notification from Time Line"
             },
-            //CHANGED
             topic: id
           };
           
