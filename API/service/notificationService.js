@@ -68,10 +68,10 @@ function subscribe(token, restaurantId) {
 
     admin.messaging().subscribeToTopic(token, restaurantId)
     .then(() => {
-      success();
+      success("subscribed to topic");
     })
-    .catch(() => {
-      nosuccess();
+    .catch((error) => {
+      nosuccess(error);
     });
  });
 }
@@ -82,10 +82,10 @@ function unsubscribe(token, restaurantId) {
 
     admin.messaging().unsubscribeFromTopic(token, restaurantId)
     .then(() => {
-      success();
+      success("unsubscribed from topic");
     })
-    .catch(() => {
-      nosuccess();
+    .catch((error) => {
+      nosuccess(error);
     });
  });
 }
