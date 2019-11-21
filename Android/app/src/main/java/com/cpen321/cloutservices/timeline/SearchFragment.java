@@ -175,6 +175,11 @@ public class SearchFragment extends Fragment {
         call.enqueue(new Callback<Favorites>() {
             @Override
             public void onResponse(Call<Favorites> call, Response<Favorites> response) {
+                if (response.body() == null) {
+                    Toast.makeText(getActivity(), "Favorites failed, please try again!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 HashSet<String> favorites = response.body().getFavoritesSet();
 
                 RestaurantService restaurantService = RetrofitClientHelper.getRetrofitInstance().create(RestaurantService.class);
@@ -186,13 +191,18 @@ public class SearchFragment extends Fragment {
                     public void onResponse(Call<Businesses> call, Response<Businesses> response) {
                         long endTime = SystemClock.uptimeMillis();
                         Log.w("QUERY RESPONSE TIME", "Response time: " + (endTime - startTime) + " milliseconds");
+                        if (response.body() == null) {
+                            Toast.makeText(getActivity(), "Search failed, please try again!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         List<Restaurant> restaurants = response.body().getBusinesses();
 
                         if (restaurants.size() == 0) {
                             searchInstructions.setVisibility(View.VISIBLE);
-                        } else {
-                            searchInstructions.setVisibility(View.GONE);
                         }
+
+                        searchInstructions.setVisibility(View.GONE);
 
                         Collections.sort(restaurants, new Comparator<Restaurant>() {
                             @Override

@@ -43,6 +43,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -94,8 +95,13 @@ public class FavoritesFragment extends Fragment {
             public void onResponse(Call<Favorites> call, Response<Favorites> response) {
                 Favorites resultingFavorites = response.body();
 
-                if (resultingFavorites.getFavorites().length == 0) {
+                if (resultingFavorites == null) {
+                    Toast.makeText(getActivity(), "Failed to get favorites, please try again!", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (resultingFavorites.getFavorites().length == 0) {
                     favoritesInstructions.setVisibility(View.VISIBLE);
+                    RestaurantAdapter restaurantAdapter = new RestaurantAdapter(new ArrayList<Restaurant>(), new HashSet<String>(), GoogleSignIn.getLastSignedInAccount(getActivity()).getEmail());
+                    recyclerView.setAdapter(restaurantAdapter);
                     return;
                 }
 
@@ -105,6 +111,11 @@ public class FavoritesFragment extends Fragment {
                 getRestaurants.enqueue(new Callback<Businesses>() {
                     @Override
                     public void onResponse(Call<Businesses> call, Response<Businesses> response) {
+                        if (response.body() == null) {
+                            Toast.makeText(getActivity(), "Failed to get restaurant information, please try again!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         List<Restaurant> favoritedRestaurants = response.body().getBusinesses();
 
                         if (favoritedRestaurants.size() == 0) {
