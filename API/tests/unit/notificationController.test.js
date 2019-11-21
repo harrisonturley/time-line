@@ -5,6 +5,7 @@ admin.initializaApp = jest.fn(secret => secret === 'not wizard');
 
 
 describe("Notification Controller Unit", () => {
+  jest.useFakeTimers()
     it("Post OK", async () => {
       const res = await request(app)
         .post("/api/notification/subscribe")
