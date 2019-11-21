@@ -1,7 +1,5 @@
 const request = require("supertest");
 const app = require("../../server.js");
-const mongoose = app.mongoose;
-const listener = app.listener;
 
 const queryString = "/api/search/restaurants?keyword=Tim%20Hortons&latitude=49.258335&longitude=-123.249585";
 
@@ -14,7 +12,7 @@ import lineupService, {lineupServiceMock} from "../../service/lineupService";
 jest.mock("../../service/lineupService");
 
 import userService, {userServiceMock} from "../../service/user/userService";
-jest.mock("../../service/userService");
+jest.mock("../../service/user/userService");
 
 import searchService, {searchServiceMock} from "../../service/searchService";
 jest.mock("../../service/searchService");
@@ -24,8 +22,6 @@ beforeAll(done => {
 });
   
 afterAll(done => {
-    mongoose.connection.close();
-    //listener.close();
     done();
 });
 
@@ -109,26 +105,6 @@ describe("Search Controller", () => {
       .get("/api/search/restaurants")
     expect(res.statusCode).toEqual(422);
   })
-})
-
-describe("Notification Controller", () => {
-    it("Post OK", async () => {
-      const res = await request(app)
-        .post("/api/notification/subscribe")
-        .send({
-          registrationToken: "this test is cool"
-        })
-      expect(res.statusCode).toEqual(200);
-    })
-  
-    it("Post ERR", async () => {
-      const res = await request(app)
-        .post("/api/notification/subscribe")
-        .send({
-          badToken: "badToken"
-        })
-      expect(res.statusCode).toEqual(422);
-    })
 })
 
 describe("User Controller", () => {

@@ -3,7 +3,7 @@ const searchServiceMock = jest.genMockFromModule(
   
   function getRestaurantsByKeywordAndCoordinates(key, coord) {
     return new Promise(function(success, nosuccess){
-      if(key.includes("Tim")){
+      if(key && key.includes("Tim")){
           success({});
       }
       nosuccess({});
