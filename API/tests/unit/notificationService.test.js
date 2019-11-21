@@ -38,7 +38,8 @@ test("send push notif w valid string", () => {
     jest.useFakeTimers()
     return pushNotification.checkToSendPushNotification(
         lineupTriggerNotification, "WavvLdfdP6g8aZTtbBQHTw")
-        .then(res => expect(res).toBe("sent message"));
+        .catch(e => expect(e).toMatch("not a valid restaurant id"));
+        //.then(res => expect(res).toBe("sent message"));
 }); 
 
 test("send push notif w invalid string", () => {
