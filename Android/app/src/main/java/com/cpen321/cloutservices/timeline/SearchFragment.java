@@ -30,6 +30,8 @@ import android.widget.Toast;
 import com.cpen321.cloutservices.timeline.model.Businesses;
 import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.cpen321.cloutservices.timeline.model.RestaurantService;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -189,7 +191,7 @@ public class SearchFragment extends Fragment {
                     }
                 });
 
-                RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants, new HashSet<>());
+                RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants, new HashSet<>(), GoogleSignIn.getLastSignedInAccount(getActivity()).getEmail());
                 recyclerView.setAdapter(restaurantAdapter);
             }
 

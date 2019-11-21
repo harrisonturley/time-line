@@ -10,8 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cpen321.cloutservices.timeline.model.FavoriteService;
+import com.cpen321.cloutservices.timeline.model.Favorites;
 import com.cpen321.cloutservices.timeline.model.Notification;
 import com.cpen321.cloutservices.timeline.model.NotificationService;
+import com.cpen321.cloutservices.timeline.model.PostFavoriteHelper;
 import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,10 +44,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     private ArrayList<Restaurant> restaurants;
     private HashSet<String> favoritedRestaurantID;
+    private String email;
 
-    public RestaurantAdapter(ArrayList<Restaurant> restaurants, HashSet<String> favoritedRestaurantID) {
+    public RestaurantAdapter(ArrayList<Restaurant> restaurants, HashSet<String> favoritedRestaurantID, String email) {
         this.restaurants = restaurants;
         this.favoritedRestaurantID = favoritedRestaurantID;
+        this.email = email;
     }
 
     @Override
@@ -136,6 +141,21 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
                 // Log and toast
                 Log.d("GET_INSTANCE_ID", token);
+
+                FavoriteService favorites = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
+                PostFavoriteHelper helper = new PostFavoriteHelper(restaurant, token);
+                Call<Favorites> postFavorite = favorites.postUserFavorite(email, helper);
+                postFavorite.enqueue(new Callback<Favorites>() {
+                    @Override
+                    public void onResponse(Call<Favorites> call, Response<Favorites> response) {
+                        Log.e("NOTIFICATION SUB", "Call sent");
+                    }
+
+                    @Override
+                    public void onFailure(Call<Favorites> call, Throwable t) {
+                        Log.e("NOTIFICATION SUB", "Possibly failed to subscribe, reason: " + t.getCause());
+                    }
+                });
 
                 /*Notification notification = new Notification(token, restaurantID);
                 NotificationService notificationSub = RetrofitClientHelper.getRetrofitInstance().create(NotificationService.class);
