@@ -1,26 +1,47 @@
 const request = require("supertest");
 const app = require("../../server.js");
+import notificationService, {notificationServiceMock} from "../../service/notificationService";
+jest.mock("../../service/notificationService");
 var admin = jest.genMockFromModule("firebase-admin").default;
 admin.initializaApp = jest.fn(secret => secret === 'not wizard');
 
 
 describe("Notification Controller Unit", () => {
-  jest.useFakeTimers()
-    it("Post OK", async () => {
+    it("Subscribe OK", async () => {
       const res = await request(app)
         .post("/api/notification/subscribe")
         .send({
-          registrationToken: "this test is cool"
+          registrationToken: "sample",
+          restaurantId: "someid"
         })
       expect(res.statusCode).toEqual(200);
-    })
+    });
   
-    it("Post ERR", async () => {
+    it("Subscribe ERR", async () => {
       const res = await request(app)
         .post("/api/notification/subscribe")
         .send({
           badToken: "badToken"
         })
       expect(res.statusCode).toEqual(422);
-    })
+    });
+
+    it("Unsubscribe OK", async () => {
+      const res = await request(app)
+        .post("/api/notification/unsubscribe")
+        .send({
+          registrationToken: "sample",
+          restaurantId: "someid"
+        })
+      expect(res.statusCode).toEqual(200);
+    });
+  
+    it("Unsubscribe ERR", async () => {
+      const res = await request(app)
+        .post("/api/notification/unsubscribe")
+        .send({
+          badToken: "badToken"
+        })
+      expect(res.statusCode).toEqual(422);
+    });
 })
