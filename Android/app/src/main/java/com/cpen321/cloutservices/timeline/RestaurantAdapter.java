@@ -156,21 +156,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                         Log.e("NOTIFICATION SUB", "Possibly failed to subscribe, reason: " + t.getCause());
                     }
                 });
-
-                /*Notification notification = new Notification(token, restaurantID);
-                NotificationService notificationSub = RetrofitClientHelper.getRetrofitInstance().create(NotificationService.class);
-                Call<Notification> call = notificationSub.sendSubscribe(notification);
-                call.enqueue(new Callback<Notification>() {
-                    @Override
-                    public void onResponse(Call<Notification> call, Response<Notification> response) {
-                        Log.e("NOTIFICATION SUB", "Call sent");
-                    }
-
-                    @Override
-                    public void onFailure(Call<Notification> call, Throwable t) {
-                        Log.e("NOTIFICATION SUB", "Possibly failed to subscribe, reason: " + t.getCause());
-                    }
-                });*/
             }
         });
     }
@@ -190,20 +175,20 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 // Log and toast
                 Log.d("GET_INSTANCE_ID", token);
 
-                /*Notification notification = new Notification(token, restaurantID);
-                NotificationService notificationSub = RetrofitClientHelper.getRetrofitInstance().create(NotificationService.class);
-                Call<Notification> call = notificationSub.sendUnsubscribe(notification);
-                call.enqueue(new Callback<Notification>() {
+                FavoriteService favorites = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
+                PostFavoriteHelper helper = new PostFavoriteHelper(new Restaurant(), token);
+                Call<Favorites> deleteFavorite = favorites.deleteUserFavorite(email, restaurant.getId(), helper);
+                deleteFavorite.enqueue(new Callback<Favorites>() {
                     @Override
-                    public void onResponse(Call<Notification> call, Response<Notification> response) {
+                    public void onResponse(Call<Favorites> call, Response<Favorites> response) {
                         Log.e("NOTIFICATION SUB", "Call sent");
                     }
 
                     @Override
-                    public void onFailure(Call<Notification> call, Throwable t) {
+                    public void onFailure(Call<Favorites> call, Throwable t) {
                         Log.e("NOTIFICATION SUB", "Possibly failed to subscribe, reason: " + t.getCause());
                     }
-                });*/
+                });
             }
         });
     }
