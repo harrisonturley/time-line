@@ -33,13 +33,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
-
     private static final String ID_TAG = "id";
     private static final String IMG = "img";
     private static final String ADDR = "addr";
+    private static final String FULL_ADDR = "full_addr";
     private static final String NAME = "name";
     private static final String LATITUDE = "lat";
     private static final String LONGITUDE = "long";
+    private static final String DISTANCE = "distance";
+    private static final String LINEUP = "lineup";
     private static final String FAVORITED = "isFavorited";
 
     private ArrayList<Restaurant> restaurants;
@@ -68,6 +70,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         viewHolder.restaurantLineup.setText("Lineup: " + restaurants.get(i).getLineupTime()/1000 + " seconds");
         viewHolder.restaurantDistance.setText("Distance: " + (int)restaurants.get(i).getDistance() + " metres");
 
+        if (favoritedRestaurantID.contains(restaurants.get(i).getId())) {
+            viewHolder.favoriteStar.setImageResource(R.drawable.ic_star_24px);
+        } else {
+            viewHolder.favoriteStar.setImageResource(R.drawable.ic_star_border_24px);
+        }
+
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,9 +83,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 intent.putExtra(ID_TAG, restaurants.get(index).getId());
                 intent.putExtra(IMG, restaurants.get(index).getImageUrl());
                 intent.putExtra(ADDR, restaurants.get(index).getLocation().getDisplayAddressFormatted());
+                intent.putExtra(FULL_ADDR, restaurants.get(index).getLocation().getDisplayAddress());
                 intent.putExtra(NAME, restaurants.get(index).getName());
                 intent.putExtra(LATITUDE, restaurants.get(index).getCoordinates().getLatitude());
                 intent.putExtra(LONGITUDE, restaurants.get(index).getCoordinates().getLongitude());
+                intent.putExtra(DISTANCE, restaurants.get(index).getDistance());
+                intent.putExtra(LINEUP, restaurants.get(index).getLineupTime());
                 intent.putExtra(FAVORITED, favoritedRestaurantID.contains(restaurants.get(index).getId()));
                 v.getContext().startActivity(intent);
             }
@@ -176,8 +187,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 Log.d("GET_INSTANCE_ID", token);
 
                 FavoriteService favorites = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
-                PostFavoriteHelper helper = new PostFavoriteHelper(new Restaurant(), token);
-                Call<Favorites> deleteFavorite = favorites.deleteUserFavorite(email, restaurant.getId(), helper);
+                //PostFavoriteHelper helper = new PostFavoriteHelper(new Restaurant(), token);
+                Call<Favorites> deleteFavorite = favorites.deleteUserFavorite(email, restaurant.getId());
                 deleteFavorite.enqueue(new Callback<Favorites>() {
                     @Override
                     public void onResponse(Call<Favorites> call, Response<Favorites> response) {

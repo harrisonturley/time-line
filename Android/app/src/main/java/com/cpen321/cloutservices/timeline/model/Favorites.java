@@ -2,6 +2,9 @@ package com.cpen321.cloutservices.timeline.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Favorites {
 
     @SerializedName("favorites")
@@ -13,5 +16,15 @@ public class Favorites {
 
     public String getFavoritesString() {
         return "";
+    }
+
+    public HashSet<String> getFavoritesSet() {
+        HashSet<String> set = new HashSet<String>();
+
+        for (String favorite: favorites) {
+            set.add(favorite);
+        }
+
+        return set;
     }
 }

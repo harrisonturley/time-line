@@ -25,6 +25,16 @@ public class Restaurant {
     @SerializedName("location")
     private Location location;
 
+    public Restaurant(String id, String name, String imageUrl, double distanceFromUser, int lineupTime, Coordinates coordinates, Location location) {
+        this.id = id;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.distanceFromUser = distanceFromUser;
+        this.lineupTime = lineupTime;
+        this.coordinates = coordinates;
+        this.location = location;
+    }
+
     public String getId() {
         return id;
     }

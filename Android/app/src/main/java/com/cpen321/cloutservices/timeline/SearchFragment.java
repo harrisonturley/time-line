@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -28,6 +29,8 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.cpen321.cloutservices.timeline.model.Businesses;
+import com.cpen321.cloutservices.timeline.model.FavoriteService;
+import com.cpen321.cloutservices.timeline.model.Favorites;
 import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.cpen321.cloutservices.timeline.model.RestaurantService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -37,8 +40,11 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -163,40 +169,56 @@ public class SearchFragment extends Fragment {
             currentLocation.setLongitude(-123.249585);
         }
 
-        RestaurantService restaurantService = RetrofitClientHelper.getRetrofitInstance().create(RestaurantService.class);
-        Call<Businesses> call = restaurantService.getJSON(query, currentLocation.getLatitude(), currentLocation.getLongitude());
-        long startTime = SystemClock.uptimeMillis();
+        FavoriteService favoriteService = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
+        Call<Favorites> call = favoriteService.getUserFavorites(GoogleSignIn.getLastSignedInAccount(getActivity()).getEmail());
 
-        call.enqueue(new Callback<Businesses>() {
+        call.enqueue(new Callback<Favorites>() {
             @Override
-            public void onResponse(Call<Businesses> call, Response<Businesses> response) {
-                long endTime = SystemClock.uptimeMillis();
-                Log.w("QUERY RESPONSE TIME", "Response time: " + (endTime - startTime) + " milliseconds");
-                List<Restaurant> restaurants = response.body().getBusinesses();
+            public void onResponse(Call<Favorites> call, Response<Favorites> response) {
+                HashSet<String> favorites = response.body().getFavoritesSet();
 
-                if (restaurants.size() == 0) {
-                    searchInstructions.setVisibility(View.VISIBLE);
-                } else {
-                    searchInstructions.setVisibility(View.GONE);
-                }
+                RestaurantService restaurantService = RetrofitClientHelper.getRetrofitInstance().create(RestaurantService.class);
+                Call<Businesses> searchCall = restaurantService.getJSON(query, currentLocation.getLatitude(), currentLocation.getLongitude());
+                long startTime = SystemClock.uptimeMillis();
 
-                Collections.sort(restaurants, new Comparator<Restaurant>() {
+                searchCall.enqueue(new Callback<Businesses>() {
                     @Override
-                    public int compare(Restaurant r1, Restaurant r2) {
-                        if (r1.getDistance() < r2.getDistance()) {
-                            return -1;
+                    public void onResponse(Call<Businesses> call, Response<Businesses> response) {
+                        long endTime = SystemClock.uptimeMillis();
+                        Log.w("QUERY RESPONSE TIME", "Response time: " + (endTime - startTime) + " milliseconds");
+                        List<Restaurant> restaurants = response.body().getBusinesses();
+
+                        if (restaurants.size() == 0) {
+                            searchInstructions.setVisibility(View.VISIBLE);
                         } else {
-                            return 1;
+                            searchInstructions.setVisibility(View.GONE);
                         }
+
+                        Collections.sort(restaurants, new Comparator<Restaurant>() {
+                            @Override
+                            public int compare(Restaurant r1, Restaurant r2) {
+                                if (r1.getDistance() < r2.getDistance()) {
+                                    return -1;
+                                } else {
+                                    return 1;
+                                }
+                            }
+                        });
+
+                        RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants, favorites, GoogleSignIn.getLastSignedInAccount(getActivity()).getEmail());
+                        recyclerView.setAdapter(restaurantAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Businesses> call, Throwable t) {
+                        Toast.makeText(getActivity(), "Failed to retrieve restaurants: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("QUERY_FAIL", t.getMessage());
                     }
                 });
-
-                RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants, new HashSet<>(), GoogleSignIn.getLastSignedInAccount(getActivity()).getEmail());
-                recyclerView.setAdapter(restaurantAdapter);
             }
 
             @Override
-            public void onFailure(Call<Businesses> call, Throwable t) {
+            public void onFailure(Call<Favorites> call, Throwable t) {
                 Toast.makeText(getActivity(), "Failed to retrieve restaurants: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("QUERY_FAIL", t.getMessage());
             }

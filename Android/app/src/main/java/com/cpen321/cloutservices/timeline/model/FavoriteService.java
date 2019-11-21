@@ -17,7 +17,7 @@ public interface FavoriteService {
     Call<Favorites> postUserFavorite(@Path("email") String email, @Body PostFavoriteHelper helper);
 
     @HTTP(method = "DELETE", path = "users/{email}/favorites/{restaurantId}", hasBody = true)
-    Call<Favorites> deleteUserFavorite(@Path("email") String email, @Path("restaurantId") String restaurantId, @Body PostFavoriteHelper helper);
+    Call<Favorites> deleteUserFavorite(@Path("email") String email, @Path("restaurantId") String restaurantId);
 
     @GET("search/restaurants/favorited")
     Call<Businesses> getRestaurantsFromIDs(@Query("restaurantIds") String restaurantIds);
