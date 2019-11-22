@@ -31,14 +31,14 @@ function addLineupTimes(searchResults) {
 
     let businessIds = Array.from(businessIdToBusinessMap.keys());
 
-    return lineupService.getLineupsByIds(businessIds).then(function (lineups) {
+    return lineupService.getLineupsAverageLineupTimesByIds(businessIds).then(function (lineups) {
+        // console.log(lineups);
         if (lineups == null) {
             return searchResults;
         }
-
         // works because lineup id = business id
         lineups.forEach(function (lineup) {
-            businessIdToBusinessMap.get(lineup.id).lineupTime = lineup.lineupTime;
+            businessIdToBusinessMap.get(lineup.id).lineupTime = lineup.averageLineupTime;
         });
 
         searchResults.businesses = Array.from(businessIdToBusinessMap.values());
@@ -58,7 +58,7 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
             latitude: coordinates.latitude,
             longitude: coordinates.longitude,
             limit: 20,
-            categories: "food, All"
+            categories: "food,restaurants"
         },
         json: true
     };

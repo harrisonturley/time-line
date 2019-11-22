@@ -29,8 +29,10 @@
     "mocha": "^6.2.1",
     "mongoose": "^5.7.5",
     "nodemon": "^1.19.3",
+    "outliers": "0.0.3",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
+    "stats-lite": "^2.2.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
@@ -45,6 +47,8 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ],
-    "setupFilesAfterEnv": ["./tests/jest.setup.js"]
+    "setupFilesAfterEnv": [
+      "./tests/jest.setup.js"
+    ]
   }
 }
