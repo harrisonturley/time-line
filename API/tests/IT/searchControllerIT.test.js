@@ -41,19 +41,19 @@ describe("searchController", () => {
         console.log(businesses[1].id);
         console.log(businesses[2].id);
 
-        const updateRes0 = await (request.post('/api/lineups/' + businesses[0].id)
+        const updateRes0 = await (request.put('/api/lineups/' + businesses[0].id)
             .send({
                 lineupTime: updatedLineupTime0
             }));
-        const updateRes1 = await (request.post('/api/lineups/' + businesses[1].id)
+        const updateRes1 = await (request.put('/api/lineups/' + businesses[1].id)
             .send({
                 lineupTime: updatedLineupTime1
             }));
-        const updateRes2 = await (request.post('/api/lineups/' + businesses[2].id)
+        const updateRes2 = await (request.put('/api/lineups/' + businesses[2].id)
             .send({
                 lineupTime: updatedLineupTime2
             }));
-        const updateRes3 = await (request.post('/api/lineups/' + businesses[0].id)
+        const updateRes3 = await (request.put('/api/lineups/' + businesses[0].id)
             .send({
                 lineupTime: updatedLineupTime3
             }));
@@ -113,7 +113,7 @@ describe("searchController", () => {
 
         const businessesRes = await request.get('/api/search/restaurants/favorited')
             .query({restaurantIds: ids});
-        const updateRes = await request.post('/api/lineups/' + seededBusinesses[1].id)
+        const updateRes = await request.put('/api/lineups/' + seededBusinesses[1].id)
             .send({
                 lineupTime: addedLineupTime
             });

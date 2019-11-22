@@ -8,7 +8,7 @@ router.get("/lineups/:id", function (req, res, next) {
     }).catch(next);
 });
 
-router.post("/lineups/:id", function (req, res, next) {
+router.put("/lineups/:id", function (req, res, next) {
     lineupService.addLineup(req.params.id, req.body.lineupTime).then(function (lineup) {
         console.log(lineup);
         res.send(lineup);

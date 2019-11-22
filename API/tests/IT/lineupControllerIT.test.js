@@ -29,7 +29,7 @@ describe("lineupController", () => {
         const id = 'uW6NtwN8hxrOLMyPi9IVcA';
         const lineupTime = getRandomIntInclusive(0, 100);
 
-        const res = await request.post('/api/lineups/' + id)
+        const res = await request.put('/api/lineups/' + id)
             .send({
                 lineupTime: lineupTime
             });
@@ -51,15 +51,15 @@ describe("lineupController", () => {
         const lineupTime3 = 29;
         const expectedLineupTime = (lineupTime1+lineupTime2+lineupTime3)/3;
 
-        const res1 = await request.post('/api/lineups/' + id)
+        const res1 = await request.put('/api/lineups/' + id)
             .send({
                 lineupTime: lineupTime1
             });
-        const res2 = await request.post('/api/lineups/' + id)
+        const res2 = await request.put('/api/lineups/' + id)
             .send({
                 lineupTime: lineupTime2
             });
-        const res3 = await request.post('/api/lineups/' + id)
+        const res3 = await request.put('/api/lineups/' + id)
             .send({
                 lineupTime: lineupTime3
             });
