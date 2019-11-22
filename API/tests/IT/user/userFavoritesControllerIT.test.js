@@ -60,7 +60,8 @@ describe("userFavoritesController", () => {
 
         const res = await request.post('/api/users/' + email + '/favorites')
             .send({
-                restaurant: newFavoriteRestaurant
+                restaurant: newFavoriteRestaurant,
+                registrationToken: 'cy8jM7xce84:APA91bF0O6qwjQf7SRji1p4t5jhK26pwnzNIso3s9HVJz4fsgYbZ2wGHtEnM0Qtt-oiJKgE_HXHFVZ1chXAExqRx0HbSCwrwhrdk-tFWN1Is8jHVlACVVO5PV7XwT_03qs9D_vnAGLb-'
             });
 
         expect(res.status).toBe(200);
@@ -86,8 +87,10 @@ describe("userFavoritesController", () => {
         const favoriteToDelete = favorites[0];
         utils.removeFromArray(favorites, favoriteToDelete);
 
-        const res = await request.delete('/api/users/' + email + '/favorites/' + favoriteToDelete);
-
+        const res = await request.delete('/api/users/' + email + '/favorites/' + favoriteToDelete)
+            .send({
+                registrationToken: 'cy8jM7xce84:APA91bF0O6qwjQf7SRji1p4t5jhK26pwnzNIso3s9HVJz4fsgYbZ2wGHtEnM0Qtt-oiJKgE_HXHFVZ1chXAExqRx0HbSCwrwhrdk-tFWN1Is8jHVlACVVO5PV7XwT_03qs9D_vnAGLb-'
+            });
         expect(res.status).toBe(200);
         expect(res.body.favorites).toEqual(favorites);
         expect(res.body).not.toHaveProperty('email');

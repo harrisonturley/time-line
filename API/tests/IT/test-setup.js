@@ -45,16 +45,19 @@ module.exports = {
         // Seeds database before each test
         beforeEach(async () => {
             await removeAllCollections();
+            await dropAllCollections();
             await seedDatabase(runSaveMiddleware);
         });
 
         // Cleans up database between each test
         afterEach(async () => {
             await removeAllCollections();
+            await dropAllCollections();
         });
 
         // Disconnect Mongoose
         afterAll(async () => {
+            await removeAllCollections();
             await dropAllCollections();
             await mongoose.connection.close();
         })

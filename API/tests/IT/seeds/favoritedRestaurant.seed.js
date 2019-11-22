@@ -65,5 +65,25 @@ module.exports = [
         },
         distance: 1499.7511186780425,
         timestamp: 1574378529
+    },
+    {
+        id: 'B3DOnmh1XLN_rW3Y105hvA',
+        name: 'Tim Hortons',
+        image_url: 'https://s3-media3.fl.yelpcdn.com/bphoto/bV0Wq-vN2FfhYv-9QLmkoA/o.jpg',
+        is_closed: false,
+        rating: 2.5,
+        coordinates: {
+            latitude: 49.26404,
+            longitude: -123.20631
+        },
+        location: {
+            display_address: [
+                '4401 W 10th Ave',
+                'Vancouver, BC V6R 2H8',
+                'Canada'
+            ]
+        },
+        distance: 2903.945733187,
+        timestamp: 1574378531
     }
 ];
