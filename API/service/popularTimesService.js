@@ -57,7 +57,7 @@ function getPopularTimes(id) {
             getGoogleId(info.phone).then(function (gid) {
                 startPythonProcess(gid).then(function (fromRunpy) {
                     return success(fromRunpy);
-                }).catch(err => {return nosuccess(err)});
+                }).catch((err) => {return nosuccess(err);});
         }).catch((err) => {return nosuccess(err);});
         }).catch((err) => {return nosuccess(err);});
     });
