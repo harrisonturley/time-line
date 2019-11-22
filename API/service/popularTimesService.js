@@ -41,13 +41,14 @@ function startPythonProcess(id){
 
         const pythonProcess = spawn("python",
             //EDIT FULL PATH
-            ["/home/time-line/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
+            ["C:/Users/Mark/Desktop/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
         pythonProcess.stdout.on("data", (returnVal) => {
-            success("wait time is: " + returnVal);
+            console.log("got here " + returnVal);
+            success(returnVal);
         });
         pythonProcess.stderr.on("data", (data) => {
             //no popular time exists for this location
-            success("no data exists");
+            success(null);
         });
 });}
 

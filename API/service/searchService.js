@@ -4,6 +4,7 @@ const request = require("request-promise");
 const API_KEY = "rw0fMRw0_c05_ankeAlpIBhpuejV80QfLKT8Ktx7Mywhj8gw1R8a8_sqmYYvt2HBvaXus2kB7xrwiWreoSXHtNqW0ASxeM4GVsWEfZKaYNI9JT7IrmGBa4owV8WoXXYx";
 const lineupService = require("../service/lineupService");
 const favoritedRestaurantService = require("../service/favoritedRestaurantService");
+const getPopularTimes = require("./popularTimesService").getPopularTimes;
 const getLineupsAverageLineupTimesByIds = require("./lineupService").getLineupsAverageLineupTimesByIds;
 
 /**
@@ -22,7 +23,7 @@ function removeExtraInfo(searchResults) {
     return searchResults;
 }
 
-function addLineupTimes(searchResults) {
+async function addLineupTimes(searchResults) {
     let businessIdToBusinessMap = new Map();
     let businessIdToAverageLineupTime = new Map();
 
@@ -38,11 +39,11 @@ function addLineupTimes(searchResults) {
         businessIdToAverageLineupTime.set(businessIds[i],lineups[i]);
     }
 
-    searchResults.businesses.forEach(business => {
+    searchResults.businesses.forEach(async business => {
             if (businessIdToAverageLineupTime.get(business.id) == null) {
-                // TODO victoria
                 console.log("getting popularTimes wait time");
-                business.lineupTime = 6969;
+                business.lineupTime = await getPopularTimes(business.id);
+                console.log(business.lineupTime);
                 // averageLineupTime = popularTimesService.getWaitTime(id);        }
             }
             else {
