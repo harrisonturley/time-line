@@ -1,31 +1,23 @@
 package com.cpen321.cloutservices.timeline;
 
-import android.content.Context;
 import android.os.Bundle;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cpen321.cloutservices.timeline.model.ContributedRestaurants;
+import com.cpen321.cloutservices.timeline.model.Award;
+import com.cpen321.cloutservices.timeline.model.Awards;
 import com.cpen321.cloutservices.timeline.model.Restaurant;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AwardsFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -61,14 +53,15 @@ public class AwardsFragment extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        /* TODO: what should our list of contributed restaurants be? */
-        List<Restaurant>  restaurants = ContributedRestaurants.getInstance().getContributedRestaurants();
-        // Maybe an API call to retrieve info about user points?
+        List<Award>  awards = new ArrayList<Award>();
+        awards.add( new Award( "https://news.mcdonalds.com/static-files/59507ede-6194-44cc-a232-c45e4154ce7f", "McDonald's", 1000, "Redeem 1000 points for a FREE Cheeseburger" ) );
+        awards.add( new Award( "https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/A%26W_Logo.svg/400px-A%26W_Logo.svg.png", "A&W", 3000, "Redeem 3000 points for a FREE Mama Burger" ) );
+        awards.add( new Award( "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png", "Starbucks", 5000, "Redeem 5000 points for a FREE Java Chip Frappuccino" ) );
+        awards.add( new Award( "https://www.tripleos.com/sites/default/files/TPLO15-Logo-Glow-effect.png", "Triple O's", 4000, "Redeem 4000 points for a FREE Chocolate Milkshake" ) );
 
-        RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants);
-        recyclerView.setAdapter(restaurantAdapter);
+        AwardAdapter awardAdapter = new AwardAdapter((ArrayList)awards);
+        recyclerView.setAdapter(awardAdapter);
     }
-
 
     // end of Fragment
 }
