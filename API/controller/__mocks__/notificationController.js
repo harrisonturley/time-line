@@ -8,7 +8,7 @@ function send(message) {
     if(message.notification.body.includes("Tim")){
         nosuccess("error sending message");
     }
-    else {success("sent message")};
+    else {success("sent message");}
  });
 
 }
