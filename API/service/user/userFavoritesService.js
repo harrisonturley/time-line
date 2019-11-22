@@ -9,7 +9,7 @@ function getUserFavorites(email) {
 
 async function addUserFavorite(email, restaurant, registrationToken) {
     delete restaurant.lineupTime;
-    notificationService.subscribe(registrationToken, restaurant.id);
+    await notificationService.subscribe(registrationToken, restaurant.id);
     const favorites = await getUserFavorites(email);
     favorites.favorites.push(restaurant.id);
     await favoritedRestaurantService.addFavoritedRestaurant(restaurant);
@@ -17,7 +17,7 @@ async function addUserFavorite(email, restaurant, registrationToken) {
 }
 
 async function deleteUserFavorite(email, restaurantId, registrationToken) {
-    notificationService.unsubscribe(registrationToken, restaurantId);
+    await notificationService.unsubscribe(registrationToken, restaurantId);
     const favorites = await getUserFavorites(email);
     utils.removeFromArray(favorites.favorites, restaurantId);
     // await favoritedRestaurantService.deleteFavoritedRestaurant(restaurantId);
