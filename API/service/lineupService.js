@@ -7,8 +7,9 @@ function getLineupById(id) {
     return Lineup.findOne({id}, {_id: 0, __v: 0}).lean();
 }
 
-function getLineupsAverageLineupTimesByIds(ids) {
-    return Lineup.find({id: {$in: ids}}, {_id: 0, id:1, averageLineupTime: 1});
+async function getLineupsAverageLineupTimesByIds(ids) {
+    const lineups = await Lineup.find({id: {$in: ids}}, {_id: 0, id: 1, averageLineupTime: 1}).lean();
+    return lineups;
 }
 
 async function addLineup(lineupId, lineupTime) {
@@ -21,7 +22,7 @@ async function addLineup(lineupId, lineupTime) {
     const lineupTimeObj = {waitTime: lineupTime, timestamp: currTime};
     let lineupTimes = [];
     let prevAverageLineupTime = null;
-    if(lineupExists){
+    if (lineupExists) {
         const lineup = await getLineupById(lineupId);
         console.log(lineup);
         prevAverageLineupTime = lineup.averageLineupTime;
@@ -33,7 +34,7 @@ async function addLineup(lineupId, lineupTime) {
     lineupTimes.filter((lineupTime) => (currTime - lineupTime.timestamp) < 1800);
 
     // if the lineupTime is an outlier don't add it
-    if(!isOutlier(lineupTimeObj.waitTime, waitTimes)){
+    if (!isOutlier(lineupTimeObj.waitTime, waitTimes)) {
         waitTimes.push(lineupTimeObj.waitTime);
         console.log(waitTimes);
         lineupTimes.push(lineupTimeObj);
@@ -41,19 +42,19 @@ async function addLineup(lineupId, lineupTime) {
     }
 
     // only maintain a max of 20 lineupTimes
-    if(lineupTimes.length > 20){
+    if (lineupTimes.length > 20) {
         lineupTimes.splice(0, 1);
     }
 
     // decide on how to get the wait time
     let averageLineupTime = 0;
-    if(isValid(waitTimes)){
+    if (isValid(waitTimes)) {
         console.log("getting our averaged wait time");
         console.log(waitTimes);
         averageLineupTime = stats.mean(waitTimes);
         console.log(averageLineupTime);
     }
-    else{
+    else {
         // TODO victoria
         console.log("getting popularTimes wait time");
         averageLineupTime = 6969;
@@ -64,19 +65,19 @@ async function addLineup(lineupId, lineupTime) {
     await Lineup.updateOne(
         {id: lineupId},
         {id: lineupId, lineupTimes: lineupTimes, averageLineupTime: averageLineupTime},
-        {upsert: true, returnNewDocument : true}
+        {upsert: true, returnNewDocument: true}
     );
 
     // decide if we should send a push notification
-    if(prevAverageLineupTime == null || (prevAverageLineupTime >= 5 && averageLineupTime < 5)){
+    if (prevAverageLineupTime == null || (prevAverageLineupTime >= 5 && averageLineupTime < 5)) {
         await pushNotification.sendPushNotification(lineupId);
     }
 
     return {id: lineupId, lineupTime: averageLineupTime};
 }
 
-function isOutlier(waitTime, waitTimes){
-    if(waitTimes.length < 3){
+function isOutlier(waitTime, waitTimes) {
+    if (waitTimes.length < 3) {
         return false;
     }
     let copy = waitTimes.slice(0);
@@ -89,15 +90,15 @@ function isOutlier(waitTime, waitTimes){
     return !copy.includes(waitTime);
 }
 
-function isValid(waitTimes){
+function isValid(waitTimes) {
     // if there are less than 3 lineup times return false
-    if(waitTimes.length < 3){
+    if (waitTimes.length < 3) {
         console.log("length < 3");
         return false;
     }
     // if the variance of the lineup times is too big return false
     // https://www.researchgate.net/post/What_do_you_consider_a_good_standard_deviation
-    if(coefficientOfVariation(waitTimes) >= 1){
+    if (coefficientOfVariation(waitTimes) >= 1) {
         console.log("coeff of var >=1 ");
         return false;
     }
@@ -105,8 +106,8 @@ function isValid(waitTimes){
     return true;
 }
 
-function coefficientOfVariation(lineupTimes){
-    return stats.stdev(lineupTimes)/stats.mean(lineupTimes);
+function coefficientOfVariation(lineupTimes) {
+    return stats.stdev(lineupTimes) / stats.mean(lineupTimes);
 }
 
 // function updateLineup(id, body) {

@@ -4,11 +4,12 @@ const request = require("request-promise");
 const API_KEY = "rw0fMRw0_c05_ankeAlpIBhpuejV80QfLKT8Ktx7Mywhj8gw1R8a8_sqmYYvt2HBvaXus2kB7xrwiWreoSXHtNqW0ASxeM4GVsWEfZKaYNI9JT7IrmGBa4owV8WoXXYx";
 const lineupService = require("../service/lineupService");
 const favoritedRestaurantService = require("../service/favoritedRestaurantService");
+const getLineupsAverageLineupTimesByIds = require("./lineupService").getLineupsAverageLineupTimesByIds;
 
 /**
  * @param searchResults {{businesses:{lineupTime:Number}}}
  **/
-function removeExtraInfo(searchResults){
+function removeExtraInfo(searchResults) {
     delete searchResults.alias;
     delete searchResults.url;
     delete searchResults.review_count;
@@ -23,6 +24,7 @@ function removeExtraInfo(searchResults){
 
 function addLineupTimes(searchResults) {
     let businessIdToBusinessMap = new Map();
+    let businessIdToAverageLineupTime = new Map();
 
     searchResults.businesses.forEach(function (business) {
         business.lineupTime = null;
@@ -30,6 +32,24 @@ function addLineupTimes(searchResults) {
     });
 
     let businessIds = Array.from(businessIdToBusinessMap.keys());
+
+    let lineups = getLineupsAverageLineupTimesByIds(businessIds);
+    for(let i = 0; i < lineups.length; i++){
+        businessIdToAverageLineupTime.set(businessIds[i],lineups[i]);
+    }
+
+    searchResults.businesses.forEach(business => {
+            if (businessIdToAverageLineupTime.get(business.id) == null) {
+                // TODO victoria
+                console.log("getting popularTimes wait time");
+                business.lineupTime = 6969;
+                // averageLineupTime = popularTimesService.getWaitTime(id);        }
+            }
+            else {
+                business.lineupTime = businessIdToAverageLineupTime.get(business.id);
+            }
+        }
+    );
 
     return lineupService.getLineupsAverageLineupTimesByIds(businessIds).then(function (lineups) {
         // console.log(lineups);

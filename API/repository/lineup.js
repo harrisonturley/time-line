@@ -27,7 +27,8 @@ const LineupSchema = new Schema({
     averageLineupTime: {
         _id: false,
         type: Number,
-        required: true
+        required: true,
+        default: null
     }
 });
 
