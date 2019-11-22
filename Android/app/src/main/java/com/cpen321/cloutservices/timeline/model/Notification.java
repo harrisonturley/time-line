@@ -5,17 +5,25 @@ import com.google.gson.annotations.SerializedName;
 public class Notification {
 
     @SerializedName("registrationToken")
-    private String notificationToken;
+    private String registrationToken;
 
-    public Notification(String token) {
-        this.notificationToken = token;
+    @SerializedName("restaurantId")
+    private String restaurantId;
+
+    public Notification(String token, String restaurantId) {
+        this.registrationToken = token;
+        this.restaurantId = restaurantId;
     }
 
     public String getToken() {
-        return notificationToken;
+        return registrationToken;
     }
 
     public void setToken(String token) {
-        this.notificationToken = token;
+        this.registrationToken = token;
+    }
+
+    public String getRestaurantId() {
+        return restaurantId;
     }
 }

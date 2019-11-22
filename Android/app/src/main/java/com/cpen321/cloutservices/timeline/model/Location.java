@@ -7,6 +7,10 @@ public class Location {
     @SerializedName("display_address")
     private String[] displayAddress;
 
+    public Location(String[] displayAddress) {
+        this.displayAddress = displayAddress;
+    }
+
     public String[] getDisplayAddress() {
         return displayAddress;
     }

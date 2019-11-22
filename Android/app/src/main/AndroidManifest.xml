@@ -17,10 +17,13 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAIzV-82mMvfjOvsmID6BUXd5Ra4V43ckI"/>
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".ReportQueueActivity"></activity>
-        <activity android:name=".MainActivity">
+            android:value="AIzaSyDweqUMjfHQx_Mnw8XpPM_vYbYNNAULM14"/>
+        <activity android:name=".SearchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ReportQueueActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

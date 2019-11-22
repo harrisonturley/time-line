@@ -1,5 +1,6 @@
 package com.cpen321.cloutservices.timeline;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -17,14 +18,25 @@ import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
+import com.cpen321.cloutservices.timeline.model.Coordinates;
+import com.cpen321.cloutservices.timeline.model.FavoriteService;
+import com.cpen321.cloutservices.timeline.model.Favorites;
 import com.cpen321.cloutservices.timeline.model.LineupService;
 import com.cpen321.cloutservices.timeline.model.Lineup;
+import com.cpen321.cloutservices.timeline.model.Location;
+import com.cpen321.cloutservices.timeline.model.PostFavoriteHelper;
+import com.cpen321.cloutservices.timeline.model.Restaurant;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +57,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private ProgressBar progressBar;
     private GoogleMap mMap;
     private Toolbar toolbar;
+    private ImageView favoritedStar;
     //    private double timer;
     private Handler handler;
 
@@ -53,8 +66,10 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private String restaurantName;
     private double restaurantLatitude;
     private double restaurantLongitude;
+    private String[] fullAddress;
     private int seconds, minutes, milliseconds ;
     long millisecondTime, startTime, timeBuff, totalTime = 0L ;
+    private boolean isFavorited;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +84,25 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         restaurantimage = findViewById(R.id.restaurant_image);
         queueTime = findViewById(R.id.queue_time);
         reportQueueBtn = findViewById(R.id.report_btn);
+        favoritedStar = findViewById(R.id.favorites_star);
 
         /* retrieve restaurant from RestaurantAdapter */
         Intent intent = getIntent();
         restaurantId = intent.getStringExtra("id");
         String imageURL = intent.getStringExtra("img");
         String address = intent.getStringExtra("addr");
+        fullAddress = intent.getStringArrayExtra("full_addr");
         restaurantName = intent.getStringExtra("name");
         restaurantLatitude = intent.getDoubleExtra("lat", 0);
         restaurantLongitude = intent.getDoubleExtra("long", 0);
+        int distanceFromUser = intent.getIntExtra("distance", 0);
+        int lineupTime = intent.getIntExtra("lineup", 0);
+        isFavorited = intent.getBooleanExtra("isFavorited", false);
 
         handler = new Handler();
 
         configureToolbar();
+        setFavoriteStar();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -91,6 +112,21 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         queueTime.setText("00:00:00");
         reportQueueBtn.setChecked(false);    // start it as true
         Glide.with(ReportQueueActivity.this).load(imageURL).into(restaurantimage);
+
+        favoritedStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isFavorited = !isFavorited;
+                setFavoriteStar();
+                Restaurant restaurant = new Restaurant(restaurantId, restaurantName, imageURL, distanceFromUser, lineupTime, new Coordinates(restaurantLatitude, restaurantLongitude), new Location(fullAddress));
+
+                if (isFavorited) {
+                    favoriteRestaurant(restaurant);
+                } else {
+                    unfavoriteRestaurant(restaurant);
+                }
+            }
+        });
 
         reportQueueBtn.setOnClickListener (new View.OnClickListener(){
             @Override
@@ -116,7 +152,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                     handler.removeCallbacks(runnable);
                     handler = null;
                     runnable = null;
-                    startActivity(new Intent(ReportQueueActivity.this, SearchActivity.class));
+                    onBackPressed();
                 }
             }
         });
@@ -138,6 +174,14 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
             handler.postDelayed(this, 0);
         }
     };
+
+    private void setFavoriteStar() {
+        if (isFavorited) {
+            favoritedStar.setImageResource(R.drawable.ic_star_24px);
+        } else {
+            favoritedStar.setImageResource(R.drawable.ic_star_border_24px);
+        }
+    }
 
     private void configureToolbar() {
         setSupportActionBar(toolbar);
@@ -202,6 +246,67 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                 Toast.makeText(ReportQueueActivity.this, "Failed to submit. Check your Internet connection", Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
                 Log.wtf("Error", t.getMessage());
+            }
+        });
+    }
+
+    private void favoriteRestaurant(Restaurant restaurant) {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (!task.isSuccessful()) {
+                    Log.w("GET_INSTANCE_ID", "failed to get firebase ID", task.getException());
+                    return;
+                }
+
+                // Get new Instance ID token
+                String token = task.getResult().getToken();
+                Log.d("GET_INSTANCE_ID", token);
+
+                FavoriteService favorites = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
+                PostFavoriteHelper helper = new PostFavoriteHelper(restaurant, token);
+                Call<Favorites> postFavorite = favorites.postUserFavorite(GoogleSignIn.getLastSignedInAccount(ReportQueueActivity.this).getEmail(), helper);
+                postFavorite.enqueue(new Callback<Favorites>() {
+                    @Override
+                    public void onResponse(Call<Favorites> call, Response<Favorites> response) {
+                        Log.e("NOTIFICATION SUB", "Call sent");
+                    }
+
+                    @Override
+                    public void onFailure(Call<Favorites> call, Throwable t) {
+                        Log.e("NOTIFICATION SUB", "Possibly failed to subscribe, reason: " + t.getCause());
+                    }
+                });
+            }
+        });
+    }
+
+    private void unfavoriteRestaurant(Restaurant restaurant) {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (!task.isSuccessful()) {
+                    Log.w("GET_INSTANCE_ID", "failed to get firebase ID", task.getException());
+                    return;
+                }
+
+                // Get new Instance ID token
+                String token = task.getResult().getToken();
+                Log.d("GET_INSTANCE_ID", token);
+
+                FavoriteService favorites = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
+                Call<Favorites> deleteFavorite = favorites.deleteUserFavorite(GoogleSignIn.getLastSignedInAccount(ReportQueueActivity.this).getEmail(), restaurant.getId());
+                deleteFavorite.enqueue(new Callback<Favorites>() {
+                    @Override
+                    public void onResponse(Call<Favorites> call, Response<Favorites> response) {
+                        Log.e("NOTIFICATION SUB", "Call sent");
+                    }
+
+                    @Override
+                    public void onFailure(Call<Favorites> call, Throwable t) {
+                        Log.e("NOTIFICATION SUB", "Possibly failed to subscribe, reason: " + t.getCause());
+                    }
+                });
             }
         });
     }

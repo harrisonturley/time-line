@@ -9,6 +9,11 @@ public class Coordinates {
     @SerializedName("longitude")
     private double longitude;
 
+    public Coordinates(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public double getLatitude() {
         return latitude;
     }

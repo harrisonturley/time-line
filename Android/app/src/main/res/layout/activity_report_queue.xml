@@ -52,11 +52,22 @@
         android:textOff="Start Queue"
         android:textOn="End Queue"
         android:textStyle="normal|bold"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/map"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar"
         app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/favorites_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star_border_24px"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintLeft_toRightOf="@id/report_btn"
+        app:layout_constraintBottom_toBottomOf="@id/report_btn"
+        app:layout_constraintTop_toTopOf="@id/report_btn"/>
 
     <TextView
         android:id="@+id/restaurant_name"
@@ -84,6 +95,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/include"
         app:layout_constraintVertical_bias="0.763" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightGrey"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/map"/>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
