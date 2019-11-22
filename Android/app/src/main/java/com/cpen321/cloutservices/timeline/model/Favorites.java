@@ -3,7 +3,6 @@ package com.cpen321.cloutservices.timeline.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashSet;
-import java.util.Set;
 
 public class Favorites {
 

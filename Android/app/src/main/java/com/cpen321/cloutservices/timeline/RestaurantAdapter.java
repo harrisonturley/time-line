@@ -8,12 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cpen321.cloutservices.timeline.model.FavoriteService;
 import com.cpen321.cloutservices.timeline.model.Favorites;
-import com.cpen321.cloutservices.timeline.model.Notification;
-import com.cpen321.cloutservices.timeline.model.NotificationService;
 import com.cpen321.cloutservices.timeline.model.PostFavoriteHelper;
 import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +21,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

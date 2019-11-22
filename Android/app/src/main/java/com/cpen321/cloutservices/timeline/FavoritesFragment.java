@@ -1,16 +1,9 @@
 package com.cpen321.cloutservices.timeline;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,13 +11,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import android.os.Looper;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.cpen321.cloutservices.timeline.model.Businesses;
@@ -32,13 +22,7 @@ import com.cpen321.cloutservices.timeline.model.FavoriteService;
 import com.cpen321.cloutservices.timeline.model.Favorites;
 import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,12 +32,8 @@ import java.util.List;
 
 
 public class FavoritesFragment extends Fragment {
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    private Location currentLocation;
     private RecyclerView recyclerView;
     private ConstraintLayout favoritesInstructions;
-
-    private final int PERMISSION_ID = 42;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +44,6 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         favoritesInstructions = view.findViewById(R.id.favorites_empty_symbol);
 
         configureFavoritesView(view);

@@ -22,4 +22,8 @@ public class Notification {
     public void setToken(String token) {
         this.registrationToken = token;
     }
+
+    public String getRestaurantId() {
+        return restaurantId;
+    }
 }
