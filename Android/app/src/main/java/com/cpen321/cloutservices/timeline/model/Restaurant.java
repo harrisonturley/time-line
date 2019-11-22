@@ -17,7 +17,7 @@ public class Restaurant {
     private double distanceFromUser;
 
     @SerializedName("lineupTime")
-    private int lineupTime;
+    private double lineupTime;
 
     @SerializedName("coordinates")
     private Coordinates coordinates;
@@ -52,7 +52,7 @@ public class Restaurant {
     }
 
     public int getLineupTime() {
-        return lineupTime;
+        return (int)lineupTime;
     }
 
     public Coordinates getCoordinates() {

@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName;
 public class Lineup {
 
     @SerializedName("lineupTime")
-    private Integer lineupTime;
+    private double lineupTime;
 
-    public void setLineupTime(Integer lineupTime) { this.lineupTime = lineupTime; }
+    public void setLineupTime(Integer lineupTime) { this.lineupTime = (double)lineupTime; }
 
     public int getLineupTime() {
-        return lineupTime;
+        return (int)lineupTime;
     }
 
 }
