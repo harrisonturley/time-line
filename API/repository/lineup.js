@@ -8,7 +8,24 @@ const LineupSchema = new Schema({
         unique: true,
         required: true
     },
-    lineupTime: {
+    // holds last 10 lineup times
+    lineupTimes: {
+        type: [{
+            _id: false,
+            waitTime: {
+                type: Number,
+                required: true
+            },
+            timestamp: {
+                type: Number,
+                required: true
+            }
+        }],
+        required: true,
+        default: []
+    },
+    averageLineupTime: {
+        _id: false,
         type: Number,
         required: true
     }

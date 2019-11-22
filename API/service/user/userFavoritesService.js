@@ -16,7 +16,7 @@ async function addUserFavorite(email, restaurant, registrationToken) {
     return updateUserFavorites(email, favorites);
 }
 
-async function deleteUserFavorite(email, restaurantId) {
+async function deleteUserFavorite(email, restaurantId, registrationToken) {
     notificationService.unsubscribe(registrationToken, restaurantId);
     const favorites = await getUserFavorites(email);
     utils.removeFromArray(favorites.favorites, restaurantId);

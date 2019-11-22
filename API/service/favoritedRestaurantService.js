@@ -8,7 +8,7 @@ async function getFavoritedRestaurants(restaurantIds){
 }
 
 function addFavoritedRestaurant(restaurant) {
-    return FavoritedRestaurant.update(
+    return FavoritedRestaurant.updateOne(
         {id: restaurant.id},
         {$setOnInsert: restaurant},
         {upsert: true}
@@ -22,3 +22,4 @@ function deleteFavoritedRestaurant(restaurantId) {
 }
 
 module.exports = {getFavoritedRestaurants, addFavoritedRestaurant, deleteFavoritedRestaurant};
+
