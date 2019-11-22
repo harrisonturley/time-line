@@ -12,5 +12,13 @@ module.exports = [
     {
         id: uuid.v1(),
         lineupTime: 30
+    },
+    {
+        id: 'vnKoBdTuh2lsUKASMwQYbA',
+        lineupTime: 40
+    },
+    {
+        id: 'JgSGpSMHbGecAXs_o1rE_g',
+        lineupTime: 50
     }
 ];

@@ -50,9 +50,6 @@ const FavoritedRestaurantSchema = new Schema({
         type: Number,
         required: true
     },
-    lineupTime: {
-        type: Number,
-    },
     timestamp: {
         type: Number,
         required: true

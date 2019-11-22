@@ -6,7 +6,7 @@ function getLineupById(id) {
 }
 
 function getLineupsByIds(ids) {
-    return Lineup.find({id: {$in: ids}});
+    return Lineup.find({id: {$in: ids}}).lean();
 }
 
 function addLineup(body) {

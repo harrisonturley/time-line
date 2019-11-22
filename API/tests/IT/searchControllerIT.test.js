@@ -83,6 +83,10 @@ describe("searchController", () => {
     it('gets favorited restaurants by ids', async done => {
         const ids = "[\"vnKoBdTuh2lsUKASMwQYbA\",\"JgSGpSMHbGecAXs_o1rE_g\", \"invalidId\"]";
         const seededBusinesses = favoritedRestaurantSeeds;
+        const expectedBusiness0 = seededBusinesses[0];
+        expectedBusiness0.lineupTime = 40;
+        const expectedBusiness1 = seededBusinesses[1];
+        expectedBusiness1.lineupTime = 50;
 
         const res = await request.get('/api/search/restaurants/favorited')
             .query({restaurantIds: ids});
@@ -93,6 +97,42 @@ describe("searchController", () => {
         expect(businesses).toHaveLength(2);
         expect(businesses[0]).toEqual(seededBusinesses[0]);
         expect(businesses[1]).toEqual(seededBusinesses[1]);
+        done();
+    });
+
+    it('gets favorited restaurants by ids with updated lineup times', async done => {
+        const ids = "[\"vnKoBdTuh2lsUKASMwQYbA\",\"JgSGpSMHbGecAXs_o1rE_g\", \"invalidId\"]";
+        const seededBusinesses = favoritedRestaurantSeeds;
+        const updatedLineupTime = 20;
+        const expectedBusiness0 = seededBusinesses[0];
+        expectedBusiness0.lineupTime = 40;
+        const expectedBusiness1 = seededBusinesses[1];
+        expectedBusiness1.lineupTime = 50;
+
+        const businessesRes = await request.get('/api/search/restaurants/favorited')
+            .query({restaurantIds: ids});
+        const updateRes = await request.put('/api/lineups/' + 'JgSGpSMHbGecAXs_o1rE_g')
+            .send({
+                lineupTime: updatedLineupTime
+            });
+        let businesses = businessesRes.body.businesses;
+        const newBusinessesRes = await request.get('/api/search/restaurants/favorited')
+            .query({restaurantIds: ids});
+        let newBusinesses = newBusinessesRes.body.businesses;
+        console.log(newBusinesses);
+
+        expect(businessesRes.status).toBe(200);
+        expect(updateRes.status).toBe(200);
+        expect(newBusinessesRes.status).toBe(200);
+        expect(businessesRes.body.total).toBe(2);
+        expect(newBusinessesRes.body.total).toBe(2);
+        expect(businesses).toHaveLength(2);
+        expect(newBusinesses).toHaveLength(2);
+        expect(businesses[0]).toEqual(expectedBusiness0);
+        expect(businesses[1]).toEqual(expectedBusiness1);
+        expectedBusiness1.lineupTime = updatedLineupTime;
+        expect(newBusinesses[0]).toEqual(expectedBusiness0);
+        expect(newBusinesses[1]).toEqual(expectedBusiness1);
         done();
     });
 });

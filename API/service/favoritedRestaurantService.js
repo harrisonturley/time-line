@@ -3,7 +3,7 @@ const FavoritedRestaurant = require("../repository/favoritedRestaurant");
 async function getFavoritedRestaurants(restaurantIds){
     const favoritedRestaurants = await FavoritedRestaurant
         .find({id: {$in: restaurantIds}}, {_id: 0, __v: 0})
-        .sort({timestamp: 'asc'});
+        .sort({timestamp: 'asc'}).lean();
     return {businesses: favoritedRestaurants, total: favoritedRestaurants.length};
 }
 

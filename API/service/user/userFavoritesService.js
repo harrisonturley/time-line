@@ -7,6 +7,7 @@ function getUserFavorites(email) {
 }
 
 async function addUserFavorite(email, restaurant) {
+    delete restaurant.lineupTime;
     const favorites = await getUserFavorites(email);
     favorites.favorites.push(restaurant.id);
     await favoritedRestaurantService.addFavoritedRestaurant(restaurant);

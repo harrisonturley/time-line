@@ -67,7 +67,7 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
 }
 
 function getRestaurantsByIds(restaurantIds) {
-    return favoritedRestaurantService.getFavoritedRestaurants(restaurantIds);
+    return favoritedRestaurantService.getFavoritedRestaurants(restaurantIds).then(addLineupTimes);
 }
 
 module.exports = {getRestaurantsByKeywordAndCoordinates, getRestaurantsByIds};

@@ -17,7 +17,6 @@ module.exports = [
             ]
         },
         distance: 689.0129820407582,
-        lineupTime: 50,
         timestamp: 1574278529
     },
     {
@@ -45,7 +44,6 @@ module.exports = [
             ]
         },
         distance: 1341.9495433736781,
-        lineupTime: null,
         timestamp: 1574278639
     },
     {
@@ -66,7 +64,6 @@ module.exports = [
             ]
         },
         distance: 1499.7511186780425,
-        lineupTime: 10,
         timestamp: 1574378529
     }
 ];

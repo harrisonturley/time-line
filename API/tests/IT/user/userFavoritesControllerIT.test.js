@@ -72,6 +72,7 @@ describe("userFavoritesController", () => {
             {id: newFavoriteRestaurant.id},
             {_id: 0, __v: 0}
         ).lean();
+        delete newFavoriteRestaurant.lineupTime;
         expect(favoritedRestaurant).toEqual(newFavoriteRestaurant);
         done();
     });
