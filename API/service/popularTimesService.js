@@ -41,7 +41,7 @@ function startPythonProcess(id){
 
         const pythonProcess = spawn("python",
             //EDIT FULL PATH
-            ["C:/Users/victo/Documents/year3/CPEN321/time-line repo/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
+            ["/home/time-line/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
         pythonProcess.stdout.on("data", (returnVal) => {
             success("wait time is: " + returnVal);
         });
