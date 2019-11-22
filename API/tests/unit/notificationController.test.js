@@ -3,7 +3,7 @@ const app = require("../../server.js");
 import notificationService, {notificationServiceMock} from "../../service/notificationService";
 jest.mock("../../service/notificationService");
 var admin = jest.genMockFromModule("firebase-admin").default;
-admin.initializaApp = jest.fn(secret => secret === 'not wizard');
+admin.initializaApp = jest.fn((secret) => secret === "mock");
 
 
 describe("Notification Controller Unit", () => {
@@ -13,7 +13,7 @@ describe("Notification Controller Unit", () => {
         .send({
           registrationToken: "sample",
           restaurantId: "someid"
-        })
+        });
       expect(res.statusCode).toEqual(200);
     });
   
@@ -22,7 +22,7 @@ describe("Notification Controller Unit", () => {
         .post("/api/notification/subscribe")
         .send({
           badToken: "badToken"
-        })
+        });
       expect(res.statusCode).toEqual(422);
     });
 
@@ -32,7 +32,7 @@ describe("Notification Controller Unit", () => {
         .send({
           registrationToken: "sample",
           restaurantId: "someid"
-        })
+        });
       expect(res.statusCode).toEqual(200);
     });
   
@@ -41,7 +41,7 @@ describe("Notification Controller Unit", () => {
         .post("/api/notification/unsubscribe")
         .send({
           badToken: "badToken"
-        })
+        });
       expect(res.statusCode).toEqual(422);
     });
-})
+});

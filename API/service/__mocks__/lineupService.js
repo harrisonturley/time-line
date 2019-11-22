@@ -26,7 +26,7 @@ const lineupServiceMock = jest.genMockFromModule(
     
     return new Promise(function(success, nosuccess){
   
-      if(body.bad_id == "bad id"){
+      if(body.bad_id === "bad id"){
           nosuccess({statusCode: 422});
       }
       success();

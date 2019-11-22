@@ -14,7 +14,7 @@ const userMock = jest.genMockFromModule(
   function create(body){
     return new Promise(function(success, nosuccess){
   
-        if(body.name == "bob"){
+        if(body.name === "bob"){
             success({name: "bob", balance: 0});
         }
         nosuccess({message: "failed"});
@@ -25,7 +25,7 @@ const userMock = jest.genMockFromModule(
     
     return new Promise(function(success, nosuccess){
   
-        if(body.balance == 9){
+        if(body.balance === 9){
             success({name: "bob", balance: 9});
         }
         nosuccess({message: "failed"});
