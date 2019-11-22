@@ -255,14 +255,12 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
                 if (!task.isSuccessful()) {
-                    Log.w("GET_INSTANCE_ID", "getInstanceId failed", task.getException());
+                    Log.w("GET_INSTANCE_ID", "failed to get firebase ID", task.getException());
                     return;
                 }
 
                 // Get new Instance ID token
                 String token = task.getResult().getToken();
-
-                // Log and toast
                 Log.d("GET_INSTANCE_ID", token);
 
                 FavoriteService favorites = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
@@ -288,18 +286,15 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
                 if (!task.isSuccessful()) {
-                    Log.w("GET_INSTANCE_ID", "getInstanceId failed", task.getException());
+                    Log.w("GET_INSTANCE_ID", "failed to get firebase ID", task.getException());
                     return;
                 }
 
                 // Get new Instance ID token
                 String token = task.getResult().getToken();
-
-                // Log and toast
                 Log.d("GET_INSTANCE_ID", token);
 
                 FavoriteService favorites = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
-                //PostFavoriteHelper helper = new PostFavoriteHelper(new Restaurant(), token);
                 Call<Favorites> deleteFavorite = favorites.deleteUserFavorite(GoogleSignIn.getLastSignedInAccount(ReportQueueActivity.this).getEmail(), restaurant.getId());
                 deleteFavorite.enqueue(new Callback<Favorites>() {
                     @Override

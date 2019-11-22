@@ -1,6 +1,5 @@
 package com.cpen321.cloutservices.timeline;
 
-import android.location.Location;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -22,7 +21,6 @@ import com.cpen321.cloutservices.timeline.model.FavoriteService;
 import com.cpen321.cloutservices.timeline.model.Favorites;
 import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.Collections;
