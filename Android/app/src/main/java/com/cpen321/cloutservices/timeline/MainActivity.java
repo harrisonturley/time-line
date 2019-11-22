@@ -5,12 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.cpen321.cloutservices.timeline.model.Lineup;
+import com.cpen321.cloutservices.timeline.model.LineupService;
+import com.cpen321.cloutservices.timeline.model.Restaurant;
+import com.cpen321.cloutservices.timeline.model.User;
+import com.cpen321.cloutservices.timeline.model.UserService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,7 +27,16 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 
 import androidx.annotation.Nullable;
+
+import java.util.List;
+
 import mehdi.sakout.fancybuttons.FancyButton;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Body;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestProfile()
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
@@ -82,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
+            verifyUser(account);
             startActivity(new Intent(MainActivity.this, SearchActivity.class));
         }
         else {
@@ -108,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             completedTask.getResult(ApiException.class);
             // Sign in successfully, show authenticated UI
+            verifyUser(GoogleSignIn.getLastSignedInAccount(this));
             startActivity(new Intent(MainActivity.this, SearchActivity.class));
         } catch (ApiException e ) {
             // The ApiException status code indicates the detailed failure reason
@@ -123,4 +141,105 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-}
+    private void verifyUser(GoogleSignInAccount account) {
+        new Thread(new Runnable() {
+            boolean accountExists;
+            @Override
+            public void run() {
+                UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
+                Call<User> call = service.getUserByEmail(account.getEmail());
+
+                call.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
+                            /* empty body, this means account does not exist! */
+                            if (response.body() == null) {
+                                accountExists = false;
+                            }
+                            /* account exists */
+                            else {
+                                accountExists = true;
+                            }
+                        }
+                        else {    /* unnsuccessful response */
+                            System.out.println("ERROR "+response.raw().body());
+                            Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Log.wtf("Error", t.getMessage());
+                    }
+                });
+
+                if (!accountExists) {
+                    createUser(account);
+
+                }
+                else {
+                    updateUser(account);
+                }
+            }   // end of run
+        }).start();
+    }   // end of verifyUser
+
+
+    /* uses post method */
+    public void createUser(GoogleSignInAccount account) {
+        User user = new User();
+        user.setEmail(account.getEmail());
+        user.setName(account.getDisplayName());
+        user.setBalance(0);
+
+        UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
+        Call<User> call = service.postUser(user);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    // success!
+                }
+                else {
+                    // failure!
+                    System.out.println("ERROR "+response.raw().body());
+                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                }
+            }
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.wtf("Error in createUser", t.getMessage());
+            }
+        });
+    }   // end of createUser
+
+
+    /* uses put method */
+    public void updateUser(GoogleSignInAccount account) {
+        User user = new User();
+        user.setEmail(account.getEmail());
+        user.setName(account.getDisplayName());
+
+        UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
+        Call<User> call = service.putUserByEmail(account.getEmail(), user);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    // success!
+                }
+                else {
+                    // failure!
+                    System.out.println("ERROR "+response.raw().body());
+                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                }
+            }
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.wtf("Error in updateUser", t.getMessage());
+            }
+        });
+    }   // end of updateUser
+}   // end of MainActivity
