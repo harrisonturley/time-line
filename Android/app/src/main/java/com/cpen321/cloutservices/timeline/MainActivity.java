@@ -188,11 +188,7 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    // success!
-                }
-                else {
-                    // failure!
+                if (!response.isSuccessful()) {
                     System.out.println("ERROR "+response.raw().body());
                     Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
                 }
