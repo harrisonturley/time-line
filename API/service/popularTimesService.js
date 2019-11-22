@@ -43,8 +43,7 @@ function startPythonProcess(id){
             //EDIT FULL PATH
             ["C:/Users/Mark/Desktop/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
         pythonProcess.stdout.on("data", (returnVal) => {
-            console.log("got here " + returnVal);
-            success(returnVal);
+            success(parseInt(returnVal));
         });
         pythonProcess.stderr.on("data", (data) => {
             //no popular time exists for this location
@@ -57,6 +56,7 @@ function getPopularTimes(id) {
         getGoogleIdInfo(id).then(function(info) {
             getGoogleId(info.phone).then(function (gid) {
                 startPythonProcess(gid).then(function (fromRunpy) {
+                    console.log('success ' + fromRunpy);
                     return success(fromRunpy);
                 }).catch((err) => {return nosuccess(err);});
         }).catch((err) => {return nosuccess(err);});
