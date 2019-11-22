@@ -6,7 +6,7 @@ const databaseName = 'searchControllerITDB';
 const favoritedRestaurantSeeds = require('./seeds/favoritedRestaurant.seed');
 
 // create a test database specific to this test file & seed it with data
-setupDB(databaseName, true);
+setupDB(databaseName);
 
 describe("searchController", () => {
     it('gets 20 restaurants by keywords and coordinates', async done => {
@@ -33,87 +33,89 @@ describe("searchController", () => {
         const updatedLineupTime2 = 15;
         const updatedLineupTime3 = 20;
 
-        const businessesRes = await request.get('/api/search/restaurants')
-            .query({keyword: keyword, latitude: latitude, longitude: longitude});
+        const businessesRes = await (request.get('/api/search/restaurants')
+            .query({keyword: keyword, latitude: latitude, longitude: longitude}));
         let businesses = businessesRes.body.businesses;
 
-        const updateRes0 = await request.post('/api/lineups')
+        console.log(businesses[0].id);
+        console.log(businesses[1].id);
+        console.log(businesses[2].id);
+
+        const updateRes0 = await (request.post('/api/lineups/' + businesses[0].id)
             .send({
-                id: businesses[0].id,
                 lineupTime: updatedLineupTime0
-            });
-        const updateRes1 = await request.post('/api/lineups')
+            }));
+        const updateRes1 = await (request.post('/api/lineups/' + businesses[1].id)
             .send({
-                id: businesses[1].id,
                 lineupTime: updatedLineupTime1
-            });
-        // allowed to do a put here because of upsert
-        const updateRes2 = await request.put('/api/lineups/' + businesses[2].id)
+            }));
+        const updateRes2 = await (request.post('/api/lineups/' + businesses[2].id)
             .send({
                 lineupTime: updatedLineupTime2
-            });
-        const updateRes3 = await request.put('/api/lineups/' + businesses[0].id)
+            }));
+        const updateRes3 = await (request.post('/api/lineups/' + businesses[0].id)
             .send({
                 lineupTime: updatedLineupTime3
-            });
-        const newBusinessesRes = await request.get('/api/search/restaurants')
+            }));
+        const newBusinessesRes = await (request.get('/api/search/restaurants')
             .query({
                 keyword: keyword, latitude: latitude, longitude: longitude
-            });
+            }));
         let newBusinesses = newBusinessesRes.body.businesses;
 
         expect(businessesRes.status).toBe(200);
-        for(let i = 0; i < newBusinessesRes.length; i++){
-            expect(businesses[i].lineupTime).toBeNull();
-        }
         expect(updateRes0.status).toBe(200);
         expect(updateRes1.status).toBe(200);
         expect(updateRes2.status).toBe(200);
         expect(updateRes3.status).toBe(200);
         expect(newBusinessesRes.status).toBe(200);
-        expect(newBusinesses[0].lineupTime).toBe(updatedLineupTime3);
-        expect(newBusinesses[1].lineupTime).toBe(updatedLineupTime1);
-        expect(newBusinesses[2].lineupTime).toBe(updatedLineupTime2);
-        for(let i = 3; i < newBusinessesRes.length; i++){
+        expect(newBusinesses[0].lineupTime).toBe(6969);
+        expect(newBusinesses[1].lineupTime).toBe((10 + 10 + 11) / 3);
+        // outlier case
+        expect(newBusinesses[2].lineupTime).toBe((30 + 30 + 30) / 3);
+        for (let i = 3; i < newBusinessesRes.length; i++) {
             expect(newBusinesses[i].lineupTime).toBeNull();
         }
         done();
     });
 
     it('gets favorited restaurants by ids', async done => {
-        const ids = "[\"vnKoBdTuh2lsUKASMwQYbA\",\"JgSGpSMHbGecAXs_o1rE_g\", \"invalidId\"]";
+        const ids = "[\"vnKoBdTuh2lsUKASMwQYbA\",\"JgSGpSMHbGecAXs_o1rE_g\", \"B3DOnmh1XLN_rW3Y105hvA\", \"invalidId\"]";
         const seededBusinesses = favoritedRestaurantSeeds;
         const expectedBusiness0 = seededBusinesses[0];
-        expectedBusiness0.lineupTime = 40;
+        expectedBusiness0.lineupTime = 0;
         const expectedBusiness1 = seededBusinesses[1];
-        expectedBusiness1.lineupTime = 50;
+        expectedBusiness1.lineupTime = 10.5;
+        const expectedBusiness2 = seededBusinesses[3];
+        expectedBusiness2.lineupTime = null;
 
         const res = await request.get('/api/search/restaurants/favorited')
             .query({restaurantIds: ids});
         let businesses = res.body.businesses;
 
         expect(res.status).toBe(200);
-        expect(res.body.total).toBe(2);
-        expect(businesses).toHaveLength(2);
-        expect(businesses[0]).toEqual(seededBusinesses[0]);
-        expect(businesses[1]).toEqual(seededBusinesses[1]);
+        expect(res.body.total).toBe(3);
+        expect(businesses).toHaveLength(3);
+        expect(businesses[0]).toEqual(expectedBusiness0);
+        expect(businesses[1]).toEqual(expectedBusiness1);
+        expect(businesses[2]).toEqual(expectedBusiness2);
         done();
     });
 
-    it('gets favorited restaurants by ids with updated lineup times', async done => {
+    it('gets favorited restaurants by ids with newly updated lineup times', async done => {
         const ids = "[\"vnKoBdTuh2lsUKASMwQYbA\",\"JgSGpSMHbGecAXs_o1rE_g\", \"invalidId\"]";
         const seededBusinesses = favoritedRestaurantSeeds;
-        const updatedLineupTime = 20;
+        const addedLineupTime = 20;
         const expectedBusiness0 = seededBusinesses[0];
-        expectedBusiness0.lineupTime = 40;
+        expectedBusiness0.lineupTime = 0;
         const expectedBusiness1 = seededBusinesses[1];
-        expectedBusiness1.lineupTime = 50;
+        expectedBusiness1.lineupTime = 10.5;
 
         const businessesRes = await request.get('/api/search/restaurants/favorited')
             .query({restaurantIds: ids});
-        const updateRes = await request.put('/api/lineups/' + 'JgSGpSMHbGecAXs_o1rE_g')
+        const updateRes = await request.post('/api/lineups/' + seededBusinesses[1].id)
             .send({
-                lineupTime: updatedLineupTime
+                lineupTime: addedLineupTime
             });
         let businesses = businessesRes.body.businesses;
         const newBusinessesRes = await request.get('/api/search/restaurants/favorited')
@@ -130,7 +132,7 @@ describe("searchController", () => {
         expect(newBusinesses).toHaveLength(2);
         expect(businesses[0]).toEqual(expectedBusiness0);
         expect(businesses[1]).toEqual(expectedBusiness1);
-        expectedBusiness1.lineupTime = updatedLineupTime;
+        expectedBusiness1.lineupTime = (addedLineupTime+ 10 + 11) / 3;
         expect(newBusinesses[0]).toEqual(expectedBusiness0);
         expect(newBusinesses[1]).toEqual(expectedBusiness1);
         done();
