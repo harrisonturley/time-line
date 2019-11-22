@@ -30,7 +30,7 @@ describe("User Service", () => {
 
     it("getUserByEmail OK", () => {
         return userService.getUserByEmail(
-            "servicetest@gmail.com").then(data => {
+            "servicetest@gmail.com").then((data) => {
             expect(data.name).toBe("jenny");
             expect(data.balance).toBe(0);
         });
@@ -38,7 +38,7 @@ describe("User Service", () => {
     
     it("getUserByEmail ERR", () => {
         return userService.getUserByEmail(
-            "non existent").then(data => {
+            "non existent").then((data) => {
             expect(data).toBeUndefined();
         });
     });
@@ -47,7 +47,7 @@ describe("User Service", () => {
         return userService.addUser({
             email: userId1,
             name: "bob"
-        }).then(data => {
+        }).then((data) => {
             expect(data.name).toBe("bob");
             expect(data.balance).toBe(0);
         });
@@ -56,7 +56,7 @@ describe("User Service", () => {
     it("addUser ERR", () => {
         return userService.addUser({
             data: "non existent"
-        }).catch(e => expect(e.message).toContain("failed"));
+        }).catch((e) => expect(e.message).toContain("failed"));
     });
 
     it("updateUser OK", () => {
@@ -65,7 +65,7 @@ describe("User Service", () => {
             userId1, {
             email: userId1,
             balance: 9
-        }).then(data => {
+        }).then((data) => {
             expect(data.balance).toBe(9);
         });
         }, 500);
@@ -75,19 +75,19 @@ describe("User Service", () => {
         return userService.updateUser(
             userId1, {
             data: "non existent"
-        }).catch(e => expect(e.message).toContain("failed"));
+        }).catch((e) => expect(e.message).toContain("failed"));
     });
 
     it("deleteUser OK", () => {
         return userService.deleteUser(
-            userId1).then(data => {
+            userId1).then((data) => {
             expect(data).toMatchObject({});
         });
     });
     
     it("deleteUser ERR", () => {
         return userService.deleteUser(
-            "non existent").then(data => {
+            "non existent").then((data) => {
             expect(data).toBeUndefined();
         });
     });
@@ -98,28 +98,28 @@ describe("Lineup Service", () => {
 
     it("getLineupById OK", () => {
         return lineupService.getLineupById(
-            "test id").then(data => {
+            "test id").then((data) => {
             expect(data.lineupTime).toBe(5);
         });
     });
     
     it("getLineupById ERR", () => {
         return lineupService.getLineupById(
-            "non existent").then(data => {
+            "non existent").then((data) => {
             expect(data).toContain("error");
         });
     });
 
     it("getLineupByIds OK", () => {
         return lineupService.getLineupsByIds(
-            "test id").then(data => {
+            "test id").then((data) => {
             expect(data.lineupTime).toBe(5);
         });
     });
     
     it("getLineupByIds ERR", () => {
         return lineupService.getLineupsByIds(
-            "non existent").then(data => {
+            "non existent").then((data) => {
             expect(data).toMatchObject([]);
         });
     });
@@ -128,7 +128,7 @@ describe("Lineup Service", () => {
         return lineupService.addLineup({
             id: lineupId1,
             lineupTime: 0
-        }).then(data => {
+        }).then((data) => {
             expect(data.lineupTime).toBe(0);
         });
     });
@@ -136,7 +136,7 @@ describe("Lineup Service", () => {
     it("addLineup ERR", () => {
         return lineupService.addLineup({
             data: "non existent"
-        }).catch(e => expect(e.message).toContain("failed"));
+        }).catch((e) => expect(e.message).toContain("failed"));
     });
     
     it("updateLineup OK", () => {
@@ -144,7 +144,7 @@ describe("Lineup Service", () => {
             "Tim Hortons", {
                 id: "Tim Hortons",
                 lineupTime: 7
-            }).then(data => {
+            }).then((data) => {
             expect(data.lineupTime).toBe(7);
         });
     });
@@ -153,19 +153,19 @@ describe("Lineup Service", () => {
         return lineupService.updateLineup(
             lineupId1, {
             data: "non existent"
-        }).catch(e => expect(e.message).toContain("failed"));
+        }).catch((e) => expect(e.message).toContain("failed"));
     });
     
     it("deleteLineup OK", () => {
         return lineupService.deleteLineup(
-            lineupId1).then(data => {
+            lineupId1).then((data) => {
             expect(data).toMatchObject({});
         });
     });
     
     it("deleteLineup ERR", () => {
         return lineupService.deleteLineup(
-            "non existent").then(data => {
+            "non existent").then((data) => {
             expect(data).toBeUndefined();
         });
     });

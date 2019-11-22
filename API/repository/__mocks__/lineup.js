@@ -23,7 +23,7 @@ const lineupMock = jest.genMockFromModule(
   function create(body){
     return new Promise(function(success, nosuccess){
   
-        if(body.data == "non existent"){
+        if(body.data === "non existent"){
             success({statusCode: 422});
         }
         success({lineupTime: 0});
@@ -35,7 +35,7 @@ const lineupMock = jest.genMockFromModule(
     
     return new Promise(function(success, nosuccess){
   
-        if(body.data == "non existent"){
+        if(body.data === "non existent"){
             success({statusCode: 422});
         }
         success({lineupTime: 7});

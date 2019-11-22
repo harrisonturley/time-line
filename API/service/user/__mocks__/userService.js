@@ -45,7 +45,7 @@ const userServiceMock = jest.genMockFromModule(
   }
 
   userServiceMock.getUserByEmail = getUserByEmail;
-  userServiceMock.addUser = addUser
+  userServiceMock.addUser = addUser;
   userServiceMock.updateUser = updateUser;
   userServiceMock.deleteUser = deleteUser;
   
