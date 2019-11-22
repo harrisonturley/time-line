@@ -16,4 +16,7 @@ public class User {
     public void setEmail(String email) { this.email = email; }
     public void setName(String name) { this.name = name; }
     public void setBalance(int balance) { this.balance = balance; }
+    public String getEmail() { return email; }
+    public String getName() { return name; }
+    public int getBalance() { return balance; }
 }

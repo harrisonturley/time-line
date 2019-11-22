@@ -5,16 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.cpen321.cloutservices.timeline.model.Lineup;
-import com.cpen321.cloutservices.timeline.model.LineupService;
-import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.cpen321.cloutservices.timeline.model.User;
 import com.cpen321.cloutservices.timeline.model.UserService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -23,20 +19,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
 
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 
 import androidx.annotation.Nullable;
-
-import java.util.List;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Body;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -227,11 +217,7 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    // success!
-                }
-                else {
-                    // failure!
+                if (!response.isSuccessful()) {
                     System.out.println("ERROR "+response.raw().body());
                     Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
                 }

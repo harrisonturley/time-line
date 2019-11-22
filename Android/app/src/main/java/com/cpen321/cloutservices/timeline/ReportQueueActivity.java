@@ -9,8 +9,6 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,9 +36,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import androidx.appcompat.widget.Toolbar;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,13 +44,10 @@ import retrofit2.Response;
 public class ReportQueueActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int ZOOM_LEVEL = 15;
     private static final int ANIMATION_LENGTH = 1000;
+
     private TextView queueTime;
-    private TextView restaurantname;
-    private TextView restaurantaddress;
-    private ImageView restaurantimage;
     private ToggleButton reportQueueBtn;
     private ProgressBar progressBar;
-    private GoogleMap mMap;
     private Toolbar toolbar;
     private ImageView favoritedStar;
     //    private double timer;
@@ -67,8 +59,13 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private double restaurantLatitude;
     private double restaurantLongitude;
     private String[] fullAddress;
-    private int seconds, minutes, milliseconds ;
-    long millisecondTime, startTime, timeBuff, totalTime = 0L ;
+    private int seconds;
+    private int minutes;
+    private int milliseconds;
+    private long millisecondTime;
+    private long startTime;
+    private long timeBuff;
+    private long totalTime = 0L;
     private boolean isFavorited;
 
     @Override
@@ -77,11 +74,11 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         setContentView(R.layout.activity_report_queue);
 
         /* findViews */
+        TextView restaurantname = findViewById(R.id.restaurant_name);
+        TextView restaurantaddress = findViewById(R.id.restaurant_address);
+        ImageView restaurantimage = findViewById(R.id.restaurant_image);
         progressBar = findViewById(R.id.progressBar);
         toolbar = findViewById(R.id.toolbar_main);
-        restaurantname = findViewById(R.id.restaurant_name);
-        restaurantaddress = findViewById(R.id.restaurant_address);
-        restaurantimage = findViewById(R.id.restaurant_image);
         queueTime = findViewById(R.id.queue_time);
         reportQueueBtn = findViewById(R.id.report_btn);
         favoritedStar = findViewById(R.id.favorites_star);
@@ -197,7 +194,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        GoogleMap mMap = googleMap;
 
         LatLng restaurant = new LatLng(restaurantLatitude, restaurantLongitude);
         mMap.addMarker(new MarkerOptions().position(restaurant).title(restaurantName));
