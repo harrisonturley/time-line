@@ -104,12 +104,13 @@ function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
             term: keyword,
             latitude: coordinates.latitude,
             longitude: coordinates.longitude,
-            limit: 20,
-            categories: "food,restaurants"
+            limit: 5,
+            categories: "food,restaurants",
+            sort_by: "distance"
         },
         json: true
     };
-
+    
     return request(options).then(addLineupTimes).then(removeExtraInfo);
 }
 
