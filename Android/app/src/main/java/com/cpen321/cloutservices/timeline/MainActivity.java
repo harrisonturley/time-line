@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         User user = new User();
         user.setEmail(account.getEmail());
         user.setName(account.getDisplayName());
-        user.setBalance(0);
+        user.setBalance(7000);
 
         UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
         Call<User> call = service.postUser(user);

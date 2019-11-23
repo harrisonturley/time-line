@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -66,6 +67,7 @@ public class SearchActivity extends AppCompatActivity {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestProfile()
                 .build();
         signInClient = GoogleSignIn.getClient(this, gso);
 
@@ -113,6 +115,11 @@ public class SearchActivity extends AppCompatActivity {
                     case R.id.nav_favorites:
                         fragmentClass = FavoritesFragment.class;
                         toolbar.setTitle("Favorites");
+                    case R.id.nav_awards:
+                        fragmentClass = AwardsFragment.class;
+                        break;
+                    case R.id.nav_settings:
+                        fragmentClass = SettingsFragment.class;
                         break;
                     case R.id.nav_sign_out:
                         signOut();

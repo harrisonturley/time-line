@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import com.cpen321.cloutservices.timeline.model.Location;
 import com.cpen321.cloutservices.timeline.model.PostFavoriteHelper;
 import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,6 +39,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import androidx.appcompat.widget.Toolbar;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,11 +52,14 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private static final int ANIMATION_LENGTH = 1000;
 
     private TextView queueTime;
+    private TextView restaurantname;
+    private TextView restaurantaddress;
+    private ImageView restaurantimage;
     private ToggleButton reportQueueBtn;
     private ProgressBar progressBar;
+    private GoogleMap mMap;
     private Toolbar toolbar;
-    private ImageView favoritedStar;
-    //    private double timer;
+    // private double timer;
     private Handler handler;
 
     // Passed from RestaurantAdapter;
@@ -68,6 +77,10 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private long totalTime = 0L;
     private boolean isFavorited;
 
+   // GoogleSignIn
+    private GoogleSignInAccount account;
+    private int balance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +92,9 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         ImageView restaurantimage = findViewById(R.id.restaurant_image);
         progressBar = findViewById(R.id.progressBar);
         toolbar = findViewById(R.id.toolbar_main);
+        restaurantname = findViewById(R.id.restaurant_name);
+        restaurantaddress = findViewById(R.id.restaurant_address);
+        restaurantimage = findViewById(R.id.restaurant_image);
         queueTime = findViewById(R.id.queue_time);
         reportQueueBtn = findViewById(R.id.report_btn);
         favoritedStar = findViewById(R.id.favorites_star);
@@ -109,21 +125,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         queueTime.setText("00:00:00");
         reportQueueBtn.setChecked(false);    // start it as true
         Glide.with(ReportQueueActivity.this).load(imageURL).into(restaurantimage);
-
-        favoritedStar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isFavorited = !isFavorited;
-                setFavoriteStar();
-                Restaurant restaurant = new Restaurant(restaurantId, restaurantName, imageURL, distanceFromUser, lineupTime, new Coordinates(restaurantLatitude, restaurantLongitude), new Location(fullAddress));
-
-                if (isFavorited) {
-                    favoriteRestaurant(restaurant);
-                } else {
-                    unfavoriteRestaurant(restaurant);
-                }
-            }
-        });
+        account = GoogleSignIn.getLastSignedInAccount(this);
 
         reportQueueBtn.setOnClickListener (new View.OnClickListener(){
             @Override
@@ -227,10 +229,13 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                 //  object does not exist yet
                 if (response.isSuccessful()) {
                     progressBar.setVisibility(View.INVISIBLE);
+
+                    getBalance(account);
                     Toast.makeText(ReportQueueActivity.this, "You have submitted your lineup time", Toast.LENGTH_LONG).show();
 
                     // if not successful, object exists already. Update instead!
-                } else {
+                }
+                else {
                     System.out.println("ERROR "+response.raw().body());
                     Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
                     Toast.makeText(ReportQueueActivity.this,  "Cannot submit new lineup time while submission is in progress", Toast.LENGTH_LONG).show();
@@ -307,5 +312,60 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
             }
         });
     }
+
+
+    private void getBalance(GoogleSignInAccount account) {
+        UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
+        Call<User> call = service.getUserByEmail(account.getEmail());
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    balance = response.body().getBalance();
+                    updateBalance(account, balance + 200);
+                }
+                else {    /* unnsuccessful response */
+                    System.out.println("ERROR " + response.raw().body());
+                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.wtf("Error", t.getMessage());
+            }
+        });
+    }   // end of getBalance
+
+    private void updateBalance(GoogleSignInAccount account, int newBalance) {
+        User user = new User();
+        user.setEmail(account.getEmail());
+        user.setName(account.getDisplayName());
+        user.setBalance(newBalance);
+
+        UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
+        Call<User> call = service.putUserByEmail(account.getEmail(), user);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    // success!
+                }
+                else {    /* unnsuccessful response */
+                    // failure!
+                    System.out.println("ERROR " + response.raw().body());
+                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.wtf("Error", t.getMessage());
+            }
+        });
+    }   // end of getBalance
+
     /* end of class */
 }
