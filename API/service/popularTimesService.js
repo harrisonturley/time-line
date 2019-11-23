@@ -39,7 +39,7 @@ async function getGoogleId(phone) {
 
 async function startPythonProcess(id){
     console.log("in python process")
-    //await sleep(5000);
+    // await sleep(100);
     return new Promise(function(success, nosuccess) {
 
         const spawn = require("child_process").spawn;
@@ -61,21 +61,21 @@ async function startPythonProcess(id){
 async function getPopularTimes(id) {
     console.log("in get popular times")
     // await sleep(5000);
-    // return new Promise(function(success, nosuccess){
-        const info = await getGoogleIdInfo(id);
-        const gid = await getGoogleId(info.phone);
-        const fromRunpy = await startPythonProcess(gid);
-        return fromRunpy;
+    return new Promise(function(success, nosuccess){
+        // const info = await getGoogleIdInfo(id);
+        // const gid = await getGoogleId(info.phone);
+        // const fromRunpy = await startPythonProcess(gid);
+        // return fromRunpy;
 
-        // getGoogleIdInfo(id).then(function(info) {
-        //     getGoogleId(info.phone).then(function (gid) {
-        //         startPythonProcess(gid).then(function (fromRunpy) {
-        //             console.log('success ' + fromRunpy);
-        //             return success(fromRunpy);
-        //         }).catch((err) => {return nosuccess(err);});
-        // }).catch((err) => {return nosuccess(err);});
-        // }).catch((err) => {return nosuccess(err);});
-    // });
+        getGoogleIdInfo(id).then(function(info) {
+            getGoogleId(info.phone).then(function (gid) {
+                startPythonProcess(gid).then(function (fromRunpy) {
+                    console.log('success ' + fromRunpy);
+                    return success(fromRunpy);
+                }).catch((err) => {return nosuccess(err);});
+        }).catch((err) => {return nosuccess(err);});
+        }).catch((err) => {return nosuccess(err);});
+    });
 }
 
 async function sleep(ms) {

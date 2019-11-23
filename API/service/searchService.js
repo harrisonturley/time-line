@@ -46,7 +46,6 @@ async function addLineupTimes(searchResults) {
     //             getPopularTimes(business.id).then(lineupTime => {
     //                 business.lineupTime = lineupTime;
     //             console.log(business.lineupTime)}).catch(err => console.log('error is: ' + err));
-    //             await sleep(2000);
 
     //             // averageLineupTime = popularTimesService.getWaitTime(id);        }
     //         }
@@ -58,13 +57,13 @@ async function addLineupTimes(searchResults) {
 
     for(let i = 0; i < searchResults.businesses.length; i++){
         let business = searchResults.businesses[i];
-        await sleep(0);
+        await sleep(100);
         if (businessIdToAverageLineupTime.get(business.id) == null) {
             console.log("getting popularTimes wait time");
-            // getPopularTimes(business.id).then(lineupTime => {
-            //     business.lineupTime = lineupTime;
-            // console.log(business.lineupTime)}).catch(err => console.log('error is: ' + err));
-            business.lineupTime = await getPopularTimes(business.id);
+            getPopularTimes(business.id).then(lineupTime => {
+                business.lineupTime = lineupTime;
+            console.log(business.lineupTime)}).catch(err => console.log('error is: ' + err));
+            // business.lineupTime = await getPopularTimes(business.id);
 
             // averageLineupTime = popularTimesService.getWaitTime(id);        }
         }
