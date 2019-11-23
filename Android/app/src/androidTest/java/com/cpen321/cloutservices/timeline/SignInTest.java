@@ -68,14 +68,7 @@ public class SignInTest {
         }
 
         ViewInteraction fn = onView(
-                allOf(withText("Sign In"),
-                        childAtPosition(
-                                allOf(withId(R.id.sign_in_button),
-                                        childAtPosition(
-                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
+                allOf(withText("Sign In")));
         fn.perform(click());
 
         // Added a sleep statement to match the app's execution delay.
