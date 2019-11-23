@@ -26,6 +26,8 @@ import com.cpen321.cloutservices.timeline.model.Lineup;
 import com.cpen321.cloutservices.timeline.model.Location;
 import com.cpen321.cloutservices.timeline.model.PostFavoriteHelper;
 import com.cpen321.cloutservices.timeline.model.Restaurant;
+import com.cpen321.cloutservices.timeline.model.User;
+import com.cpen321.cloutservices.timeline.model.UserService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,6 +61,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private ProgressBar progressBar;
     private GoogleMap mMap;
     private Toolbar toolbar;
+    private ImageView favoritedStar;
     // private double timer;
     private Handler handler;
 
@@ -126,6 +129,21 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         reportQueueBtn.setChecked(false);    // start it as true
         Glide.with(ReportQueueActivity.this).load(imageURL).into(restaurantimage);
         account = GoogleSignIn.getLastSignedInAccount(this);
+
+        favoritedStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isFavorited = !isFavorited;
+                setFavoriteStar();
+                Restaurant restaurant = new Restaurant(restaurantId, restaurantName, imageURL, distanceFromUser, lineupTime, new Coordinates(restaurantLatitude, restaurantLongitude), new Location(fullAddress));
+
+                if (isFavorited) {
+                    favoriteRestaurant(restaurant);
+                } else {
+                    unfavoriteRestaurant(restaurant);
+                }
+            }
+        });
 
         reportQueueBtn.setOnClickListener (new View.OnClickListener(){
             @Override
