@@ -12,11 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.cpen321.cloutservices.timeline.model.Award;
-import com.cpen321.cloutservices.timeline.model.Restaurant;
+import com.cpen321.cloutservices.timeline.model.AwardDelegate;
 import com.cpen321.cloutservices.timeline.model.User;
 import com.cpen321.cloutservices.timeline.model.UserService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -33,18 +34,15 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.ViewHolder> 
 
     private ArrayList<Award> awards;
     private GoogleSignInAccount account;
-    private View awardsView;
-    private TextView awardsPoints;
     private int balance;
+    private AwardDelegate delegate;
 
-    public AwardAdapter(ArrayList<Award> awards, GoogleSignInAccount accountId, View awardsView) { this.awards = awards; this.account = account; this.awardsPoints = awardsPoints; }
+    public AwardAdapter(ArrayList<Award> awards, GoogleSignInAccount account, AwardDelegate delegate) { this.awards = awards; this.account = account; this.delegate = delegate; }
 
     @Override
     public AwardAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.search_row, viewGroup, false);
-
-        awardsPoints = view.findViewById(R.id.award_points);
-        awardsPoints.setText("555");
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.award_row, viewGroup, false);
+        getBalance(account);
 
         return new ViewHolder(view);
     }
@@ -55,16 +53,15 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.ViewHolder> 
 
         Glide.with(viewHolder.itemView.getContext()).load(awards.get(i).getURL()).into(viewHolder.awardImage);
         viewHolder.awardName.setText(awards.get(i).getName());
-        viewHolder.awardCost.setText(awards.get(i).getCost());
+        viewHolder.awardCost.setText(String.valueOf(awards.get(i).getCost()));
         viewHolder.awardDescription.setText(awards.get(i).getDescription());
 
+        // debugging start here
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // we check to see if we have enough balance
-                // if true, setup confirmation message
-                // if false, error message
-                balance = getBalance(account);
+                // we check to see if we have enough balance if true, setup confirmation message, if false, send error message
+                getBalance(account);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setMessage("Do you wish to confirm this transaction?");
@@ -82,7 +79,7 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.ViewHolder> 
                                 else {
                                     Toast.makeText(v.getContext(), "Success! You have redeemed your award", Toast.LENGTH_LONG).show();
                                     balance = balance - awards.get(i).getCost();
-                                    awardsPoints.setText(balance);
+//                                    awardsPoints.setText(balance);
                                     updateBalance(account, balance);
                                     dialog.cancel();
                                 }
@@ -119,7 +116,6 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.ViewHolder> 
 
         public ViewHolder(View v) {
             super(v);
-
             view = v;
             awardImage = v.findViewById(R.id.awardImage);
             awardName = v.findViewById(R.id.awardName);
@@ -128,7 +124,7 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.ViewHolder> 
         }
     }
 
-    private int getBalance(GoogleSignInAccount account) {
+    private void getBalance(GoogleSignInAccount account) {
         UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
         Call<User> call = service.getUserByEmail(account.getEmail());
 
@@ -136,7 +132,8 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.ViewHolder> 
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    balance = response.body().getUser().getBalance();
+                    balance = response.body().getBalance();
+                    delegate.setPointsText(balance);
                 }
                 else {    /* unnsuccessful response */
                     System.out.println("ERROR " + response.raw().body());
@@ -149,14 +146,13 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.ViewHolder> 
                 Log.wtf("Error", t.getMessage());
             }
         });
-        return balance;
     }   // end of getBalance
 
-    private int updateBalance(GoogleSignInAccount account, int balance) {
+    private void updateBalance(GoogleSignInAccount account, int newBalance) {
         User user = new User();
         user.setEmail(account.getEmail());
         user.setName(account.getDisplayName());
-        user.setBalance(balance);
+        user.setBalance(newBalance);
 
         UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
         Call<User> call = service.putUserByEmail(account.getEmail(), user);
@@ -166,6 +162,7 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.ViewHolder> 
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     // success!
+                    delegate.setPointsText(newBalance);
                 }
                 else {    /* unnsuccessful response */
                     // failure!
@@ -179,7 +176,6 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.ViewHolder> 
                 Log.wtf("Error", t.getMessage());
             }
         });
-        return balance;
     }   // end of getBalance
 
 }

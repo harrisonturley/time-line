@@ -12,16 +12,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cpen321.cloutservices.timeline.model.Award;
-import com.cpen321.cloutservices.timeline.model.Awards;
-import com.cpen321.cloutservices.timeline.model.Restaurant;
+import com.cpen321.cloutservices.timeline.model.AwardDelegate;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class AwardsFragment extends Fragment {
+public class AwardsFragment extends Fragment implements AwardDelegate {
     private RecyclerView recyclerView;
     private TextView awardsPoints;
     private GoogleSignInAccount account;
@@ -54,12 +52,10 @@ public class AwardsFragment extends Fragment {
 
     private void configureAwardsView(View v) {
         recyclerView = v.findViewById(R.id.award_recycler_view);
-        awardsPoints = v.findViewById(R.id.award_points);  //getactivity?
+        awardsPoints = v.findViewById(R.id.award_points);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        awardsPoints.setText("999");
-
 
         List<Award>  awards = new ArrayList<Award>();
         awards.add( new Award( "https://news.mcdonalds.com/static-files/59507ede-6194-44cc-a232-c45e4154ce7f", "McDonald's", 1000, "Redeem 1000 points for a FREE Cheeseburger" ) );
@@ -67,9 +63,18 @@ public class AwardsFragment extends Fragment {
         awards.add( new Award( "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png", "Starbucks", 5000, "Redeem 5000 points for a FREE Java Chip Frappuccino" ) );
         awards.add( new Award( "https://www.tripleos.com/sites/default/files/TPLO15-Logo-Glow-effect.png", "Triple O's", 4000, "Redeem 4000 points for a FREE Chocolate Milkshake" ) );
 
-        AwardAdapter awardAdapter = new AwardAdapter((ArrayList)awards, account, awardsPoints);
+        AwardAdapter awardAdapter = new AwardAdapter((ArrayList) awards, account,this);
         recyclerView.setAdapter(awardAdapter);
     }
 
+    @Override
+    public void setPointsText(int points) {
+        awardsPoints.setText(String.valueOf(points));
+    }
+
+    @Override
+    public void testText(String text) {
+        awardsPoints.setText(text);
+    }
     // end of Fragment
 }

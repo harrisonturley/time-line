@@ -18,7 +18,7 @@ public interface UserService {
     @POST("users")
     Call<User> postUser(@Body User user);
 
-    @PUT("/users/{email}")
+    @PUT("users/{email}")
     Call<User> putUserByEmail(@Path("email") String email, @Body User user);
 
 }
