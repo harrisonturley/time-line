@@ -19,6 +19,10 @@ import android.widget.ToggleButton;
 import com.bumptech.glide.Glide;
 import com.cpen321.cloutservices.timeline.model.LineupService;
 import com.cpen321.cloutservices.timeline.model.Lineup;
+import com.cpen321.cloutservices.timeline.model.User;
+import com.cpen321.cloutservices.timeline.model.UserService;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -45,7 +49,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private ProgressBar progressBar;
     private GoogleMap mMap;
     private Toolbar toolbar;
-    //    private double timer;
+    // private double timer;
     private Handler handler;
 
     // Passed from RestaurantAdapter;
@@ -55,6 +59,10 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     private double restaurantLongitude;
     private int seconds, minutes, milliseconds ;
     long millisecondTime, startTime, timeBuff, totalTime = 0L ;
+
+    // GoogleSignIn
+    private GoogleSignInAccount account;
+    private int balance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +99,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
         queueTime.setText("00:00:00");
         reportQueueBtn.setChecked(false);    // start it as true
         Glide.with(ReportQueueActivity.this).load(imageURL).into(restaurantimage);
+        account = GoogleSignIn.getLastSignedInAccount(this);
 
         reportQueueBtn.setOnClickListener (new View.OnClickListener(){
             @Override
@@ -170,6 +179,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
 
         Lineup lineup = new Lineup();
         lineup.setLineupTime(lineuptime);
+        boolean success;
 
         LineupService service = RetrofitClientHelper.getRetrofitInstance().create(LineupService.class);
         Call<Lineup> call = service.updateLineup(restaurantId, lineup);
@@ -186,10 +196,13 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                 //  object does not exist yet
                 if (response.isSuccessful()) {
                     progressBar.setVisibility(View.INVISIBLE);
+
+                    getBalance(account);
                     Toast.makeText(ReportQueueActivity.this, "You have submitted your lineup time", Toast.LENGTH_LONG).show();
 
                     // if not successful, object exists already. Update instead!
-                } else {
+                }
+                else {
                     System.out.println("ERROR "+response.raw().body());
                     Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
                     Toast.makeText(ReportQueueActivity.this,  "Cannot submit new lineup time while submission is in progress", Toast.LENGTH_LONG).show();
@@ -205,5 +218,58 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
             }
         });
     }
+
+    private void getBalance(GoogleSignInAccount account) {
+        UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
+        Call<User> call = service.getUserByEmail(account.getEmail());
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    balance = response.body().getBalance();
+                    updateBalance(account, balance + 200);
+                }
+                else {    /* unnsuccessful response */
+                    System.out.println("ERROR " + response.raw().body());
+                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.wtf("Error", t.getMessage());
+            }
+        });
+    }   // end of getBalance
+
+    private void updateBalance(GoogleSignInAccount account, int newBalance) {
+        User user = new User();
+        user.setEmail(account.getEmail());
+        user.setName(account.getDisplayName());
+        user.setBalance(newBalance);
+
+        UserService service = RetrofitClientHelper.getRetrofitInstance().create(UserService.class);
+        Call<User> call = service.putUserByEmail(account.getEmail(), user);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    // success!
+                }
+                else {    /* unnsuccessful response */
+                    // failure!
+                    System.out.println("ERROR " + response.raw().body());
+                    Log.wtf("Response errorBody", String.valueOf(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.wtf("Error", t.getMessage());
+            }
+        });
+    }   // end of getBalance
     /* end of class */
 }

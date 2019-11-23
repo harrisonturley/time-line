@@ -67,6 +67,7 @@ public class SearchActivity extends AppCompatActivity {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestProfile()
                 .build();
         signInClient = GoogleSignIn.getClient(this, gso);
 
