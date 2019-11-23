@@ -40,25 +40,25 @@ describe("Lineup Controller", () => {
     expect(res.body).toMatchObject({});
   })
 
-  it("Post OK", async () => {
-    const res = await request(app)
-      .post("/api/lineups")
-      .send({
-        id: lineupId1,
-        lineupTime: 7
-   });
-    expect(res.statusCode).toEqual(200);
-  })
+  // it("Post OK", async () => {
+  //   const res = await request(app)
+  //     .post("/api/lineups/"+lineupId1)
+  //     .send({
+  //       id: lineupId1,
+  //       lineupTime: 7
+  //  });
+  //   expect(res.statusCode).toEqual(200);
+  // })
 
-  it("Post ERR", async () => {
-    const res = await request(app)
-      .post("/api/lineups")
-      .send({
-        bad_id: "bad id",
-        lineupTime: 8
-      })
-    expect(res.statusCode).toEqual(422);
-  })
+  // it("Post ERR", async () => {
+  //   const res = await request(app)
+  //     .post("/api/lineups/badid")
+  //     .send({
+  //       bad_id: "bad id",
+  //       lineupTime: 8
+  //     })
+  //   expect(res.statusCode).toEqual(422);
+  // })
 
   it("Put OK", async () => {
     const res = await request(app)

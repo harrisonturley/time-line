@@ -13,9 +13,11 @@ const lineupMock = jest.genMockFromModule(
 
   function find(body) {
     return new Promise(function(success, nosuccess){
-      if(body.id.$in.includes("test id")){
-          success({lineupTime: 5});
-      }
+      console.log("body is"+JSON.stringify(body, null, 4))
+      //if(body.id.includes("test id")){
+      //if(body.id.$in.includes("test id")){
+          //success({lineupTime: 0});
+      //}
       success([]);
    });
   }

@@ -61,21 +61,22 @@ test("an invalid input fails with an error", () => {
         "invalid string").catch((e) => expect(e.statusCode).toEqual(400));
 });
 
+//if fails remember to change path to script
 test("returns correct data given gary danko google id", () => {
     return popService.getPopularTimes(
-        "WavvLdfdP6g8aZTtbBQHTw").then((e) => expect(e).toMatch(presentGaryData))
+        "WavvLdfdP6g8aZTtbBQHTw").then((e) => expect(e).toBe(presentGaryData))
         .catch();
 });
 
 test("returns correct data given tims hortons google id", () => {
     return popService.getPopularTimes(
-        "FX7Dw41atuJ4oeTK6WtDUQ").then((e) => expect(e).toMatch(presentTimsData))
+        "FX7Dw41atuJ4oeTK6WtDUQ").then((e) => expect(e).toBe(presentTimsData))
         .catch();
 });
 
 test("returns no data available when given a restaurant with no populartimes", () => {
     return popService.getPopularTimes(
-        "M1kP4u3OmtUEW_9ob8ZH7A").then((e) => expect(e).toMatch(null))
+        "M1kP4u3OmtUEW_9ob8ZH7A").then((e) => expect(e).toBeNull())
         .catch();
 });
 
