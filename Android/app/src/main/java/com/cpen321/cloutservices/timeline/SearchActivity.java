@@ -115,8 +115,10 @@ public class SearchActivity extends AppCompatActivity {
                     case R.id.nav_favorites:
                         fragmentClass = FavoritesFragment.class;
                         toolbar.setTitle("Favorites");
+                        break;
                     case R.id.nav_awards:
                         fragmentClass = AwardsFragment.class;
+                        toolbar.setTitle("Awards");
                         break;
                     case R.id.nav_sign_out:
                         signOut();
