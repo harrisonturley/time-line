@@ -59,7 +59,7 @@ async function addLineup(lineupId, lineupTime) {
         // TODO victoria
         console.log("getting popularTimes wait time");
         averageLineupTime = await popularTimesService.getPopularTimes(id);
-        console.log(averageLineupTime);
+        console.log("lineupservice: " + averageLineupTime);
     }
 
     // write to db

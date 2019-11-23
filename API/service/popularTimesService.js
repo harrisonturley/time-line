@@ -10,7 +10,9 @@ const placesKey = "AIzaSyBVDI23V1oCRqdGAsxU7ARKuXplmWhTDRM";
 
 const request = require("request-promise");
 
-function getGoogleIdInfo(yelpId) {
+async function getGoogleIdInfo(yelpId) {
+    console.log("in google id info")
+    //await sleep(5000);
     const options = {
         uri: "https://api.yelp.com/v3/businesses/" + yelpId,
         headers: {
@@ -23,7 +25,9 @@ function getGoogleIdInfo(yelpId) {
     });
   }
 
-function getGoogleId(phone) {
+async function getGoogleId(phone) {
+    console.log("in google id")
+    //await sleep(5000);
     var options = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%2B" + 
         phone + "&inputtype=phonenumber&fields=place_id&key=" + placesKey;
   
@@ -33,36 +37,53 @@ function getGoogleId(phone) {
     }).catch((err) => {return "error with places id: "+ err;});
 }
 
-function startPythonProcess(id){
-
+async function startPythonProcess(id){
+    console.log("in python process")
+    //await sleep(5000);
     return new Promise(function(success, nosuccess) {
 
         const spawn = require("child_process").spawn;
 
         const pythonProcess = spawn("python",
             //EDIT FULL PATH
-            ["C:/Users/Mark/Desktop/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
+            ["C:/Users/victo/Documents/year3/CPEN321/time-line repo/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
         pythonProcess.stdout.on("data", (returnVal) => {
+            console.log("exiting python process")
             success(parseInt(returnVal));
         });
         pythonProcess.stderr.on("data", (data) => {
             //no popular time exists for this location
+            console.log("exiting python process")
             success(null);
         });
 });}
 
-function getPopularTimes(id) {
-    return new Promise(function(success, nosuccess){
-        getGoogleIdInfo(id).then(function(info) {
-            getGoogleId(info.phone).then(function (gid) {
-                startPythonProcess(gid).then(function (fromRunpy) {
-                    console.log('success ' + fromRunpy);
-                    return success(fromRunpy);
-                }).catch((err) => {return nosuccess(err);});
-        }).catch((err) => {return nosuccess(err);});
-        }).catch((err) => {return nosuccess(err);});
-    });
+async function getPopularTimes(id) {
+    console.log("in get popular times")
+    // await sleep(5000);
+    // return new Promise(function(success, nosuccess){
+        const info = await getGoogleIdInfo(id);
+        const gid = await getGoogleId(info.phone);
+        const fromRunpy = await startPythonProcess(gid);
+        return fromRunpy;
+
+        // getGoogleIdInfo(id).then(function(info) {
+        //     getGoogleId(info.phone).then(function (gid) {
+        //         startPythonProcess(gid).then(function (fromRunpy) {
+        //             console.log('success ' + fromRunpy);
+        //             return success(fromRunpy);
+        //         }).catch((err) => {return nosuccess(err);});
+        // }).catch((err) => {return nosuccess(err);});
+        // }).catch((err) => {return nosuccess(err);});
+    // });
 }
+
+async function sleep(ms) {
+    return new Promise(resolve => {
+        console.log("in sleep")
+        setTimeout(resolve, ms)
+    });
+  }
 
 module.exports = router;
 module.exports = {getPopularTimes, getGoogleIdInfo, getGoogleId, startPythonProcess};

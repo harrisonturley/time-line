@@ -34,23 +34,44 @@ async function addLineupTimes(searchResults) {
 
     let businessIds = Array.from(businessIdToBusinessMap.keys());
 
-    let lineups = getLineupsAverageLineupTimesByIds(businessIds);
+    let lineups = await getLineupsAverageLineupTimesByIds(businessIds);
     for(let i = 0; i < lineups.length; i++){
         businessIdToAverageLineupTime.set(businessIds[i],lineups[i]);
     }
 
-    searchResults.businesses.forEach(async business => {
-            if (businessIdToAverageLineupTime.get(business.id) == null) {
-                console.log("getting popularTimes wait time");
-                business.lineupTime = await getPopularTimes(business.id);
-                console.log(business.lineupTime);
-                // averageLineupTime = popularTimesService.getWaitTime(id);        }
-            }
-            else {
-                business.lineupTime = businessIdToAverageLineupTime.get(business.id);
-            }
+    // await searchResults.businesses.forEach(async business => {
+    //         await sleep(2000);
+    //         if (businessIdToAverageLineupTime.get(business.id) == null) {
+    //             console.log("getting popularTimes wait time");
+    //             getPopularTimes(business.id).then(lineupTime => {
+    //                 business.lineupTime = lineupTime;
+    //             console.log(business.lineupTime)}).catch(err => console.log('error is: ' + err));
+    //             await sleep(2000);
+
+    //             // averageLineupTime = popularTimesService.getWaitTime(id);        }
+    //         }
+    //         else {
+    //             business.lineupTime = businessIdToAverageLineupTime.get(business.id);
+    //         }
+    //     }
+    // );
+
+    for(let i = 0; i < searchResults.businesses.length; i++){
+        let business = searchResults.businesses[i];
+        await sleep(0);
+        if (businessIdToAverageLineupTime.get(business.id) == null) {
+            console.log("getting popularTimes wait time");
+            // getPopularTimes(business.id).then(lineupTime => {
+            //     business.lineupTime = lineupTime;
+            // console.log(business.lineupTime)}).catch(err => console.log('error is: ' + err));
+            business.lineupTime = await getPopularTimes(business.id);
+
+            // averageLineupTime = popularTimesService.getWaitTime(id);        }
         }
-    );
+        else {
+            business.lineupTime = businessIdToAverageLineupTime.get(business.id);
+        }
+    }
 
     return lineupService.getLineupsAverageLineupTimesByIds(businessIds).then(function (lineups) {
         // console.log(lineups);
@@ -67,6 +88,12 @@ async function addLineupTimes(searchResults) {
         return searchResults;
     });
 }
+
+async function sleep(ms) {
+    return new Promise(resolve => {
+        console.log("in sleep");
+        setTimeout(resolve, ms)});
+  }
 
 function getRestaurantsByKeywordAndCoordinates(keyword, coordinates) {
     const options = {
