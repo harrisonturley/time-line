@@ -2,6 +2,7 @@ const Lineup = require("../repository/lineup");
 const pushNotification = require("./notificationService");
 const outliers = require("outliers");
 const stats = require("stats-lite");
+const popularTimesService = require("./popularTimesService");
 
 function getLineupById(id) {
     return Lineup.findOne({id}, {_id: 0, __v: 0}).lean();
@@ -57,8 +58,8 @@ async function addLineup(lineupId, lineupTime) {
     else {
         // TODO victoria
         console.log("getting popularTimes wait time");
-        averageLineupTime = 6969;
-        // averageLineupTime = popularTimesService.getWaitTime(id);
+        averageLineupTime = await popularTimesService.getPopularTimes(lineupId);
+        console.log("lineupservice: " + averageLineupTime);
     }
 
     // write to db
