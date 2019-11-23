@@ -169,7 +169,6 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                     handler.removeCallbacks(runnable);
                     handler = null;
                     runnable = null;
-                    onBackPressed();
                 }
             }
         });
@@ -223,11 +222,10 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
     }
 
     // method to post the line up time
-    public void putLineupTime(String restaurantId, Integer lineuptime) {
+    public void putLineupTime(String restaurantId, int lineuptime) {
         // setup progess bar
         progressBar.setVisibility(View.VISIBLE);
         Log.wtf("Print restaurantId: ", restaurantId);
-        Log.wtf("Print lineuptime: ", lineuptime.toString());
 
         Lineup lineup = new Lineup();
         lineup.setLineupTime(lineuptime);
@@ -259,6 +257,8 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                     Toast.makeText(ReportQueueActivity.this,  "Cannot submit new lineup time while submission is in progress", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.INVISIBLE);
                 }
+
+                onBackPressed();
             }
 
             @Override
@@ -266,6 +266,7 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                 Toast.makeText(ReportQueueActivity.this, "Failed to submit. Check your Internet connection", Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
                 Log.wtf("Error", t.getMessage());
+                onBackPressed();
             }
         });
     }
