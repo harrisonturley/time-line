@@ -49,7 +49,7 @@ async function startPythonProcess(id){
             ["/home/time-line/time-line/API/popularTimes/popularTimes.py", placesKey, id]);
         pythonProcess.stdout.on("data", (returnVal) => {
             console.log("exiting python process")
-            success(parseInt(returnVal));
+            success(parseFloat(returnVal));
         });
         pythonProcess.stderr.on("data", (data) => {
             //no popular time exists for this location

@@ -57,7 +57,7 @@ async function addLineupTimes(searchResults) {
 
     for(let i = 0; i < searchResults.businesses.length; i++){
         let business = searchResults.businesses[i];
-        await sleep(100);
+        await sleep(1000);
         if (businessIdToAverageLineupTime.get(business.id) == null) {
             console.log("getting popularTimes wait time");
             getPopularTimes(business.id).then(lineupTime => {
