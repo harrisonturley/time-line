@@ -36,7 +36,7 @@ async function addLineupTimes(searchResults) {
 
     let lineups = await getLineupsAverageLineupTimesByIds(businessIds);
     for(let i = 0; i < lineups.length; i++){
-        businessIdToAverageLineupTime.set(businessIds[i],lineups[i]);
+        businessIdToAverageLineupTime.set(businessIds[i],lineups[i].lineupTime);
     }
 
     // await searchResults.businesses.forEach(async business => {
