@@ -40,7 +40,8 @@ describe("lineupController", () => {
         // expect(lineup.id).toBe(id);
         // expect(lineup.lineupTime).toBe(lineupTime);
         expect(res.body.id).toBe(id);
-        expect(res.body.lineupTime).toBe(6969);
+        console.log(res.body);
+        expect(res.body.lineupTime).toBe(null);
         done();
     });
 
@@ -72,9 +73,9 @@ describe("lineupController", () => {
         // expect(lineup.id).toBe(id);
         // expect(lineup.averageLineupTime).toBe(expectedLineupTime);
         expect(res1.body.id).toBe(id);
-        expect(res1.body.lineupTime).toBe(6969);
+        expect(res1.body.lineupTime).toBe(null);
         expect(res2.body.id).toBe(id);
-        expect(res2.body.lineupTime).toBe(6969);
+        expect(res2.body.lineupTime).toBe(null);
         expect(res3.body.id).toBe(id);
         expect(res3.body.lineupTime).toBe(expectedLineupTime);
         done();

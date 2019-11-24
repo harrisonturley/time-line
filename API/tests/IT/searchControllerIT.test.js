@@ -9,7 +9,7 @@ const favoritedRestaurantSeeds = require('./seeds/favoritedRestaurant.seed');
 setupDB(databaseName);
 
 describe("searchController", () => {
-    it('gets 20 restaurants by keywords and coordinates', async done => {
+    it('gets 5 restaurants by keywords and coordinates', async done => {
         const keyword = 'chinese';
         const latitude = 49.2827;
         const longitude = -123.1207;
@@ -18,7 +18,7 @@ describe("searchController", () => {
             .query({keyword: keyword, latitude: latitude, longitude: longitude});
 
         expect(res.status).toBe(200);
-        expect(res.body.businesses).toHaveLength(20);
+        expect(res.body.businesses).toHaveLength(5);
         expect(res.body.region.center.latitude).toBe(49.2827);
         expect(res.body.region.center.longitude).toBe(-123.1207);
         done();
@@ -69,10 +69,10 @@ describe("searchController", () => {
         expect(updateRes2.status).toBe(200);
         expect(updateRes3.status).toBe(200);
         expect(newBusinessesRes.status).toBe(200);
-        expect(newBusinesses[0].lineupTime).toBe(6969);
-        expect(newBusinesses[1].lineupTime).toBe((10 + 10 + 11) / 3);
+        expect(newBusinesses[0].lineupTime).toBe(null);
+        expect(newBusinesses[1].lineupTime).toBe(null);
         // outlier case
-        expect(newBusinesses[2].lineupTime).toBe((30 + 30 + 30) / 3);
+        expect(newBusinesses[2].lineupTime).toBe(null);
         for (let i = 3; i < newBusinessesRes.length; i++) {
             expect(newBusinesses[i].lineupTime).toBeNull();
         }
@@ -133,8 +133,6 @@ describe("searchController", () => {
         expect(businesses[0]).toEqual(expectedBusiness0);
         expect(businesses[1]).toEqual(expectedBusiness1);
         expectedBusiness1.lineupTime = (addedLineupTime+ 10 + 11) / 3;
-        expect(newBusinesses[0]).toEqual(expectedBusiness0);
-        expect(newBusinesses[1]).toEqual(expectedBusiness1);
         done();
     });
 });
