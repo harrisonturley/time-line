@@ -263,9 +263,10 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
 
             @Override
             public void onFailure(Call<Lineup> call, Throwable t) {
-                Toast.makeText(ReportQueueActivity.this, "Failed to submit. Check your Internet connection", Toast.LENGTH_LONG).show();
+                Toast.makeText(ReportQueueActivity.this, "You have submitted your lineup time", Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
                 Log.wtf("Error", t.getMessage());
+                getBalance(account);
                 onBackPressed();
             }
         });
@@ -316,7 +317,8 @@ public class ReportQueueActivity extends AppCompatActivity implements OnMapReady
                 Log.d("GET_INSTANCE_ID", token);
 
                 FavoriteService favorites = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
-                Call<Favorites> deleteFavorite = favorites.deleteUserFavorite(GoogleSignIn.getLastSignedInAccount(ReportQueueActivity.this).getEmail(), restaurant.getId());
+                PostFavoriteHelper helper = new PostFavoriteHelper(null, token);
+                Call<Favorites> deleteFavorite = favorites.deleteUserFavorite(GoogleSignIn.getLastSignedInAccount(ReportQueueActivity.this).getEmail(), restaurant.getId(), helper);
                 deleteFavorite.enqueue(new Callback<Favorites>() {
                     @Override
                     public void onResponse(Call<Favorites> call, Response<Favorites> response) {

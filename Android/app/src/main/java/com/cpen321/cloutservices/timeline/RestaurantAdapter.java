@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.cpen321.cloutservices.timeline.model.FavoriteService;
 import com.cpen321.cloutservices.timeline.model.Favorites;
+import com.cpen321.cloutservices.timeline.model.Location;
 import com.cpen321.cloutservices.timeline.model.PostFavoriteHelper;
 import com.cpen321.cloutservices.timeline.model.Restaurant;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -183,8 +184,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 Log.d("GET_INSTANCE_ID", token);
 
                 FavoriteService favorites = RetrofitClientHelper.getRetrofitInstance().create(FavoriteService.class);
-                //PostFavoriteHelper helper = new PostFavoriteHelper(new Restaurant(), token);
-                Call<Favorites> deleteFavorite = favorites.deleteUserFavorite(email, restaurant.getId());
+                PostFavoriteHelper helper = new PostFavoriteHelper(null, token);
+                Call<Favorites> deleteFavorite = favorites.deleteUserFavorite(email, restaurant.getId(), helper);
                 deleteFavorite.enqueue(new Callback<Favorites>() {
                     @Override
                     public void onResponse(Call<Favorites> call, Response<Favorites> response) {
