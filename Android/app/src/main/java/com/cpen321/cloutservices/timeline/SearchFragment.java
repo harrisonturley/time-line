@@ -213,8 +213,10 @@ public class SearchFragment extends Fragment {
                             }
                         });
 
-                        RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList)restaurants, favorites, GoogleSignIn.getLastSignedInAccount(getActivity()).getEmail());
-                        recyclerView.setAdapter(restaurantAdapter);
+                        if (SearchFragment.this != null && getActivity() != null) {
+                            RestaurantAdapter restaurantAdapter = new RestaurantAdapter((ArrayList) restaurants, favorites, GoogleSignIn.getLastSignedInAccount(getActivity()).getEmail());
+                            recyclerView.setAdapter(restaurantAdapter);
+                        }
                     }
 
                     @Override
