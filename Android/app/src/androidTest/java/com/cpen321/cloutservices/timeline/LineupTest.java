@@ -16,9 +16,11 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
+import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiSelector;
+import androidx.test.uiautomator.Until;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -117,66 +119,20 @@ public class LineupTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//
-//        ViewInteraction appCompatToggleButton = onView(
-//                allOf(withId(R.id.report_btn), withText("Start Queue"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        withId(android.R.id.content),
-//                                        0),
-//                                3),
-//                        isDisplayed()));
-//        appCompatToggleButton.perform(longClick());
-//
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Thread.interrupted();
-//
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//
-//        ViewInteraction appCompatToggleButton2 = onView(
-//                allOf(withId(R.id.report_btn), withText("End Queue"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        withId(android.R.id.content),
-//                                        0),
-//                                3),
-//                        isDisplayed()));
-//        appCompatToggleButton2.perform(click());
-//
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        ViewInteraction linearLayout = onView(
-//                allOf(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-//                        childAtPosition(
-//                                allOf(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-//                                        childAtPosition(
-//                                                withId(R.id.search_view),
-//                                                0)),
-//                                0),
-//                        isDisplayed()));
-//        linearLayout.check(matches(isDisplayed()));
+
+        mUiDevice.findObject(new UiSelector().text("Start Queue")).click();
+        mUiDevice.wait(Until.findObject(By.text("End Queue")), 5000);
+        mUiDevice.findObject(new UiSelector().text("End Queue")).click();
+
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        mUiDevice.findObject(By.text("Enter Restaurant Name"));
+
     }
 
     private static Matcher<View> childAtPosition(
