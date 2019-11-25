@@ -146,16 +146,6 @@ public class LineupTest {
             e.printStackTrace();
         }
 
-        ViewInteraction appCompatToggleButton = onView(
-                allOf(withId(R.id.report_btn), withText("Start Queue"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatToggleButton.perform(click());
-
     }
 
     private static Matcher<View> childAtPosition(
