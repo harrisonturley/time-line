@@ -66,35 +66,7 @@ public class LineupTest {
 
 
     @Test
-    public void lineupTest() throws Exception {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ViewInteraction fn = onView(
-                allOf(withText("Sign In")));
-        fn.perform(click());
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        UiObject mText = mUiDevice.findObject(new UiSelector().text("khyjoon"));
-        mText.click();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+    public void lineupTest() throws Exception, SecurityException {
 
         ViewInteraction searchAutoComplete = onView(
                 allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")),
@@ -145,7 +117,66 @@ public class LineupTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+//
+//        ViewInteraction appCompatToggleButton = onView(
+//                allOf(withId(R.id.report_btn), withText("Start Queue"),
+//                        childAtPosition(
+//                                childAtPosition(
+//                                        withId(android.R.id.content),
+//                                        0),
+//                                3),
+//                        isDisplayed()));
+//        appCompatToggleButton.perform(longClick());
+//
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Thread.interrupted();
+//
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//
+//        ViewInteraction appCompatToggleButton2 = onView(
+//                allOf(withId(R.id.report_btn), withText("End Queue"),
+//                        childAtPosition(
+//                                childAtPosition(
+//                                        withId(android.R.id.content),
+//                                        0),
+//                                3),
+//                        isDisplayed()));
+//        appCompatToggleButton2.perform(click());
+//
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        ViewInteraction linearLayout = onView(
+//                allOf(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+//                        childAtPosition(
+//                                allOf(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+//                                        childAtPosition(
+//                                                withId(R.id.search_view),
+//                                                0)),
+//                                0),
+//                        isDisplayed()));
+//        linearLayout.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(
