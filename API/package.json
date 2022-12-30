@@ -26,7 +26,7 @@
     "firebase-admin": "^8.6.0",
     "google-auth-library": "^5.5.0",
     "kill-port": "^1.6.0",
-    "mocha": "^6.2.1",
+    "mocha": "^10.2.0",
     "mongoose": "^5.7.5",
     "nodemon": "^1.19.3",
     "outliers": "0.0.3",
